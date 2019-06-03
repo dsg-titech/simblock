@@ -2,39 +2,39 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>SimBlock</title>
-    <link>https://dsg-titech.github.io/SimBlockWebsite/</link>
+    <link>https://dsg-titech.github.io/simblock/</link>
     <description>Recent content on SimBlock</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>ja-jp</language>
-    <lastBuildDate>Wed, 17 Apr 2019 00:00:00 +0000</lastBuildDate>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 01 Jun 2019 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://dsg-titech.github.io/SimBlockWebsite/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://dsg-titech.github.io/simblock/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title>Documents</title>
-      <link>https://dsg-titech.github.io/SimBlockWebsite/documents/</link>
-      <pubDate>Fri, 19 Apr 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://dsg-titech.github.io/SimBlockWebsite/documents/</guid>
-      <description> User Guide (English / 日本語)  </description>
-    </item>
     
     <item>
       <title>Contact</title>
-      <link>https://dsg-titech.github.io/SimBlockWebsite/contact/</link>
-      <pubDate>Wed, 17 Apr 2019 00:00:00 +0000</pubDate>
+      <link>https://dsg-titech.github.io/simblock/contact/</link>
+      <pubDate>Sat, 01 Jun 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://dsg-titech.github.io/SimBlockWebsite/contact/</guid>
+      <guid>https://dsg-titech.github.io/simblock/contact/</guid>
       <description> Member  Yusuke Aoki Ryohei Banno Takeshi Kaneko Ryunosuke Nagayama Kai Otsuki Kazuyuki Shudo   Laboratory website  Shudo Lab.   Contact  E-mail: dsg-titech at googlegroups.com  </description>
     </item>
     
     <item>
-      <title>Publications</title>
-      <link>https://dsg-titech.github.io/SimBlockWebsite/publications/</link>
-      <pubDate>Wed, 17 Apr 2019 00:00:00 +0000</pubDate>
+      <title>Documents</title>
+      <link>https://dsg-titech.github.io/simblock/documents/</link>
+      <pubDate>Sat, 01 Jun 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://dsg-titech.github.io/SimBlockWebsite/publications/</guid>
+      <guid>https://dsg-titech.github.io/simblock/documents/</guid>
+      <description> User Guide (English / 日本語)  </description>
+    </item>
+    
+    <item>
+      <title>Publications</title>
+      <link>https://dsg-titech.github.io/simblock/publications/</link>
+      <pubDate>Sat, 01 Jun 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://dsg-titech.github.io/simblock/publications/</guid>
       <description>Ryohei Banno, Kazuyuki Shudo, &amp;ldquo;Simulating a Blockchain Network with SimBlock&amp;rdquo;, the IEEE International Conference on Blockchain and Cryptocurrency (ICBC), May 2019. Yusuke Aoki, Kai Otsuki, Takeshi Kaneko, Ryohei Banno, Kazuyuki Shudo, &amp;ldquo;SimBlock: A Blockchain Network Simulator&amp;rdquo;, the Workshop on Cryptocurrencies and Blockchains for Distributed Systems (CryBlock, In conjunction with IEEE INFOCOM 2019), April 2019. Yusuke Aoki, Kai Otsuki, Takeshi Kaneko, Ryohei Banno, Kazuyuki Shudo, &amp;ldquo;SimBlock: A Blockchain Network Simulator&amp;rdquo;, Technical Report of IEICE, IA2018-70, March 2019.</description>
     </item>
     
