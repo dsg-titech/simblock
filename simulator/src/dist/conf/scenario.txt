@@ -1,0 +1,10 @@
+0 MakeAndJoinTask 1 3 1 1000 BitcoinCoreTable
+0 MakeAndJoinTask 2 3 1 1000 BitcoinCoreTable
+0 MakeAndJoinTask 3 3 1 1000 BitcoinCoreTable
+0 MakeAndJoinTask 4 3 1 1000 BitcoinCoreTable
+0 MakeAndJoinTask 5 3 1 1000 BitcoinCoreTable
+0 MakeAndJoinTask 6 3 1 1000 BitcoinCoreTable
+0 MakeAndJoinTask 7 3 1 1000 BitcoinCoreTable
+0 MakeAndJoinTask 8 3 1 1000 BitcoinCoreTable
+0 MakeAndJoinTask 9 3 1 1000 BitcoinCoreTable
+0 MakeAndJoinTask 10 3 1 1000 BitcoinCoreTable

@@ -1,0 +1,96 @@
+import org.gradle.plugins.ide.idea.model.*
+import org.gradle.plugins.ide.eclipse.model.*
+
+apply plugin: 'idea'
+apply plugin: 'eclipse'
+
+def srcDir = 'src/main/java'
+def confDir = 'src/dist/conf'
+def outDir = 'build/classes/java/main'
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'application'
+    apply plugin: 'idea'
+    apply plugin: 'eclipse'
+
+    applicationDefaultJvmArgs = ["-Dfile.encoding=UTF-8"]
+
+    idea.module {
+        sourceDirs += file(srcDir)
+        outputDir = file(outDir)
+        inheritOutputDirs = false
+        iml {
+            whenMerged  { module ->
+                module.getDependencies().add(new ModuleLibrary([new Path('file://$MODULE_DIR$/'+confDir)] as Set, [] as Set, [] as Set, [] as Set, null))
+            }
+        }
+    }
+
+    eclipse {
+        jdt.file {
+            withProperties { prop ->
+                prop.clear()
+                prop.put("eclipse.preferences.version", "1")
+                prop.put("encoding/<project>", "UTF-8")
+            }
+        }
+        project {
+            natures 'org.eclipse.jdt.core.javanature'
+            buildCommand 'org.eclipse.jdt.core.javabuilder'
+        }
+        classpath.file {
+            whenMerged { classpath ->
+                classpath.entries.clear()
+                classpath.entries.add(new Output(outDir))
+                classpath.entries.add(new Container('org.eclipse.jdt.launching.JRE_CONTAINER'))
+                classpath.entries.add(new SourceFolder(srcDir, null))
+                classpath.entries.add(new Library(fileReference(confDir)))
+            }
+        }
+    }
+
+    //For reading files when run from gradle.
+    run.doFirst {
+        classpath += files(confDir)
+    }
+
+    //For reading files when run from scripts.
+    startScripts {
+        classpath += files(confDir)
+        doLast {
+            def windowsScriptFile = file getWindowsScript()
+            def unixScriptFile = file getUnixScript()
+            windowsScriptFile.text = windowsScriptFile.text.replace('%APP_HOME%\\lib\\conf', '%APP_HOME%\\conf')
+            unixScriptFile.text = unixScriptFile.text.replace('$APP_HOME/lib/conf', '$APP_HOME/conf')
+        }
+    }
+}
+
+allprojects {
+    def defaultEncoding = 'UTF-8'
+    tasks.withType(AbstractCompile)*.options*.encoding = defaultEncoding
+    tasks.withType(GroovyCompile)*.groovyOptions*.encoding = defaultEncoding
+}
+
+project(':simulator') {
+    mainClassName = 'SimBlock.simulator.Main'
+
+    def distSettings = {
+        baseName = 'SimBlock'
+        exclude('output/graph/*.*')
+        exclude('output/*.*')
+    }
+
+    distZip {
+        configure distSettings
+    }
+
+    distTar {
+        configure distSettings
+    }
+
+    startScripts {
+        applicationName = 'runSimBlock'
+    }
+}

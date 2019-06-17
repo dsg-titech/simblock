@@ -1,0 +1,28 @@
+# IntelliJ IDEA related files
+*.iml
+*.ipr
+*.iws
+
+# Ecipse related files
+.settings/
+.classpath
+.project
+bin/
+
+# Gradle related files
+.gradle/
+build/
+
+# Simulator related files
+blockList.txt
+nodeList.txt
+out.txt
+
+# To manage directory structure by git
+/simulator/src/dist/output/*
+!/simulator/src/dist/output/graph/
+/simulator/src/dist/output/graph/*
+!/simulator/src/dist/output/graph/.gitkeep
+
+#for MacOS
+.DS_Store
