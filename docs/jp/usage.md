@@ -169,7 +169,7 @@ SimBlock
         - ＜ノードID, ノードID＞
             - 左のノードIDから右のノードIDへのコネクションを意味します。
 - *output.json*
-	- 発生したイベントの情報が列挙されます。本ファイルを可視化ツールに読み込ませることで、可視化を実行できます。
+	- 発生したイベントの情報が列挙されます。本ファイルを[SimBlock Visualizer](https://github.com/dsg-titech/simblock-visualizer)に読み込ませることで、可視化を実行できます。
 		- ＜イベントの種類, データ内容＞
 		- イベントの種類
 			- add-link : 隣接ノードの追加。
