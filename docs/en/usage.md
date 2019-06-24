@@ -172,7 +172,7 @@ output contents are as follows:
         - ＜node ID, node ID＞
             - Connection from left node ID to right node ID.
 - *output.json*
-	- This file is listing occurred events. By importing this file into SimBlock Visualizer, you can see the visualization.
+	- This file is listing occurred events. By uploading this file into [SimBlock Visualizer](https://github.com/dsg-titech/simblock-visualizer), you can see the visualization.
 		- ＜event, content＞
 		- Event
 			- add-link: Add a node to neighbor nodes.
