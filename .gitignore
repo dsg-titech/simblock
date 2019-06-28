@@ -9,6 +9,10 @@
 .project
 bin/
 
+# JetBrains related files 
+*.iml
+.idea/
+
 # Gradle related files
 .gradle/
 build/
