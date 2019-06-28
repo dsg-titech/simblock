@@ -90,7 +90,7 @@ public class Main {
 
 			if(getTask() instanceof MiningTask){
 				MiningTask task = (MiningTask) getTask();
-				if(task.getParent().getHeight() == j) j++;
+				if(task.getParentBlock().getHeight() == j) j++;
 				if(j > ENDBLOCKHEIGHT){break;}
 				if(j%100==0 || j==2) writeGraph(j);
 			}
@@ -125,7 +125,7 @@ public class Main {
 		Collections.sort(blockList, new Comparator<Block>(){
 	        @Override
 	        public int compare(Block a, Block b){
-	          int order = Long.signum(a.getTime() - b.getTime());
+	          int order = Long.signum(a.getGeneratedTime() - b.getGeneratedTime());
 	          if(order != 0) return order;
 	          order = System.identityHashCode(a) - System.identityHashCode(b);
 			  return order;

@@ -17,10 +17,13 @@ package SimBlock.task;
 
 import SimBlock.node.Block;
 import SimBlock.node.Node;
+import lombok.Data;
+
 import static SimBlock.simulator.Timer.*;
 import static SimBlock.simulator.Simulator.*;
 import static SimBlock.simulator.Main.*;
 
+@Data
 public class MiningTask implements Task {
 	private Node miningNode;
 	private Block parentBlock;
@@ -32,21 +35,12 @@ public class MiningTask implements Task {
 	
 		double p = getDifficulty();
 		double u = random.nextDouble();
-		this.interval = (long)(  ( Math.log(u) / Math.log(1.0-p) ) / this.miningNode.getPower() );
-	}
-	
-	@Override
-	public long getInterval() {
-		return this.interval;
+		this.interval = (long)(  ( Math.log(u) / Math.log(1.0-p) ) / this.miningNode.getMiningRate() );
 	}
 
 	@Override
 	public void run() {
 		Block createdBlock = new Block(this.parentBlock.getHeight() + 1, this.parentBlock, this.miningNode ,getCurrentTime());
 		this.miningNode.receiveBlock(createdBlock);
-	}
-
-	public Block getParent(){
-		return this.parentBlock;
 	}
 }

@@ -15,6 +15,9 @@
  */
 package SimBlock.node;
 
+import lombok.Data;
+
+@Data
 public class Block {
 	private int height;
 	private Block parent;
@@ -32,12 +35,6 @@ public class Block {
 		this.id = latestId;
 		latestId++;
 	}
-
-	public int getHeight(){return this.height;}
-	public Block getParent(){return this.parent;}
-	public Node getCreator(){return this.creator;}
-	public long getTime(){return this.generatedTime;}
-	public int getId() {return this.id;}
 
 	// return ancestor block that height is {height}
 	public Block getBlockWithHeight(int height){

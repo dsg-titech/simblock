@@ -27,6 +27,10 @@ subprojects {
         }
     }
 
+    dependencies {
+        compileOnly 'org.projectlombok:lombok:1.18.8'
+    }
+
     eclipse {
         jdt.file {
             withProperties { prop ->
@@ -71,6 +75,9 @@ allprojects {
     def defaultEncoding = 'UTF-8'
     tasks.withType(AbstractCompile)*.options*.encoding = defaultEncoding
     tasks.withType(GroovyCompile)*.groovyOptions*.encoding = defaultEncoding
+    repositories {
+        mavenCentral()
+    }
 }
 
 project(':simulator') {

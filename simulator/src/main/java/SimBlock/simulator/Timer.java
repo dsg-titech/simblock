@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.PriorityQueue;
 
 import SimBlock.task.Task;
+import lombok.Value;
 
 
 public class Timer {
@@ -27,19 +28,12 @@ public class Timer {
 	private static PriorityQueue<ScheduledTask> taskQueue = new PriorityQueue<ScheduledTask>();
 	private static Map<Task,ScheduledTask> taskMap = new HashMap<Task,ScheduledTask>();
 	private static long currentTime = 0L;
-	
+
+	@Value
 	private static class ScheduledTask implements Comparable<ScheduledTask> {
 		private final Task task;
 		private final long scheduledTime;
-		
-		private ScheduledTask(Task task, long scheduledTime){
-			this.task = task;
-			this.scheduledTime = scheduledTime;
-		}
-		
-		private Task getTask(){ return this.task; }
-		private long getScheduledTime(){ return this.scheduledTime; }
-		
+
 		public int compareTo(ScheduledTask o) {
 			if(this.equals(o)) return 0;
 			int order = Long.signum(this.scheduledTime - o.scheduledTime);

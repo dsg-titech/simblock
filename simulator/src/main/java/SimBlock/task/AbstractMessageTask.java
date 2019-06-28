@@ -17,16 +17,14 @@ package SimBlock.task;
 import static SimBlock.simulator.Network.*;
 
 import SimBlock.node.Node;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+@AllArgsConstructor
+@Data
 public abstract class AbstractMessageTask implements Task{
 	private Node from;
 	private Node to;
-
-	public AbstractMessageTask(Node from, Node to){
-		this.from = from;
-		this.to = to;
-	}
-	public Node getFrom(){ return this.from; }
-	public Node getTo(){ return this.to; }
 
 	public long getInterval(){
 		long latency = getLatency(this.from.getRegion(), this.to.getRegion());

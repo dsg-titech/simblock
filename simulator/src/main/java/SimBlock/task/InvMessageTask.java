@@ -17,7 +17,11 @@ package SimBlock.task;
 
 import SimBlock.node.Block;
 import SimBlock.node.Node;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode(callSuper=true)
+@Data
 public class InvMessageTask extends AbstractMessageTask {
 	
 	private Block block;
@@ -26,9 +30,4 @@ public class InvMessageTask extends AbstractMessageTask {
 		super(from, to);
 		this.block = block;
 	}
-
-	public Block getBlock(){
-		return this.block;
-	}
-
 }

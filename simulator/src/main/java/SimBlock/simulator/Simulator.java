@@ -56,7 +56,7 @@ public class Simulator {
 		double totalPower = 0.0;
 		
 		for(Node node : SimulatedNodes){
-			totalPower += node.getPower();
+			totalPower += node.getMiningRate();
 		}
 		
 		if(totalPower != 0.0){
@@ -76,7 +76,7 @@ public class Simulator {
 	public static void arriveBlock(Block block,Node node){
 		if(observedBlocks.contains(block)){
 			LinkedHashMap<Integer, Long> Propagation = observedPropagations.get(observedBlocks.indexOf(block));
-			Propagation.put(node.getNodeID(), getCurrentTime() - block.getTime());
+			Propagation.put(node.getNodeID(), getCurrentTime() - block.getGeneratedTime());
 		}else{
 			if(observedBlocks.size() > 10){
 				printPropagation(observedBlocks.get(0),observedPropagations.get(0));
@@ -84,7 +84,7 @@ public class Simulator {
 				observedPropagations.remove(0);
 			}
 			LinkedHashMap<Integer, Long> propagation = new LinkedHashMap<Integer, Long>();
-			propagation.put(node.getNodeID(), getCurrentTime() - block.getTime());
+			propagation.put(node.getNodeID(), getCurrentTime() - block.getGeneratedTime());
 			observedBlocks.add(block);
 			observedPropagations.add(propagation);
 		}

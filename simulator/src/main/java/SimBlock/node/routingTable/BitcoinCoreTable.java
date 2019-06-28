@@ -45,7 +45,7 @@ public class BitcoinCoreTable extends AbstractRoutingTable {
 	    }
 		Collections.shuffle(candidates);
 		for(int candidate:candidates){
-			if(this.outbound.size() < this.getnConnection()){
+			if(this.outbound.size() < this.getNConnection()){
 				this.addNeighbor(getSimulatedNodes().get(candidate));
 			}else{
 				break;
@@ -56,7 +56,7 @@ public class BitcoinCoreTable extends AbstractRoutingTable {
 	// add node to outbound and add selfnode to node's inbound 
 	// if # of nodes in outbound is less than nConnection
 	public boolean addNeighbor(Node node){
-		if(node == getSelfNode() || this.outbound.contains(node) || this.inbound.contains(node) || this.outbound.size() >= this.getnConnection()){
+		if(node == getSelfNode() || this.outbound.contains(node) || this.inbound.contains(node) || this.outbound.size() >= this.getNConnection()){
 			return false;
 		}else if(this.outbound.add(node) && node.getRoutingTable().addInbound(getSelfNode())){
 			printAddLink(node);

@@ -18,7 +18,9 @@ package SimBlock.node.routingTable;
 import java.util.ArrayList;
 
 import SimBlock.node.Node;
+import lombok.Data;
 
+@Data
 public abstract class AbstractRoutingTable {
 	private Node selfNode;
 	private int nConnection = 8;
@@ -26,9 +28,6 @@ public abstract class AbstractRoutingTable {
 	public AbstractRoutingTable(Node selfNode){
 		this.selfNode = selfNode;
 	}
-	protected Node getSelfNode() {return selfNode;}
-	public void setnConnection(int nConnection) {this.nConnection = nConnection;}
-	public int getnConnection(){return this.nConnection;}
 	public abstract void initTable();
 	public abstract ArrayList<Node> getNeighbors();
 	public abstract boolean addNeighbor(Node node);

@@ -32,6 +32,9 @@ import SimBlock.task.InvMessageTask;
 import SimBlock.task.MiningTask;
 import SimBlock.task.RecMessageTask;
 import SimBlock.task.Task;
+import lombok.Data;
+
+@Data
 public class Node {
 	private int region;
 	private int nodeID;
@@ -55,25 +58,18 @@ public class Node {
 		this.miningRate = power;
 		try {
 			this.routingTable = (AbstractRoutingTable) Class.forName(routingTableName).getConstructor(Node.class).newInstance(this);
-			this.setnConnection(nConnection);
+			this.setNConnection(nConnection);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public int getNodeID(){ return this.nodeID; }
-	public Block getBlock(){ return this.block; }
-	public long getPower(){ return this.miningRate; }
-	public Set<Block> getOrphans(){ return this.orphans; }
-	public void setRegion(int region){ this.region = region; }
-	public int getRegion(){ return this.region; }
-
 	public boolean addNeighbor(Node node){ return this.routingTable.addNeighbor(node); }
 	public boolean removeNeighbor(Node node){ return this.routingTable.removeNeighbor(node); }
 	public ArrayList<Node> getNeighbors(){ return this.routingTable.getNeighbors(); }
 	public AbstractRoutingTable getRoutingTable(){ return this.routingTable; }
-	public void setnConnection(int nConnection){ this.routingTable.setnConnection(nConnection); }
-	public int getnConnection(){ return this.routingTable.getnConnection(); }
+	public void setNConnection(int nConnection){ this.routingTable.setNConnection(nConnection); }
+	public int getNConnection(){ return this.routingTable.getNConnection(); }
 
 
 	public void joinNetwork(){

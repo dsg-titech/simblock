@@ -21,7 +21,12 @@ import static SimBlock.simulator.Timer.*;
 
 import SimBlock.node.Block;
 import SimBlock.node.Node;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
+@EqualsAndHashCode(callSuper=true)
+@Data
 public class BlockMessageTask extends AbstractMessageTask {
 
 	private Block block;
@@ -31,10 +36,6 @@ public class BlockMessageTask extends AbstractMessageTask {
 		super(from, to);
 		this.block = block;
 		this.interval = getLatency(this.getFrom().getRegion(), this.getTo().getRegion()) + delay;
-	}
-
-	public long getInterval(){
-		return this.interval;
 	}
 
 	public void run(){
@@ -54,10 +55,4 @@ public class BlockMessageTask extends AbstractMessageTask {
 
 		super.run();
 	}
-
-	public Block getBlock(){
-		return this.block;
-	}
-
-
 }
