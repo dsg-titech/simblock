@@ -136,8 +136,8 @@ SimBlock
 |:-----------|:------------|:------------|
 | 地域名 | *BlockChainSimulator.settings.NetworkConfiguration#REGION_LIST* | ノードの存在する地域の一覧。デフォルトでは6地域です。 |
 | 各地域の遅延 | *BlockChainSimulator.settings.NetworkConfiguration#LATENCY* | 地域ごとの遅延。 |
-| 各地域の送信帯域 | *BlockChainSimulator.settings.NetworkConfiguration#UPLOAD_BANDWIDTH* | 地域ごとの受信帯域幅。 |
-| 各地域の受信帯域 | *BlockChainSimulator.settings.NetworkConfiguration#DOWNLOAD_BANDWIDTH* | 地域ごとの送信帯域幅。 |
+| 各地域の送信帯域 | *BlockChainSimulator.settings.NetworkConfiguration#UPLOAD_BANDWIDTH* | 地域ごとの送信帯域幅。 |
+| 各地域の受信帯域 | *BlockChainSimulator.settings.NetworkConfiguration#DOWNLOAD_BANDWIDTH* | 地域ごとの受信帯域幅。 |
 | 地域分布 | *BlockChainSimulator.settings.NetworkConfiguration#REGION_DISTRIBUTION* | ノードの地域分布。 |
 | 次数分布 | *BlockChainSimulator.settings.SimulationConfiguration#DEGREE_DISTRIBUTION* | アウトバウンドの個数を表します。詳しくはMirror論文参照（Andrew Miller et al., "Discovering bitcoin's public topology and influential nodes", 2015.） |
 | ブロック生成間隔 | *BlockChainSimulator.settings.SimulationConfiguration#INTERVAL* | ブロック生成間隔。 |
