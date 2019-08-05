@@ -1,6 +1,6 @@
 ## What is SimBlock?
 
-SimBlock is an open source blockchain network simulator, developed by Distributed Systems group, Tokyo Institute of Technology.
+SimBlock is an open source blockchain network simulator, developed by Distributed Systems Group, Tokyo Institute of Technology.
 
 https://dsg-titech.github.io/simblock/
 
