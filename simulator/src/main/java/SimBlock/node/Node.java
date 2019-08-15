@@ -35,7 +35,7 @@ import SimBlock.task.Task;
 public class Node {
 	private int region;
 	private int nodeID;
-	private long miningRate;
+	private long miningPower;
 	private AbstractRoutingTable routingTable;
 
 	private Block block;
@@ -49,10 +49,10 @@ public class Node {
 
 	private long processingTime = 2;
 
-	public Node(int nodeID,int nConnection ,int region, long power, String routingTableName){
+	public Node(int nodeID,int nConnection ,int region, long miningPower, String routingTableName){
 		this.nodeID = nodeID;
 		this.region = region;
-		this.miningRate = power;
+		this.miningPower = miningPower;
 		try {
 			this.routingTable = (AbstractRoutingTable) Class.forName(routingTableName).getConstructor(Node.class).newInstance(this);
 			this.setnConnection(nConnection);
@@ -63,7 +63,7 @@ public class Node {
 
 	public int getNodeID(){ return this.nodeID; }
 	public Block getBlock(){ return this.block; }
-	public long getPower(){ return this.miningRate; }
+	public long getMiningPower(){ return this.miningPower; }
 	public Set<Block> getOrphans(){ return this.orphans; }
 	public void setRegion(int region){ this.region = region; }
 	public int getRegion(){ return this.region; }
