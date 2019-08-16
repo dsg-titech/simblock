@@ -25,42 +25,42 @@ import static SimBlock.simulator.Timer.*;
 
 
 public class Simulator {
-	private static ArrayList<Node> SimulatedNodes = new ArrayList<Node>();
-	private static long TargetInterval;// = 1000*60*10;//msec
-	private static double miningSuccessRate;
+	private static ArrayList<Node> simulatedNodes = new ArrayList<Node>();
+	private static long targetInterval;// = 1000*60*10;//msec
+	private static long averageDifficulty;
 	
-	public static ArrayList<Node> getSimulatedNodes(){ return SimulatedNodes; }
-	public static double getMiningSuccessRate(){ return miningSuccessRate; }
-	public static void setTargetInterval(long interval){ TargetInterval = interval; }
+	public static ArrayList<Node> getSimulatedNodes(){ return simulatedNodes; }
+	public static long getAverageDifficulty(){ return averageDifficulty; }
+	public static void setTargetInterval(long interval){ targetInterval = interval; }
 	
 	public static void addNode(Node node){
-		SimulatedNodes.add(node);
-		setMiningSuccessRate();
+		simulatedNodes.add(node);
+		setAverageDifficulty();
 	}
 	
 	public static void removeNode(Node node){
-		SimulatedNodes.remove(node);
-		setMiningSuccessRate();
+		simulatedNodes.remove(node);
+		setAverageDifficulty();
 	}
 	
 	public static void addNodeWithConnection(Node node){
 		node.joinNetwork();
 		addNode(node);
-		for(Node existingNode: SimulatedNodes){
+		for(Node existingNode: simulatedNodes){
 			existingNode.addNeighbor(node);
 		}
 	}
 	
-	// calculate miningSuccessRate from totalMiningPower
-	private static void setMiningSuccessRate(){
-		double totalMiningPower = 0.0;
+	// calculate averageDifficulty from totalMiningPower
+	private static void setAverageDifficulty(){
+		long totalMiningPower = 0;
 		
-		for(Node node : SimulatedNodes){
+		for(Node node : simulatedNodes){
 			totalMiningPower += node.getMiningPower();
 		}
 		
-		if(totalMiningPower != 0.0){
-			miningSuccessRate =  1.0 / (totalMiningPower * TargetInterval);
+		if(totalMiningPower != 0){
+			averageDifficulty =  totalMiningPower * targetInterval;
 		}
 	}
 
