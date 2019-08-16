@@ -30,9 +30,9 @@ public class MiningTask implements Task {
 		this.miningNode = miningNode;
 		this.parentBlock = miningNode.getBlock();
 	
-		double p = getDifficulty();
+		double p = 1.0 / getAverageDifficulty();
 		double u = random.nextDouble();
-		this.interval = (long)(  ( Math.log(u) / Math.log(1.0-p) ) / this.miningNode.getPower() );
+		this.interval = (long)(  ( Math.log(u) / Math.log(1.0-p) ) / this.miningNode.getMiningPower() );
 	}
 	
 	@Override

@@ -25,42 +25,42 @@ import static SimBlock.simulator.Timer.*;
 
 
 public class Simulator {
-	private static ArrayList<Node> SimulatedNodes = new ArrayList<Node>();
-	private static long TargetInterval;// = 1000*60*10;//msec
-	private static double difficulty;
+	private static ArrayList<Node> simulatedNodes = new ArrayList<Node>();
+	private static long targetInterval;// = 1000*60*10;//msec
+	private static long averageDifficulty;
 	
-	public static ArrayList<Node> getSimulatedNodes(){ return SimulatedNodes; }
-	public static double getDifficulty(){ return difficulty; }
-	public static void setTargetInterval(long interval){ TargetInterval = interval; }
+	public static ArrayList<Node> getSimulatedNodes(){ return simulatedNodes; }
+	public static long getAverageDifficulty(){ return averageDifficulty; }
+	public static void setTargetInterval(long interval){ targetInterval = interval; }
 	
 	public static void addNode(Node node){
-		SimulatedNodes.add(node);
-		setDifficulty();
+		simulatedNodes.add(node);
+		setAverageDifficulty();
 	}
 	
 	public static void removeNode(Node node){
-		SimulatedNodes.remove(node);
-		setDifficulty();
+		simulatedNodes.remove(node);
+		setAverageDifficulty();
 	}
 	
 	public static void addNodeWithConnection(Node node){
 		node.joinNetwork();
 		addNode(node);
-		for(Node existingNode: SimulatedNodes){
+		for(Node existingNode: simulatedNodes){
 			existingNode.addNeighbor(node);
 		}
 	}
 	
-	// calculate difficulty from totalPower
-	private static void setDifficulty(){
-		double totalPower = 0.0;
+	// calculate averageDifficulty from totalMiningPower
+	private static void setAverageDifficulty(){
+		long totalMiningPower = 0;
 		
-		for(Node node : SimulatedNodes){
-			totalPower += node.getPower();
+		for(Node node : simulatedNodes){
+			totalMiningPower += node.getMiningPower();
 		}
 		
-		if(totalPower != 0.0){
-			difficulty =  1.0 / (totalPower * TargetInterval);
+		if(totalMiningPower != 0){
+			averageDifficulty =  totalMiningPower * targetInterval;
 		}
 	}
 

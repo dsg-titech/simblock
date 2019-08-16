@@ -143,11 +143,13 @@ It is explained later in the section of "Import to IDE".
 | List of download bandwidth | *BlockChainSimulator.settings.NetworkConfiguration#DOWNLOAD_BANDWIDTH* | List of download bandwidth assigned to each region. |
 | Distribution of region | *BlockChainSimulator.settings.NetworkConfiguration#REGION_DISTRIBUTION* | The distribution of node's region. |
 | Distribution of degree | *BlockChainSimulator.settings.SimulationConfiguration#DEGREE_DISTRIBUTION* | The cumulative distribution of number of outbound links. Cf. Andrew Miller et al., "Discovering bitcoin's public topology and influential nodes", 2015. |
-| Block interval | *BlockChainSimulator.settings.SimulationConfiguration#INTERVAL* | Block interval. |
+| Number of nodes | *BlockChainSimulator.settings.SimulationConfiguration#NUM_OF_NODES* | The number of nodes participating in the blockchain network. |
 | Routing table | *BlockChainSimulator.settings.SimulationConfiguration#TABLE* | The kind of routing tables. |
+| Block interval | *BlockChainSimulator.settings.SimulationConfiguration#INTERVAL* | The expected value of block generation interval. The difficulty of mining is automatically adjusted by this value and the sum of mining power. |
+| Average mining power | *BlockChainSimulator.settings.SimulationConfiguration#AVERAGE_MINING_POWER* | The average mining power of each node. Mining power corresponds to Hash Rate in Bitcoin, and is the number of mining (hash calculation) executed per millisecond. |
+| Standard deviation of mining power | *BlockChainSimulator.settings.SimulationConfiguration#STDEV_OF_MINING_POWER* | The mining power of each node is determined randomly according to the normal ditribution whose average is AVERAGE_MINING_POWER and standard deviation is STDEV_OF_MINING_POWER. |
 | Max block Height | *BlockChainSimulator.settings.SimulationConfiguration#ENDBLOCKHEIGHT* | The block height when a simulation end. |
 | Block size | *BlockChainSimulator.settings.SimulationConfiguration#BLOCKSIZE* | Block size. |
-| Number of nodes | *BlockChainSimulator.settings.SimulationConfiguration#NUM_OF_NODES* | The number of nodes participating in the blockchain network. |
 
 *SimBlock.settings* package has two classes which have these parameters: *NetworkConfiguration.java* and *SimulationConfiguration.java*.
 The former has parameters related to network parameters, and the latter has blockchain parameters.
