@@ -23,25 +23,28 @@ import static SimBlock.simulator.Timer.*;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import SimBlock.node.routingTable.AbstractRoutingTable;
+import SimBlock.node.consensusAlgo.AbstractConsensusAlgo;
 import SimBlock.task.AbstractMessageTask;
 import SimBlock.task.BlockMessageTask;
 import SimBlock.task.InvMessageTask;
-import SimBlock.task.MiningTask;
 import SimBlock.task.RecMessageTask;
 import SimBlock.task.Task;
+
 public class Node {
 	private int region;
 	private int nodeID;
 	private long miningPower;
 	private AbstractRoutingTable routingTable;
+	private AbstractConsensusAlgo consensusAlgo;
 
 	private Block block;
 	private Set<Block> orphans = new HashSet<Block>();
 
-	private Task executingTask = null;
+	private Task miningTask = null;
 
 	private boolean sendingBlock = false;
 	private ArrayList<RecMessageTask> messageQue = new ArrayList<RecMessageTask>();
@@ -49,12 +52,13 @@ public class Node {
 
 	private long processingTime = 2;
 
-	public Node(int nodeID,int nConnection ,int region, long miningPower, String routingTableName){
+	public Node(int nodeID,int nConnection ,int region, long miningPower, String routingTableName, String consensusAlgoName){
 		this.nodeID = nodeID;
 		this.region = region;
 		this.miningPower = miningPower;
 		try {
 			this.routingTable = (AbstractRoutingTable) Class.forName(routingTableName).getConstructor(Node.class).newInstance(this);
+			this.consensusAlgo = (AbstractConsensusAlgo) Class.forName(consensusAlgoName).getConstructor(Node.class).newInstance(this);
 			this.setnConnection(nConnection);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -64,6 +68,7 @@ public class Node {
 	public int getNodeID(){ return this.nodeID; }
 	public Block getBlock(){ return this.block; }
 	public long getMiningPower(){ return this.miningPower; }
+	public AbstractConsensusAlgo getConsensusAlgo() { return this.consensusAlgo; }
 	public Set<Block> getOrphans(){ return this.orphans; }
 	public void setRegion(int region){ this.region = region; }
 	public int getRegion(){ return this.region; }
@@ -80,15 +85,15 @@ public class Node {
 		this.routingTable.initTable();
 	}
 
-	public void genesisBlock(){
-		Block genesis = new Block(1, null, this, 0);
+	public void genesisBlock(Map<String, Long> genesisNextDifficulties, Map<Node, Coinage> genesisCoinages){
+		Block genesis = new Block(null, this, 0, "genesis", 0, genesisNextDifficulties, genesisCoinages);
 		this.receiveBlock(genesis);
 	}
 
 	public void addToChain(Block newBlock) {
-		if(this.executingTask != null){
-			removeTask(this.executingTask);
-			this.executingTask = null;
+		if(this.miningTask != null){
+			removeTask(this.miningTask);
+			this.miningTask = null;
 		}
 		this.block = newBlock;
 		printAddBlock(newBlock);
@@ -118,9 +123,9 @@ public class Node {
 	}
 
 	public void mining(){
-		Task task = new MiningTask(this);
-		this.executingTask = task;
-		putTask(task);
+		Task task = this.consensusAlgo.mining();
+		this.miningTask = task;
+		if (task != null) putTask(task);
 	}
 
 	public void sendInv(Block block){
@@ -133,21 +138,18 @@ public class Node {
 	public void receiveBlock(Block receivedBlock){
 		Block sameHeightBlock;
 
-		if(this.block == null){
-			this.addToChain(receivedBlock);
-			this.mining();
-			this.sendInv(receivedBlock);
-
-		}else if(receivedBlock.getHeight() > this.block.getHeight()){
-			sameHeightBlock = receivedBlock.getBlockWithHeight(this.block.getHeight());
-			if(sameHeightBlock != this.block){
-				this.addOrphans(this.block, sameHeightBlock);
+		if(this.consensusAlgo.isReceivedBlockValid(receivedBlock, this.block)){
+			if (this.block != null) {
+				sameHeightBlock = receivedBlock.getBlockWithHeight(this.block.getHeight());
+				if(sameHeightBlock != this.block){
+					this.addOrphans(this.block, sameHeightBlock);
+				}
 			}
 			this.addToChain(receivedBlock);
 			this.mining();
 			this.sendInv(receivedBlock);
 
-		}else if(receivedBlock.getHeight() <= this.block.getHeight()){
+		}else{
 			sameHeightBlock = this.block.getBlockWithHeight(receivedBlock.getHeight());
 			if(!this.orphans.contains(receivedBlock) && receivedBlock != sameHeightBlock){
 				this.addOrphans(receivedBlock, sameHeightBlock);
@@ -163,7 +165,7 @@ public class Node {
 		if(message instanceof InvMessageTask){
 			Block block = ((InvMessageTask) message).getBlock();
 			if(!this.orphans.contains(block) && !this.downloadingBlocks.contains(block)){
-				if(this.block == null || block.getHeight() > this.block.getHeight()){
+				if(this.consensusAlgo.isReceivedBlockValid(block, this.block)){
 					AbstractMessageTask task = new RecMessageTask(this,from,block);
 					putTask(task);
 					downloadingBlocks.add(block);
@@ -212,5 +214,4 @@ public class Node {
 			sendingBlock = false;
 		}
 	}
-
 }

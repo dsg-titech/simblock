@@ -15,20 +15,52 @@
  */
 package SimBlock.node;
 
+import static SimBlock.simulator.Simulator.*;
+import static SimBlock.settings.SimulationConfiguration.*;
+import java.util.Map;
+import java.util.HashMap;
+
 public class Block {
 	private int height;
 	private Block parent;
 	private Node creator;
-	private long generatedTime;
+	private long time;
+	private String proofOfWhat;
+	private Map<Node, Coinage> coinages;
+	private long difficulty;
+	private long totalDifficulty;
+	private Map<String, Long> nextDifficulties;
 	private int id;
 	private static int latestId = 0;
 
-
-	public Block(int height, Block parent, Node creator,long generatedTime){
-		this.height = height;
+	public Block(Block parent, Node creator, long time, String proofOfWhat, long difficulty, Map<String, Long> genesisNextDifficulties, Map<Node, Coinage>genesisCoinages){
+		this.height = parent == null ? 0 : parent.getHeight() + 1;
 		this.parent = parent;
 		this.creator = creator;
-		this.generatedTime = generatedTime;
+		this.time = time;
+		this.proofOfWhat = proofOfWhat;
+		this.difficulty = difficulty;
+		this.totalDifficulty = difficulty + (parent == null ? 0 : parent.getTotalDifficulty());
+		if (parent == null) {
+			this.nextDifficulties = genesisNextDifficulties;
+
+			this.coinages = genesisCoinages;
+		} else {
+			// TODO: difficulty adjustment
+			this.nextDifficulties = new HashMap<String, Long>();
+			this.nextDifficulties.put("work", parent.getNextDifficulty("work"));
+			this.nextDifficulties.put("stake", parent.getNextDifficulty("stake"));
+			
+			this.coinages = new HashMap<Node, Coinage>();
+			for (Node node : getSimulatedNodes()) {
+				this.coinages.put(node, parent.getCoinage(node).clone());
+				this.coinages.get(node).increaseAge();
+			}
+			if (proofOfWhat == "stake") {
+				this.coinages.get(creator).resetAge();
+				this.coinages.get(creator).reward(STAKING_REWARD);
+			}
+		}
 		this.id = latestId;
 		latestId++;
 	}
@@ -36,8 +68,14 @@ public class Block {
 	public int getHeight(){return this.height;}
 	public Block getParent(){return this.parent;}
 	public Node getCreator(){return this.creator;}
-	public long getTime(){return this.generatedTime;}
+	public long getTime(){return this.time;}
+	public String getProofOfWhat(){return proofOfWhat;}
+	public Coinage getCoinage(Node node){return this.coinages.get(node);}
+	public long getDifficulty() {return this.difficulty;}
+	public long getTotalDifficulty() {return this.totalDifficulty;}
+	public long getNextDifficulty(String proofOfWhat) {return this.nextDifficulties.get(proofOfWhat);}
 	public int getId() {return this.id;}
+
 
 	// return ancestor block that height is {height}
 	public Block getBlockWithHeight(int height){

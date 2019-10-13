@@ -27,20 +27,17 @@ import static SimBlock.simulator.Timer.*;
 public class Simulator {
 	private static ArrayList<Node> simulatedNodes = new ArrayList<Node>();
 	private static long targetInterval;// = 1000*60*10;//msec
-	private static long averageDifficulty;
 	
 	public static ArrayList<Node> getSimulatedNodes(){ return simulatedNodes; }
-	public static long getAverageDifficulty(){ return averageDifficulty; }
+	public static long getTargetInterval(){ return targetInterval; }
 	public static void setTargetInterval(long interval){ targetInterval = interval; }
 	
 	public static void addNode(Node node){
 		simulatedNodes.add(node);
-		setAverageDifficulty();
 	}
 	
 	public static void removeNode(Node node){
 		simulatedNodes.remove(node);
-		setAverageDifficulty();
 	}
 	
 	public static void addNodeWithConnection(Node node){
@@ -50,21 +47,6 @@ public class Simulator {
 			existingNode.addNeighbor(node);
 		}
 	}
-	
-	// calculate averageDifficulty from totalMiningPower
-	private static void setAverageDifficulty(){
-		long totalMiningPower = 0;
-		
-		for(Node node : simulatedNodes){
-			totalMiningPower += node.getMiningPower();
-		}
-		
-		if(totalMiningPower != 0){
-			averageDifficulty =  totalMiningPower * targetInterval;
-		}
-	}
-
-	
 	
 	//
 	// Record block propagation time

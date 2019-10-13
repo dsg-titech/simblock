@@ -18,21 +18,20 @@ package SimBlock.task;
 import SimBlock.node.Block;
 import SimBlock.node.Node;
 import static SimBlock.simulator.Timer.*;
-import static SimBlock.simulator.Simulator.*;
-import static SimBlock.simulator.Main.*;
 
 public class MiningTask implements Task {
-	private Node miningNode;
-	private Block parentBlock;
+	private Node miner;
+	private Block parent;
 	private long interval;
+	private String proofOfWhat;
+	private long difficulty;
 	
-	public MiningTask(Node miningNode) {
-		this.miningNode = miningNode;
-		this.parentBlock = miningNode.getBlock();
-	
-		double p = 1.0 / getAverageDifficulty();
-		double u = random.nextDouble();
-		this.interval = (long)(  ( Math.log(u) / Math.log(1.0-p) ) / this.miningNode.getMiningPower() );
+	public MiningTask(Node miner, long interval, String proofOfWhat, long difficulty) {
+		this.miner = miner;
+		this.parent = miner.getBlock();
+		this.interval = interval;
+		this.proofOfWhat = proofOfWhat;
+		this.difficulty = difficulty;
 	}
 	
 	@Override
@@ -42,11 +41,11 @@ public class MiningTask implements Task {
 
 	@Override
 	public void run() {
-		Block createdBlock = new Block(this.parentBlock.getHeight() + 1, this.parentBlock, this.miningNode ,getCurrentTime());
-		this.miningNode.receiveBlock(createdBlock);
+		Block createdBlock = new Block(this.parent, this.miner, getCurrentTime(), this.proofOfWhat, this.difficulty, null, null);
+		this.miner.receiveBlock(createdBlock);
 	}
 
 	public Block getParent(){
-		return this.parentBlock;
+		return this.parent;
 	}
 }
