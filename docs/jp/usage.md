@@ -135,18 +135,18 @@ SimBlock
 | パラメータ | 場所 | 説明 |
 |:-----------|:------------|:------------|
 | 地域名 | *BlockChainSimulator.settings.NetworkConfiguration#REGION_LIST* | ノードの存在する地域の一覧。デフォルトでは6地域。 |
-| 各地域の遅延 | *BlockChainSimulator.settings.NetworkConfiguration#LATENCY* | 地域ごとの遅延。 |
-| 各地域の送信帯域 | *BlockChainSimulator.settings.NetworkConfiguration#UPLOAD_BANDWIDTH* | 地域ごとの送信帯域幅。 |
-| 各地域の受信帯域 | *BlockChainSimulator.settings.NetworkConfiguration#DOWNLOAD_BANDWIDTH* | 地域ごとの受信帯域幅。 |
-| 地域分布 | *BlockChainSimulator.settings.NetworkConfiguration#REGION_DISTRIBUTION* | ノードの地域分布。 |
+| 各地域の遅延 | *BlockChainSimulator.settings.NetworkConfiguration#LATENCY* | 地域ごとの遅延。 (単位: millisecond) |
+| 各地域の送信帯域 | *BlockChainSimulator.settings.NetworkConfiguration#UPLOAD_BANDWIDTH* | 地域ごとの送信帯域幅。 (単位: bit per second) |
+| 各地域の受信帯域 | *BlockChainSimulator.settings.NetworkConfiguration#DOWNLOAD_BANDWIDTH* | 地域ごとの受信帯域幅。 (単位: bit per second) |
+| 地域分布 | *BlockChainSimulator.settings.NetworkConfiguration#REGION_DISTRIBUTION* | ノードの地域分布。各値は、全ノード数に対する当該地域のノード数の割合を表す。 |
 | 次数分布 | *BlockChainSimulator.settings.SimulationConfiguration#DEGREE_DISTRIBUTION* | アウトバウンドの個数を表す。詳しくはMirror論文参照（Andrew Miller et al., "Discovering bitcoin's public topology and influential nodes", 2015.） |
-| ノード数 | *BlockChainSimulator.settings.SimulationConfiguration#NUM_OF_NODES* | ブロックチェーンネットワーク参加ノード総数。|
+| ノード数 | *BlockChainSimulator.settings.SimulationConfiguration#NUM_OF_NODES* | ブロックチェーンネットワーク参加ノード総数。 |
 | ルーティングテーブル | *BlockChainSimulator.settings.SimulationConfiguration#TABLE* | ルーティングテーブルの種類を表す。 |
-| ブロック生成間隔 | *BlockChainSimulator.settings.SimulationConfiguration#INTERVAL* | ブロック生成間隔の期待値。この値と、下記マイニングパワーの総量から、マイニングの難しさ（difficulty）が自動調整される。 |
+| ブロック生成間隔 | *BlockChainSimulator.settings.SimulationConfiguration#INTERVAL* | ブロック生成間隔の期待値。この値と、下記マイニングパワーの総量から、マイニングの難しさ（difficulty）が自動調整される。 (単位: millisecond) |
 | 平均マイニングパワー | *BlockChainSimulator.settings.SimulationConfiguration#AVERAGE_MINING_POWER* | 各ノードが持つマイニングパワーの平均値。マイニングパワーはBitcoinにおけるHash Rateに相当し、ミリ秒あたりに実行できるマイニング（ハッシュ計算）回数を表す。 |
 | マイニングパワーの標準偏差 | *BlockChainSimulator.settings.SimulationConfiguration#STDEV_OF_MINING_POWER* | 各ノードのマイニングパワーは、平均がAVERAGE_MINING_POWER、標準偏差がSTDEV_OF_MINING_POWERであるような正規分布に沿ってランダムに決定される。 |
 | ブロック高 | *BlockChainSimulator.settings.SimulationConfiguration#ENDBLOCKHEIGHT* | 何ブロック生成後にシミュレーションを終えるかを表す。 |
-| ブロックサイズ | *BlockChainSimulator.settings.SimulationConfiguration#BLOCKSIZE* | ブロックサイズ。 |
+| ブロックサイズ | *BlockChainSimulator.settings.SimulationConfiguration#BLOCKSIZE* | ブロックサイズ。 (単位: byte) |
 
 シミュレータのパラメータは *SimBlock.settings* パッケージ内の2つのクラス、 *NetworkConfiguration* と *SimulationConfiguration* に書かれています。
 前者はネットワーク関係のパラメータを、後者はブロックチェーンネットワークに関するパラメタを保持しています。
