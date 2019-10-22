@@ -25,6 +25,7 @@ public class NetworkConfiguration {
 	public static final List<String> REGION_LIST = new ArrayList<>(Arrays.asList("NORTH_AMERICA", "EUROPE", "SOUTH_AMERICA", "ASIA_PACIFIC", "JAPAN", "AUSTRALIA"));
 
 	// LATENCY[i][j] is average latency from REGION_LIST[i] to REGION_LIST[j]
+	// Unit: millisecond
 	public static final long[][] LATENCY = {
 			{36, 119, 255, 310, 154, 208},
             {119, 12, 221, 242, 266, 350},
@@ -34,11 +35,14 @@ public class NetworkConfiguration {
             {208, 350, 269, 278, 163, 22}};
 
 	// Download bandwidth in each region, and last element is Inter-regional bandwidth
+	// Unit: bit per second
 	public static final long[] DOWNLOAD_BANDWIDTH = {25000000, 24000000, 6500000, 10000000, 17500000, 14000000, 6 * 1000000};
 
 	// Upload bandwidth in each region, and last element is Inter-regional bandwidth
+	// Unit: bit per second
 	public static final long[] UPLOAD_BANDWIDTH =  { 4700000,  8100000, 1800000,  5300000,  3400000,  5200000, 6 * 1000000};
 
+	// Each value means the rate of the number of nodes in the corresponding region to the number of all nodes.
 	public static final double[] REGION_DISTRIBUTION = {0.3869,0.5159,0.0113,0.0574,0.0119,0.0166};
 	//double[] REGION_DISTRIBUTION = {0.3661, 0.4791, 0.0149, 0.1022, 0.0238, 0.0139};lite
 	//double[] REGION_DISTRIBUTION = {0.3924, 0.4879, 0.0212, 0.0697, 0.0106, 0.0182};  //doge
