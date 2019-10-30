@@ -210,9 +210,7 @@ public class Main {
 	}
 	public static Coinage genCoinage() {
 		double r = random.nextGaussian();
-		double s = random.nextGaussian();
-
-		return new Coinage(Math.max((int)(r * STDEV_OF_COINS + AVERAGE_COINS),0), Math.max((int)(s * STDEV_OF_AGE + AVERAGE_AGE),0));
+		return new Coinage(Math.max((int)(r * STDEV_OF_COINS + AVERAGE_COINS),0),1);
 	}
 	public static void constructNetworkWithAllNode(int numNodes){
 		//List<String> regions = new ArrayList<>(Arrays.asList("NORTH_AMERICA", "EUROPE", "SOUTH_AMERICA", "ASIA_PACIFIC", "JAPAN", "AUSTRALIA", "OTHER"));
@@ -251,7 +249,7 @@ public class Main {
 
 		Map<String, Long> genesisNextDifficulties = new HashMap<String, Long>();
 		genesisNextDifficulties.put("work", totalMiningPower * getTargetInterval());
-		genesisNextDifficulties.put("stake", (long)((double)totalCoinage / numNodes * getTargetInterval()));
+		genesisNextDifficulties.put("stake", (long)((double)totalCoinage * getTargetInterval() / 1000));
 		
 		getSimulatedNodes().get(0).genesisBlock(genesisNextDifficulties, genesisCoinages);
 	}

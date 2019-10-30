@@ -20,8 +20,8 @@ import SimBlock.task.MiningTask;
 import SimBlock.node.Block;
 import static SimBlock.simulator.Main.*;
 
-public class ProofOfStake extends AbstractConsensusAlgo {
-	public ProofOfStake(Node selfNode) {
+public class SampleProofOfStake extends AbstractConsensusAlgo {
+	public SampleProofOfStake(Node selfNode) {
 		super(selfNode);
 	}
 

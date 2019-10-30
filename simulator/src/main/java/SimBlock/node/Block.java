@@ -49,17 +49,22 @@ public class Block {
 			// TODO: difficulty adjustment
 			this.nextDifficulties = new HashMap<String, Long>();
 			this.nextDifficulties.put("work", parent.getNextDifficulty("work"));
-			this.nextDifficulties.put("stake", parent.getNextDifficulty("stake"));
-			
+
 			this.coinages = new HashMap<Node, Coinage>();
-			for (Node node : getSimulatedNodes()) {
+			long totalCoinage = 0;
+			for (Node node : parent.coinages.keySet()) {
 				this.coinages.put(node, parent.getCoinage(node).clone());
 				this.coinages.get(node).increaseAge();
+				totalCoinage += this.coinages.get(node).getCoinage();
 			}
 			if (proofOfWhat == "stake") {
+				totalCoinage -= this.coinages.get(creator).getCoinage();
 				this.coinages.get(creator).resetAge();
 				this.coinages.get(creator).reward(STAKING_REWARD);
+				
 			}
+
+			this.nextDifficulties.put("stake", (long)((double)totalCoinage * getTargetInterval() / 1000));
 		}
 		this.id = latestId;
 		latestId++;

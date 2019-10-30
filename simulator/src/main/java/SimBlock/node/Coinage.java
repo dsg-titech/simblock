@@ -30,7 +30,7 @@ public class Coinage implements Cloneable {
 	public long getAge() { return this.age; }
 	public void increaseAge() { this.age++; }
 	public void resetAge() { this.age = 0; }
-	public void reward(double reward) { this.coins *= reward; }
+	public void reward(double reward) { this.coins += this.getCoinage() * reward; }
 	
 	public long getCoinage() { return this.getCoins() * this.getAge(); }
 
