@@ -59,8 +59,8 @@ public class Block {
 			}
 			if (proofOfWhat == "stake") {
 				totalCoinage -= this.coinages.get(creator).getCoinage();
-				this.coinages.get(creator).resetAge();
 				this.coinages.get(creator).reward(STAKING_REWARD);
+				this.coinages.get(creator).resetAge();
 				
 			}
 
