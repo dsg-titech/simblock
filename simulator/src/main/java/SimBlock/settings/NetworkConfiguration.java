@@ -21,33 +21,53 @@ import java.util.List;
 
 // Setting Network latency and bandwith
 public class NetworkConfiguration {
-
 	public static final List<String> REGION_LIST = new ArrayList<>(Arrays.asList("NORTH_AMERICA", "EUROPE", "SOUTH_AMERICA", "ASIA_PACIFIC", "JAPAN", "AUSTRALIA"));
 
 	// LATENCY[i][j] is average latency from REGION_LIST[i] to REGION_LIST[j]
 	// Unit: millisecond
-	public static final long[][] LATENCY = {
-			{36, 119, 255, 310, 154, 208},
-            {119, 12, 221, 242, 266, 350},
-            {255, 221, 137, 347, 256, 269},
-            {310, 242, 347, 99, 172, 278},
-            {154, 266, 256, 172, 9, 163},
-            {208, 350, 269, 278, 163, 22}};
+	private static final long[][] LATENCY_2015 = {
+		{36, 119, 255, 310, 154, 208},
+		{119, 12, 221, 242, 266, 350},
+		{255, 221, 137, 347, 256, 269},
+		{310, 242, 347, 99, 172, 278},
+		{154, 266, 256, 172, 9, 163},
+		{208, 350, 269, 278, 163, 22}};
+	private static final long[][] LATENCY_2019 = {
+		{ 32, 115, 166, 197, 153, 191},
+		{115,  11, 219, 280, 249, 277},
+		{166, 219,  88, 348, 297, 337},
+		{197, 280, 348,  85,  75, 304},
+		{153, 249, 297,  75,  12, 130},
+		{191, 277, 337, 304, 130,  16}};
+
+	public static final long[][] LATENCY = LATENCY_2019;
+	
 
 	// Download bandwidth in each region, and last element is Inter-regional bandwidth
 	// Unit: bit per second
-	public static final long[] DOWNLOAD_BANDWIDTH = {25000000, 24000000, 6500000, 10000000, 17500000, 14000000, 6 * 1000000};
+	private static final long[] DOWNLOAD_BANDWIDTH_2015 = {25000000, 24000000, 6500000, 10000000, 17500000, 14000000, 6 * 1000000};
+	private static final long[] DOWNLOAD_BANDWIDTH_2019 = {50700000, 37000000, 26200000, 15600000, 30000000, 28700000, 6 * 1000000};
+
+	public static final long[] DOWNLOAD_BANDWIDTH = DOWNLOAD_BANDWIDTH_2019;
 
 	// Upload bandwidth in each region, and last element is Inter-regional bandwidth
 	// Unit: bit per second
-	public static final long[] UPLOAD_BANDWIDTH =  { 4700000,  8100000, 1800000,  5300000,  3400000,  5200000, 6 * 1000000};
+	private static final long[] UPLOAD_BANDWIDTH_2015 =  { 4700000,  8100000, 1800000,  5300000,  3400000,  5200000, 6 * 1000000};
+	private static final long[] UPLOAD_BANDWIDTH_2019 =  { 16600000,  8800000, 5600000,  12200000,  14100000,  12600000, 6 * 1000000};
+
+	public static final long[] UPLOAD_BANDWIDTH = UPLOAD_BANDWIDTH_2019;
 
 	// Each value means the rate of the number of nodes in the corresponding region to the number of all nodes.
-	public static final double[] REGION_DISTRIBUTION = {0.3869,0.5159,0.0113,0.0574,0.0119,0.0166};
-	//double[] REGION_DISTRIBUTION = {0.3661, 0.4791, 0.0149, 0.1022, 0.0238, 0.0139};lite
-	//double[] REGION_DISTRIBUTION = {0.3924, 0.4879, 0.0212, 0.0697, 0.0106, 0.0182};  //doge
+	private static final double[] REGION_DISTRIBUTION_BITCOIN_2015 = { 0.3869, 0.5159, 0.0113, 0.0574, 0.0119, 0.0166};
+	private static final double[] REGION_DISTRIBUTION_BITCOIN_2019 = { 0.3315, 0.4998, 0.0090, 0.1176, 0.0224, 0.0195};
+	private static final double[] REGION_DISTRIBUTION_LITECOIN     = { 0.3661, 0.4791, 0.0149, 0.1022, 0.0238, 0.0139};
+	private static final double[] REGION_DISTRIBUTION_DOGECOIN     = { 0.3924, 0.4879, 0.0212, 0.0697, 0.0106, 0.0182};
 
-	public static final double[] DEGREE_DISTRIBUTION = {0.025,0.050,0.075,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.85,0.90,0.95,0.97,0.97,0.98,0.99,0.995,1.0};
-	//double[] DEGREE_DISTRIBUTION = {0.01,0.02,0.04,0.07,0.09,0.14,0.20,0.28,0.39,0.5,0.6,0.69,0.76,0.81,0.85,0.87,0.89,0.92,0.93,1.0};
-	//double DEGREE_DISTRIBUTION[] = {0.00,0.00,0.00,0.00,0.00,0.00,0.00,1.0,1.00,1.00,1.00,1.00,1.00,1.00,1.00,1.00,1.00,1.00,1.00,1.0};
+	public static final double[] REGION_DISTRIBUTION = REGION_DISTRIBUTION_BITCOIN_2019;
+
+	private static final double[] DEGREE_DISTRIBUTION_BITCOIN_2015 = {0.025,0.050,0.075,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.85,0.90,0.95,0.97,0.97,0.98,0.99,0.995,1.0};
+	private static final double[] DEGREE_DISTRIBUTION_LITECOIN     = {0.01,0.02,0.04,0.07,0.09,0.14,0.20,0.28,0.39,0.5,0.6,0.69,0.76,0.81,0.85,0.87,0.89,0.92,0.93,1.0};
+	private static final double[] DEGREE_DISTRIBUTION_DOGECOIN     = {0.00,0.00,0.00,0.00,0.00,0.00,0.00,1.0,1.00,1.00,1.00,1.00,1.00,1.00,1.00,1.00,1.00,1.00,1.00,1.0};
+
+	public static final double[] DEGREE_DISTRIBUTION = DEGREE_DISTRIBUTION_BITCOIN_2015;
 }
