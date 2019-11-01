@@ -59,7 +59,7 @@ public class NetworkConfiguration {
 
 	// Each value means the rate of the number of nodes in the corresponding region to the number of all nodes.
 	private static final double[] REGION_DISTRIBUTION_BITCOIN_2015 = { 0.3869, 0.5159, 0.0113, 0.0574, 0.0119, 0.0166};
-	private static final double[] REGION_DISTRIBUTION_BITCOIN_2019 = { 0.3315, 0.4998, 0.0090, 0.1176, 0.0224, 0.0195};
+	private static final double[] REGION_DISTRIBUTION_BITCOIN_2019 = { 0.3316, 0.4998, 0.0090, 0.1177, 0.0224, 0.0195};
 	private static final double[] REGION_DISTRIBUTION_LITECOIN     = { 0.3661, 0.4791, 0.0149, 0.1022, 0.0238, 0.0139};
 	private static final double[] REGION_DISTRIBUTION_DOGECOIN     = { 0.3924, 0.4879, 0.0212, 0.0697, 0.0106, 0.0182};
 
