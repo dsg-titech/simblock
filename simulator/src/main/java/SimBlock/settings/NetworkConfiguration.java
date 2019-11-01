@@ -33,12 +33,12 @@ public class NetworkConfiguration {
 		{154, 266, 256, 172, 9, 163},
 		{208, 350, 269, 278, 163, 22}};
 	private static final long[][] LATENCY_2019 = {
-		{ 32, 115, 166, 197, 153, 191},
-		{115,  11, 219, 280, 249, 277},
-		{166, 219,  88, 348, 297, 337},
-		{197, 280, 348,  85,  75, 304},
-		{153, 249, 297,  75,  12, 130},
-		{191, 277, 337, 304, 130,  16}};
+		{ 32, 124, 184, 198, 151, 189},
+		{124,  11, 227, 237, 252, 294},
+		{184, 227,  88, 325, 301, 322},
+		{198, 237, 325,  85,  58, 198},
+		{151, 252, 301,  58,  12, 126},
+		{189, 294, 322, 198, 126,  16}};
 
 	public static final long[][] LATENCY = LATENCY_2019;
 	
@@ -46,14 +46,14 @@ public class NetworkConfiguration {
 	// Download bandwidth in each region, and last element is Inter-regional bandwidth
 	// Unit: bit per second
 	private static final long[] DOWNLOAD_BANDWIDTH_2015 = {25000000, 24000000, 6500000, 10000000, 17500000, 14000000, 6 * 1000000};
-	private static final long[] DOWNLOAD_BANDWIDTH_2019 = {50700000, 37000000, 26200000, 15600000, 30000000, 28700000, 6 * 1000000};
+	private static final long[] DOWNLOAD_BANDWIDTH_2019 = {52000000, 40000000, 18000000, 22800000, 22800000, 29900000, 6 * 1000000};
 
 	public static final long[] DOWNLOAD_BANDWIDTH = DOWNLOAD_BANDWIDTH_2019;
 
 	// Upload bandwidth in each region, and last element is Inter-regional bandwidth
 	// Unit: bit per second
 	private static final long[] UPLOAD_BANDWIDTH_2015 =  { 4700000,  8100000, 1800000,  5300000,  3400000,  5200000, 6 * 1000000};
-	private static final long[] UPLOAD_BANDWIDTH_2019 =  { 16600000,  8800000, 5600000,  12200000,  14100000,  12600000, 6 * 1000000};
+	private static final long[] UPLOAD_BANDWIDTH_2019 =  { 19200000,  20700000, 5800000,  15700000,  10200000,  11300000, 6 * 1000000};
 
 	public static final long[] UPLOAD_BANDWIDTH = UPLOAD_BANDWIDTH_2019;
 
