@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package SimBlock.node;
+package SimBlock.block;
 
 public class Coinage implements Cloneable {
 	private long coins;
@@ -23,8 +23,6 @@ public class Coinage implements Cloneable {
 		this.coins = coins;
 		this.age = age;
 	}
-	
-	
 
 	public long getCoins() { return this.coins; }
 	public long getAge() { return this.age; }

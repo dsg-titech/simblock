@@ -15,37 +15,21 @@
  */
 package SimBlock.task;
 
-import SimBlock.node.Block;
+import SimBlock.block.ProofOfWorkBlock;
 import SimBlock.node.Node;
 import static SimBlock.simulator.Timer.*;
 
-public class MiningTask implements Task {
-	private Node miner;
-	private Block parent;
-	private long interval;
-	private String proofOfWhat;
+public class MiningTask extends AbstractMintingTask {
 	private long difficulty;
 	
-	public MiningTask(Node miner, long interval, String proofOfWhat, long difficulty) {
-		this.miner = miner;
-		this.parent = miner.getBlock();
-		this.interval = interval;
-		this.proofOfWhat = proofOfWhat;
+	public MiningTask(Node minter, long interval, long difficulty) {
+		super(minter, interval);
 		this.difficulty = difficulty;
-	}
-	
-	@Override
-	public long getInterval() {
-		return this.interval;
 	}
 
 	@Override
 	public void run() {
-		Block createdBlock = new Block(this.parent, this.miner, getCurrentTime(), this.proofOfWhat, this.difficulty, null, null);
-		this.miner.receiveBlock(createdBlock);
-	}
-
-	public Block getParent(){
-		return this.parent;
+		ProofOfWorkBlock createdBlock = new ProofOfWorkBlock((ProofOfWorkBlock)this.getParent(), this.getMinter(), getCurrentTime(), this.difficulty);
+		this.getMinter().receiveBlock(createdBlock);
 	}
 }

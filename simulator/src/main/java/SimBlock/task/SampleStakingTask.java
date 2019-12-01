@@ -13,22 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package SimBlock.node.consensusAlgo;
+package SimBlock.task;
 
-import SimBlock.block.Block;
+import SimBlock.block.SampleProofOfStakeBlock;
 import SimBlock.node.Node;
-import SimBlock.task.AbstractMintingTask;
+import static SimBlock.simulator.Timer.*;
 
-public abstract class AbstractConsensusAlgo {
-	private Node selfNode;
-
-	public AbstractConsensusAlgo(Node selfNode) {
-		this.selfNode = selfNode;
+public class SampleStakingTask extends AbstractMintingTask {
+	private long difficulty;
+	
+	public SampleStakingTask(Node minter, long interval, long difficulty) {
+		super(minter, interval);
+		this.difficulty = difficulty;
 	}
 
-	public Node getSelfNode() { return this.selfNode; }
-
-	public abstract AbstractMintingTask minting();
-	public abstract boolean isReceivedBlockValid(Block receivedBlock, Block currentBlock);
-	public abstract Block genesisBlock();
+	@Override
+	public void run() {
+		SampleProofOfStakeBlock createdBlock = new SampleProofOfStakeBlock((SampleProofOfStakeBlock)this.getParent(), this.getMinter(), getCurrentTime(), this.difficulty);
+		this.getMinter().receiveBlock(createdBlock);
+	}
 }

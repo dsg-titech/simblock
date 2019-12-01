@@ -19,14 +19,14 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import SimBlock.node.Block;
+import SimBlock.block.Block;
 import SimBlock.node.Node;
 import static SimBlock.simulator.Timer.*;
 
 
 public class Simulator {
 	private static ArrayList<Node> simulatedNodes = new ArrayList<Node>();
-	private static long targetInterval;// = 1000*60*10;//msec
+	private static long targetInterval;//msec
 	
 	public static ArrayList<Node> getSimulatedNodes(){ return simulatedNodes; }
 	public static long getTargetInterval(){ return targetInterval; }
@@ -85,5 +85,4 @@ public class Simulator {
 			printPropagation(observedBlocks.get(i), observedPropagations.get(i));
 		}
 	}
-	
 }

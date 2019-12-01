@@ -15,9 +15,10 @@
  */
 package SimBlock.node.consensusAlgo;
 
+import SimBlock.block.Block;
+import SimBlock.block.ProofOfWorkBlock;
 import SimBlock.node.Node;
 import SimBlock.task.MiningTask;
-import SimBlock.node.Block;
 import static SimBlock.simulator.Main.*;
 
 public class ProofOfWork extends AbstractConsensusAlgo {
@@ -26,25 +27,32 @@ public class ProofOfWork extends AbstractConsensusAlgo {
 	}
 
 	@Override
-	public MiningTask mining() {
+	public MiningTask minting() {
 		Node selfNode = this.getSelfNode();
-		long difficulty = selfNode.getBlock().getNextDifficulty("work");
+		ProofOfWorkBlock parent = (ProofOfWorkBlock)selfNode.getBlock();
+		long difficulty = parent.getNextDifficulty();
 		double p = 1.0 / difficulty;
 		double u = random.nextDouble();
-		return new MiningTask(selfNode, (long)( Math.log(u) / Math.log(1.0-p) / selfNode.getMiningPower() ), "work", difficulty);
+		return new MiningTask(selfNode, (long)( Math.log(u) / Math.log(1.0-p) / selfNode.getMiningPower() ), difficulty);
 	}
 
 	@Override
 	public boolean isReceivedBlockValid(Block receivedBlock, Block currentBlock) {
+		if (!(receivedBlock instanceof ProofOfWorkBlock)) return false;
+		ProofOfWorkBlock _receivedBlock = (ProofOfWorkBlock)receivedBlock;
+		ProofOfWorkBlock _currentBlock = (ProofOfWorkBlock)currentBlock;
+		int receivedBlockHeight = receivedBlock.getHeight();
 		return (
-				receivedBlock.getHeight() == 0 ||
-				receivedBlock.getProofOfWhat() == "work"
-			) && (
-				receivedBlock.getHeight() == 0 ||
-				receivedBlock.getDifficulty() >= receivedBlock.getBlockWithHeight(receivedBlock.getHeight()-1).getNextDifficulty("work")
+				receivedBlockHeight == 0 ||
+				_receivedBlock.getDifficulty() >= ((ProofOfWorkBlock)receivedBlock.getBlockWithHeight(receivedBlockHeight-1)).getNextDifficulty()
 			) && (
 				currentBlock == null ||
-				receivedBlock.getTotalDifficulty() > currentBlock.getTotalDifficulty()
+				_receivedBlock.getTotalDifficulty() > _currentBlock.getTotalDifficulty()
 			);
+	}
+
+	@Override
+	public ProofOfWorkBlock genesisBlock() {
+		return ProofOfWorkBlock.genesisBlock(this.getSelfNode());
 	}
 }

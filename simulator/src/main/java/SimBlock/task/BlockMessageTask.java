@@ -19,7 +19,7 @@ import static SimBlock.simulator.Main.*;
 import static SimBlock.simulator.Network.*;
 import static SimBlock.simulator.Timer.*;
 
-import SimBlock.node.Block;
+import SimBlock.block.Block;
 import SimBlock.node.Node;
 
 public class BlockMessageTask extends AbstractMessageTask {

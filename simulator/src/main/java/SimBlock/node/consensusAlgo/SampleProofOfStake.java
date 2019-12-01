@@ -15,9 +15,10 @@
  */
 package SimBlock.node.consensusAlgo;
 
+import SimBlock.block.Block;
+import SimBlock.block.SampleProofOfStakeBlock;
 import SimBlock.node.Node;
-import SimBlock.task.MiningTask;
-import SimBlock.node.Block;
+import SimBlock.task.SampleStakingTask;
 import static SimBlock.simulator.Main.*;
 
 public class SampleProofOfStake extends AbstractConsensusAlgo {
@@ -26,25 +27,32 @@ public class SampleProofOfStake extends AbstractConsensusAlgo {
 	}
 
 	@Override
-	public MiningTask mining() {
+	public SampleStakingTask minting() {
 		Node selfNode = this.getSelfNode();
-		long difficulty = selfNode.getBlock().getNextDifficulty("stake");
-		double p = (double)selfNode.getBlock().getCoinage(selfNode).getCoinage() / difficulty;
+		SampleProofOfStakeBlock parent = (SampleProofOfStakeBlock)selfNode.getBlock();
+		long difficulty = parent.getNextDifficulty();
+		double p = (double)parent.getCoinage(selfNode).getCoinage() / difficulty;
 		double u = random.nextDouble();
-		return p == 0 ? null : new MiningTask(selfNode, (long)( Math.log(u) / Math.log(1.0-p) * 1000 ), "stake", difficulty);
+		return p == 0 ? null : new SampleStakingTask(selfNode, (long)( Math.log(u) / Math.log(1.0-p) * 1000 ), difficulty);
 	}
 
 	@Override
 	public boolean isReceivedBlockValid(Block receivedBlock, Block currentBlock) {
+		if (!(receivedBlock instanceof SampleProofOfStakeBlock)) return false;
+		SampleProofOfStakeBlock _receivedBlock = (SampleProofOfStakeBlock)receivedBlock;
+		SampleProofOfStakeBlock _currentBlock = (SampleProofOfStakeBlock)currentBlock;
+		int receivedBlockHeight = receivedBlock.getHeight();
 		return (
-				receivedBlock.getHeight() == 0 ||
-				receivedBlock.getProofOfWhat() == "stake"
-			) && (
-				receivedBlock.getHeight() == 0 ||
-				receivedBlock.getDifficulty() >= receivedBlock.getBlockWithHeight(receivedBlock.getHeight()-1).getNextDifficulty("stake")
+				receivedBlockHeight == 0 ||
+				_receivedBlock.getDifficulty() >= ((SampleProofOfStakeBlock)receivedBlock.getBlockWithHeight(receivedBlockHeight-1)).getNextDifficulty()
 			) && (
 				currentBlock == null ||
-				receivedBlock.getTotalDifficulty() > currentBlock.getTotalDifficulty()
+				_receivedBlock.getTotalDifficulty() > _currentBlock.getTotalDifficulty()
 			);
+	}
+
+	@Override
+	public SampleProofOfStakeBlock genesisBlock() {
+		return SampleProofOfStakeBlock.genesisBlock(this.getSelfNode());
 	}
 }

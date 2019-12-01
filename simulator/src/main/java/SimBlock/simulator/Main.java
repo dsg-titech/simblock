@@ -30,17 +30,14 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-import SimBlock.node.Block;
-import SimBlock.node.Coinage;
+import SimBlock.block.Block;
 import SimBlock.node.Node;
-import SimBlock.task.MiningTask;
+import SimBlock.task.AbstractMintingTask;
 
 public class Main {
 	public static Random random = new Random(10);
@@ -62,13 +59,6 @@ public class Main {
 	static {
 		try{
 			OUT_JSON_FILE = new PrintWriter(new BufferedWriter(new FileWriter(new File(OUT_FILE_URI.resolve("./output.json")))));
-		} catch (IOException e){
-			e.printStackTrace();
-		}
-	}
-
-	static {
-		try{
 			STATIC_JSON_FILE = new PrintWriter(new BufferedWriter(new FileWriter(new File(OUT_FILE_URI.resolve("./static.json")))));
 		} catch (IOException e){
 			e.printStackTrace();
@@ -89,8 +79,8 @@ public class Main {
 		int j=1;
 		while(getTask() != null){
 
-			if(getTask() instanceof MiningTask){
-				MiningTask task = (MiningTask) getTask();
+			if(getTask() instanceof AbstractMintingTask){
+				AbstractMintingTask task = (AbstractMintingTask) getTask();
 				if(task.getParent().getHeight() == j) j++;
 				if(j > ENDBLOCKHEIGHT){break;}
 				if(j%100==0 || j==2) writeGraph(j);
@@ -208,28 +198,16 @@ public class Main {
 
 		return  Math.max((int)(r * STDEV_OF_MINING_POWER + AVERAGE_MINING_POWER),1);
 	}
-	public static Coinage genCoinage() {
-		double r = random.nextGaussian();
-		return new Coinage(Math.max((int)(r * STDEV_OF_COINS + AVERAGE_COINS),0),1);
-	}
 	public static void constructNetworkWithAllNode(int numNodes){
 		//List<String> regions = new ArrayList<>(Arrays.asList("NORTH_AMERICA", "EUROPE", "SOUTH_AMERICA", "ASIA_PACIFIC", "JAPAN", "AUSTRALIA", "OTHER"));
 		double[] regionDistribution = getRegionDistribution();
 		List<Integer> regionList  = makeRandomList(regionDistribution,false);
 		double[] degreeDistribution = getDegreeDistribution();
 		List<Integer> degreeList  = makeRandomList(degreeDistribution,true);
-
-		long totalMiningPower = 0;
-		long totalCoinage = 0;
-		Map<Node, Coinage> genesisCoinages = new HashMap<Node, Coinage>();
+		
 		for(int id = 1; id <= numNodes; id++){
-			long miningPower = genMiningPower();
-			totalMiningPower += miningPower;
-			Node node = new Node(id,degreeList.get(id-1)+1,regionList.get(id-1), miningPower,TABLE,ALGO);
+			Node node = new Node(id,degreeList.get(id-1)+1,regionList.get(id-1), genMiningPower(),TABLE,ALGO);
 			addNode(node);
-			Coinage coinage = genCoinage();
-			totalCoinage += coinage.getCoinage();
-			genesisCoinages.put(node, coinage);
 
 			OUT_JSON_FILE.print("{");
 			OUT_JSON_FILE.print(	"\"kind\":\"add-node\",");
@@ -246,12 +224,8 @@ public class Main {
 		for(Node node: getSimulatedNodes()){
 			node.joinNetwork();
 		}
-
-		Map<String, Long> genesisNextDifficulties = new HashMap<String, Long>();
-		genesisNextDifficulties.put("work", totalMiningPower * getTargetInterval());
-		genesisNextDifficulties.put("stake", (long)((double)totalCoinage * getTargetInterval() / 1000));
 		
-		getSimulatedNodes().get(0).genesisBlock(genesisNextDifficulties, genesisCoinages);
+		getSimulatedNodes().get(0).genesisBlock();
 	}
 
 	public static void writeGraph(int j){

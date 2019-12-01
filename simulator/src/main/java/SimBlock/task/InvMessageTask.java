@@ -15,7 +15,7 @@
  */
 package SimBlock.task;
 
-import SimBlock.node.Block;
+import SimBlock.block.Block;
 import SimBlock.node.Node;
 
 public class InvMessageTask extends AbstractMessageTask {
