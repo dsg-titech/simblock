@@ -15,24 +15,26 @@
  */
 package SimBlock.block;
 
+import java.math.BigInteger;
 import SimBlock.node.Node;
 import static SimBlock.simulator.Simulator.*;
 
+
 public class ProofOfWorkBlock extends Block {
 	private long difficulty;
-	private long totalDifficulty;
+	private BigInteger totalDifficulty;
 	private long nextDifficulty;
 	private static long genesisNextDifficulty;
 
 	public ProofOfWorkBlock(ProofOfWorkBlock parent, Node minter, long time, long difficulty) {
 		super(parent, minter, time);
 		this.difficulty = difficulty;
-		this.totalDifficulty = (parent == null ? 0 : parent.getTotalDifficulty()) + difficulty;
+		this.totalDifficulty = (parent == null ? BigInteger.ZERO : parent.getTotalDifficulty()).add(BigInteger.valueOf(difficulty));
 		this.nextDifficulty = (parent == null ? ProofOfWorkBlock.genesisNextDifficulty : parent.getNextDifficulty()); // TODO: difficulty adjustment
 	}
 
 	public long getDifficulty() {return this.difficulty;}
-	public long getTotalDifficulty() {return this.totalDifficulty;}
+	public BigInteger getTotalDifficulty() {return this.totalDifficulty;}
 	public long getNextDifficulty() {return this.nextDifficulty;}
 
 	public static ProofOfWorkBlock genesisBlock(Node minter) {

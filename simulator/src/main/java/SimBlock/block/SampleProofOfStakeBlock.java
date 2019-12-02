@@ -15,6 +15,7 @@
  */
 package SimBlock.block;
 
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 import SimBlock.node.Node;
@@ -26,7 +27,7 @@ public class SampleProofOfStakeBlock extends Block {
 	private Map<Node, Coinage> coinages;
 	private static Map<Node, Coinage> genesisCoinages;
 	private long difficulty;
-	private long totalDifficulty;
+	private BigInteger totalDifficulty;
 	private long nextDifficulty;
 
 	public SampleProofOfStakeBlock(SampleProofOfStakeBlock parent, Node minter, long time, long difficulty) {
@@ -52,13 +53,13 @@ public class SampleProofOfStakeBlock extends Block {
 		}
 		
 		this.difficulty = difficulty;
-		this.totalDifficulty = (parent == null ? 0 : parent.getTotalDifficulty()) + difficulty;
+		this.totalDifficulty = (parent == null ? BigInteger.ZERO : parent.getTotalDifficulty()).add(BigInteger.valueOf(difficulty));
 		this.nextDifficulty = (long)((double)totalCoinage * getTargetInterval() / 1000);
 	}
 	
 	public Coinage getCoinage(Node node) {return this.coinages.get(node);}
 	public long getDifficulty() {return this.difficulty;}
-	public long getTotalDifficulty() {return this.totalDifficulty;}
+	public BigInteger getTotalDifficulty() {return this.totalDifficulty;}
 	public long getNextDifficulty() {return this.nextDifficulty;}
 	
 	private static Coinage genCoinage() {
