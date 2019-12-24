@@ -19,10 +19,12 @@ import SimBlock.block.SampleProofOfStakeBlock;
 import SimBlock.node.Node;
 import static SimBlock.simulator.Timer.*;
 
+import java.math.BigInteger;
+
 public class SampleStakingTask extends AbstractMintingTask {
-	private long difficulty;
+	private BigInteger difficulty;
 	
-	public SampleStakingTask(Node minter, long interval, long difficulty) {
+	public SampleStakingTask(Node minter, long interval, BigInteger difficulty) {
 		super(minter, interval);
 		this.difficulty = difficulty;
 	}

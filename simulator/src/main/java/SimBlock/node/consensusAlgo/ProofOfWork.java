@@ -21,6 +21,8 @@ import SimBlock.node.Node;
 import SimBlock.task.MiningTask;
 import static SimBlock.simulator.Main.*;
 
+import java.math.BigInteger;
+
 public class ProofOfWork extends AbstractConsensusAlgo {
 	public ProofOfWork(Node selfNode) {
 		super(selfNode);
@@ -30,8 +32,8 @@ public class ProofOfWork extends AbstractConsensusAlgo {
 	public MiningTask minting() {
 		Node selfNode = this.getSelfNode();
 		ProofOfWorkBlock parent = (ProofOfWorkBlock)selfNode.getBlock();
-		long difficulty = parent.getNextDifficulty();
-		double p = 1.0 / difficulty;
+		BigInteger difficulty = parent.getNextDifficulty();
+		double p = 1.0 / difficulty.doubleValue();
 		double u = random.nextDouble();
 		return new MiningTask(selfNode, (long)( Math.log(u) / Math.log(1.0-p) / selfNode.getMiningPower() ), difficulty);
 	}
@@ -44,7 +46,7 @@ public class ProofOfWork extends AbstractConsensusAlgo {
 		int receivedBlockHeight = receivedBlock.getHeight();
 		return (
 				receivedBlockHeight == 0 ||
-				_receivedBlock.getDifficulty() >= ((ProofOfWorkBlock)receivedBlock.getBlockWithHeight(receivedBlockHeight-1)).getNextDifficulty()
+				_receivedBlock.getDifficulty().compareTo(((ProofOfWorkBlock)receivedBlock.getBlockWithHeight(receivedBlockHeight-1)).getNextDifficulty()) >= 0
 			) && (
 				currentBlock == null ||
 				_receivedBlock.getTotalDifficulty().compareTo(_currentBlock.getTotalDifficulty()) > 0

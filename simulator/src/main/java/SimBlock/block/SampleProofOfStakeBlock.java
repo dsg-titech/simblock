@@ -26,11 +26,11 @@ import static SimBlock.simulator.Simulator.*;
 public class SampleProofOfStakeBlock extends Block {
 	private Map<Node, Coinage> coinages;
 	private static Map<Node, Coinage> genesisCoinages;
-	private long difficulty;
+	private BigInteger difficulty;
 	private BigInteger totalDifficulty;
-	private long nextDifficulty;
+	private BigInteger nextDifficulty;
 
-	public SampleProofOfStakeBlock(SampleProofOfStakeBlock parent, Node minter, long time, long difficulty) {
+	public SampleProofOfStakeBlock(SampleProofOfStakeBlock parent, Node minter, long time, BigInteger difficulty) {
 		super(parent, minter, time);
 		
 		this.coinages = new HashMap<Node, Coinage>();
@@ -47,24 +47,24 @@ public class SampleProofOfStakeBlock extends Block {
 			this.coinages.get(minter).resetAge();
 		}
 		
-		long totalCoinage = 0;
+		BigInteger totalCoinage = BigInteger.ZERO;
 		for (Node node : getSimulatedNodes()) {
-			totalCoinage += this.coinages.get(node).getCoinage();
+			totalCoinage = totalCoinage.add(this.coinages.get(node).getCoinage());
 		}
 		
 		this.difficulty = difficulty;
-		this.totalDifficulty = (parent == null ? BigInteger.ZERO : parent.getTotalDifficulty()).add(BigInteger.valueOf(difficulty));
-		this.nextDifficulty = (long)((double)totalCoinage * getTargetInterval() / 1000);
+		this.totalDifficulty = (parent == null ? BigInteger.ZERO : parent.getTotalDifficulty()).add(difficulty);
+		this.nextDifficulty = totalCoinage.multiply(BigInteger.valueOf(getTargetInterval())).divide(BigInteger.valueOf(1000));
 	}
 	
 	public Coinage getCoinage(Node node) {return this.coinages.get(node);}
-	public long getDifficulty() {return this.difficulty;}
+	public BigInteger getDifficulty() {return this.difficulty;}
 	public BigInteger getTotalDifficulty() {return this.totalDifficulty;}
-	public long getNextDifficulty() {return this.nextDifficulty;}
+	public BigInteger getNextDifficulty() {return this.nextDifficulty;}
 	
 	private static Coinage genCoinage() {
 		double r = random.nextGaussian();
-		return new Coinage(Math.max((int)(r * STDEV_OF_COINS + AVERAGE_COINS),0),1);
+		return new Coinage(BigInteger.valueOf(Math.max((int)(r * STDEV_OF_COINS + AVERAGE_COINS),0)),1);
 	}
 
 	public static SampleProofOfStakeBlock genesisBlock(Node minter) {
@@ -72,6 +72,6 @@ public class SampleProofOfStakeBlock extends Block {
 		for(Node node : getSimulatedNodes()){
 			genesisCoinages.put(node, genCoinage());
 		}
-		return new SampleProofOfStakeBlock(null, minter, 0, 0);
+		return new SampleProofOfStakeBlock(null, minter, 0, BigInteger.ZERO);
 	}
 }

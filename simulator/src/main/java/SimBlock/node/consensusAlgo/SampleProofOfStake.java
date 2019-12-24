@@ -21,6 +21,8 @@ import SimBlock.node.Node;
 import SimBlock.task.SampleStakingTask;
 import static SimBlock.simulator.Main.*;
 
+import java.math.BigInteger;
+
 public class SampleProofOfStake extends AbstractConsensusAlgo {
 	public SampleProofOfStake(Node selfNode) {
 		super(selfNode);
@@ -30,8 +32,8 @@ public class SampleProofOfStake extends AbstractConsensusAlgo {
 	public SampleStakingTask minting() {
 		Node selfNode = this.getSelfNode();
 		SampleProofOfStakeBlock parent = (SampleProofOfStakeBlock)selfNode.getBlock();
-		long difficulty = parent.getNextDifficulty();
-		double p = (double)parent.getCoinage(selfNode).getCoinage() / difficulty;
+		BigInteger difficulty = parent.getNextDifficulty();
+		double p = parent.getCoinage(selfNode).getCoinage().doubleValue() / difficulty.doubleValue();
 		double u = random.nextDouble();
 		return p == 0 ? null : new SampleStakingTask(selfNode, (long)( Math.log(u) / Math.log(1.0-p) * 1000 ), difficulty);
 	}
@@ -44,7 +46,7 @@ public class SampleProofOfStake extends AbstractConsensusAlgo {
 		int receivedBlockHeight = receivedBlock.getHeight();
 		return (
 				receivedBlockHeight == 0 ||
-				_receivedBlock.getDifficulty() >= ((SampleProofOfStakeBlock)receivedBlock.getBlockWithHeight(receivedBlockHeight-1)).getNextDifficulty()
+				_receivedBlock.getDifficulty().compareTo(((SampleProofOfStakeBlock)receivedBlock.getBlockWithHeight(receivedBlockHeight-1)).getNextDifficulty()) >= 0
 			) && (
 				currentBlock == null ||
 				_receivedBlock.getTotalDifficulty().compareTo(_currentBlock.getTotalDifficulty()) > 0

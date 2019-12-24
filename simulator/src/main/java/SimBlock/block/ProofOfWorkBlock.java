@@ -21,28 +21,28 @@ import static SimBlock.simulator.Simulator.*;
 
 
 public class ProofOfWorkBlock extends Block {
-	private long difficulty;
+	private BigInteger difficulty;
 	private BigInteger totalDifficulty;
-	private long nextDifficulty;
-	private static long genesisNextDifficulty;
+	private BigInteger nextDifficulty;
+	private static BigInteger genesisNextDifficulty;
 
-	public ProofOfWorkBlock(ProofOfWorkBlock parent, Node minter, long time, long difficulty) {
+	public ProofOfWorkBlock(ProofOfWorkBlock parent, Node minter, long time, BigInteger difficulty) {
 		super(parent, minter, time);
 		this.difficulty = difficulty;
-		this.totalDifficulty = (parent == null ? BigInteger.ZERO : parent.getTotalDifficulty()).add(BigInteger.valueOf(difficulty));
+		this.totalDifficulty = (parent == null ? BigInteger.ZERO : parent.getTotalDifficulty()).add(difficulty);
 		this.nextDifficulty = (parent == null ? ProofOfWorkBlock.genesisNextDifficulty : parent.getNextDifficulty()); // TODO: difficulty adjustment
 	}
 
-	public long getDifficulty() {return this.difficulty;}
+	public BigInteger getDifficulty() {return this.difficulty;}
 	public BigInteger getTotalDifficulty() {return this.totalDifficulty;}
-	public long getNextDifficulty() {return this.nextDifficulty;}
+	public BigInteger getNextDifficulty() {return this.nextDifficulty;}
 
 	public static ProofOfWorkBlock genesisBlock(Node minter) {
 		long totalMiningPower = 0;
 		for(Node node : getSimulatedNodes()){
 			totalMiningPower += node.getMiningPower();
 		}
-		genesisNextDifficulty = totalMiningPower * getTargetInterval();
-		return new ProofOfWorkBlock(null, minter, 0, 0);
+		genesisNextDifficulty = BigInteger.valueOf(totalMiningPower * getTargetInterval());
+		return new ProofOfWorkBlock(null, minter, 0, BigInteger.ZERO);
 	}
 }

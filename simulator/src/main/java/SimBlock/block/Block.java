@@ -39,7 +39,7 @@ public class Block {
 	public Node getMinter(){return this.minter;}
 	public long getTime(){return this.time;}
 	public int getId() {return this.id;}
-	
+
 	public static Block genesisBlock(Node minter) {
 		return new Block(null, minter, 0);
 	}

@@ -19,10 +19,12 @@ import SimBlock.block.ProofOfWorkBlock;
 import SimBlock.node.Node;
 import static SimBlock.simulator.Timer.*;
 
+import java.math.BigInteger;
+
 public class MiningTask extends AbstractMintingTask {
-	private long difficulty;
+	private BigInteger difficulty;
 	
-	public MiningTask(Node minter, long interval, long difficulty) {
+	public MiningTask(Node minter, long interval, BigInteger difficulty) {
 		super(minter, interval);
 		this.difficulty = difficulty;
 	}
