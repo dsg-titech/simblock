@@ -44,9 +44,11 @@ public class SampleProofOfStake extends AbstractConsensusAlgo {
 		SampleProofOfStakeBlock _receivedBlock = (SampleProofOfStakeBlock)receivedBlock;
 		SampleProofOfStakeBlock _currentBlock = (SampleProofOfStakeBlock)currentBlock;
 		int receivedBlockHeight = receivedBlock.getHeight();
+		SampleProofOfStakeBlock receivedBlockParent = receivedBlockHeight == 0 ? null : (SampleProofOfStakeBlock)receivedBlock.getBlockWithHeight(receivedBlockHeight-1);
+
 		return (
 				receivedBlockHeight == 0 ||
-				_receivedBlock.getDifficulty().compareTo(((SampleProofOfStakeBlock)receivedBlock.getBlockWithHeight(receivedBlockHeight-1)).getNextDifficulty()) >= 0
+				_receivedBlock.getDifficulty().compareTo(receivedBlockParent.getNextDifficulty()) >= 0
 			) && (
 				currentBlock == null ||
 				_receivedBlock.getTotalDifficulty().compareTo(_currentBlock.getTotalDifficulty()) > 0

@@ -44,9 +44,11 @@ public class ProofOfWork extends AbstractConsensusAlgo {
 		ProofOfWorkBlock _receivedBlock = (ProofOfWorkBlock)receivedBlock;
 		ProofOfWorkBlock _currentBlock = (ProofOfWorkBlock)currentBlock;
 		int receivedBlockHeight = receivedBlock.getHeight();
+		ProofOfWorkBlock receivedBlockParent = receivedBlockHeight == 0 ? null : (ProofOfWorkBlock)receivedBlock.getBlockWithHeight(receivedBlockHeight-1);
+
 		return (
 				receivedBlockHeight == 0 ||
-				_receivedBlock.getDifficulty().compareTo(((ProofOfWorkBlock)receivedBlock.getBlockWithHeight(receivedBlockHeight-1)).getNextDifficulty()) >= 0
+				_receivedBlock.getDifficulty().compareTo(receivedBlockParent.getNextDifficulty()) >= 0
 			) && (
 				currentBlock == null ||
 				_receivedBlock.getTotalDifficulty().compareTo(_currentBlock.getTotalDifficulty()) > 0
