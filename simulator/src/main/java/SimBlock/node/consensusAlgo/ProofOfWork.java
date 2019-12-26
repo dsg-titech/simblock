@@ -35,7 +35,7 @@ public class ProofOfWork extends AbstractConsensusAlgo {
 		BigInteger difficulty = parent.getNextDifficulty();
 		double p = 1.0 / difficulty.doubleValue();
 		double u = random.nextDouble();
-		return new MiningTask(selfNode, (long)( Math.log(u) / Math.log(1.0-p) / selfNode.getMiningPower() ), difficulty);
+		return p <= Math.pow(2, -53) ? null : new MiningTask(selfNode, (long)( Math.log(u) / Math.log(1.0-p) / selfNode.getMiningPower() ), difficulty);
 	}
 
 	@Override
