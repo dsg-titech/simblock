@@ -35,13 +35,13 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import SimBlock.node.Block;
+import SimBlock.block.Block;
 import SimBlock.node.Node;
-import SimBlock.task.MiningTask;
+import SimBlock.task.AbstractMintingTask;
 
 public class Main {
 	public static Random random = new Random(10);
-	public static long time1 = 0;//a value to know the simation time.
+	public static long time1 = 0;//a value to know the simulation time.
 
 	public static URI CONF_FILE_URI;
 	public static URI OUT_FILE_URI;
@@ -59,13 +59,6 @@ public class Main {
 	static {
 		try{
 			OUT_JSON_FILE = new PrintWriter(new BufferedWriter(new FileWriter(new File(OUT_FILE_URI.resolve("./output.json")))));
-		} catch (IOException e){
-			e.printStackTrace();
-		}
-	}
-
-	static {
-		try{
 			STATIC_JSON_FILE = new PrintWriter(new BufferedWriter(new FileWriter(new File(OUT_FILE_URI.resolve("./static.json")))));
 		} catch (IOException e){
 			e.printStackTrace();
@@ -83,13 +76,11 @@ public class Main {
 
 		constructNetworkWithAllNode(NUM_OF_NODES);
 
-		getSimulatedNodes().get(0).genesisBlock();
-
 		int j=1;
 		while(getTask() != null){
 
-			if(getTask() instanceof MiningTask){
-				MiningTask task = (MiningTask) getTask();
+			if(getTask() instanceof AbstractMintingTask){
+				AbstractMintingTask task = (AbstractMintingTask) getTask();
 				if(task.getParent().getHeight() == j) j++;
 				if(j > ENDBLOCKHEIGHT){break;}
 				if(j%100==0 || j==2) writeGraph(j);
@@ -213,9 +204,9 @@ public class Main {
 		List<Integer> regionList  = makeRandomList(regionDistribution,false);
 		double[] degreeDistribution = getDegreeDistribution();
 		List<Integer> degreeList  = makeRandomList(degreeDistribution,true);
-
+		
 		for(int id = 1; id <= numNodes; id++){
-			Node node = new Node(id,degreeList.get(id-1)+1,regionList.get(id-1), genMiningPower(),TABLE);
+			Node node = new Node(id,degreeList.get(id-1)+1,regionList.get(id-1), genMiningPower(),TABLE,ALGO);
 			addNode(node);
 
 			OUT_JSON_FILE.print("{");
@@ -233,7 +224,8 @@ public class Main {
 		for(Node node: getSimulatedNodes()){
 			node.joinNetwork();
 		}
-
+		
+		getSimulatedNodes().get(0).genesisBlock();
 	}
 
 	public static void writeGraph(int j){

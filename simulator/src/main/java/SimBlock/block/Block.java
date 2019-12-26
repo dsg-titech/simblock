@@ -13,39 +13,53 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package SimBlock.node;
+package SimBlock.block;
+
+import SimBlock.node.Node;
 
 public class Block {
 	private int height;
 	private Block parent;
-	private Node creator;
-	private long generatedTime;
+	private Node minter;
+	private long time;
 	private int id;
 	private static int latestId = 0;
 
-
-	public Block(int height, Block parent, Node creator,long generatedTime){
-		this.height = height;
+	public Block(Block parent, Node minter, long time){
+		this.height = parent == null ? 0 : parent.getHeight() + 1;
 		this.parent = parent;
-		this.creator = creator;
-		this.generatedTime = generatedTime;
+		this.minter = minter;
+		this.time = time;
 		this.id = latestId;
 		latestId++;
 	}
 
 	public int getHeight(){return this.height;}
 	public Block getParent(){return this.parent;}
-	public Node getCreator(){return this.creator;}
-	public long getTime(){return this.generatedTime;}
+	public Node getMinter(){return this.minter;}
+	public long getTime(){return this.time;}
 	public int getId() {return this.id;}
 
+	public static Block genesisBlock(Node minter) {
+		return new Block(null, minter, 0);
+	}
+
 	// return ancestor block that height is {height}
-	public Block getBlockWithHeight(int height){
-		if(this.height == height){
+	public Block getBlockWithHeight(int height) {
+		if (this.height == height) {
 			return this;
-		}else{
+		} else {
 			return this.parent.getBlockWithHeight(height);
 		}
 	}
 
+	public boolean isOnSameChainAs(Block block) {
+		if (block == null) {
+			return false;
+		} else if (this.height <= block.height) {
+			return this.equals(block.getBlockWithHeight(this.height));
+		} else {
+			return this.getBlockWithHeight(block.height).equals(block);
+		}
+	}
 }

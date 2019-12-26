@@ -19,6 +19,7 @@ public class SimulationConfiguration {
 	public static final int NUM_OF_NODES = 600;//600;//800;//6000;
 
 	public static final String TABLE = "SimBlock.node.routingTable.BitcoinCoreTable";
+	public static final String ALGO = "SimBlock.node.consensusAlgo.SampleProofOfStake";
 
 	// Unit: millisecond
 	public static final long INTERVAL = 1000*60*10;//1000*60;//1000*30*5;//1000*60*10;
@@ -26,6 +27,11 @@ public class SimulationConfiguration {
 	// Mining power is the number of mining (hash calculation) executed per millisecond.
 	public static final int AVERAGE_MINING_POWER = 400000;
 	public static final int STDEV_OF_MINING_POWER = 100000;
+
+	public static final int AVERAGE_COINS = 4000;
+	public static final int STDEV_OF_COINS = 2000;
+
+	public static final double STAKING_REWARD = 0.01;
 
 	public static final int ENDBLOCKHEIGHT = 100;
 

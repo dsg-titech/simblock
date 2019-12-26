@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 package SimBlock.task;
+
 import static SimBlock.simulator.Network.*;
 
 import SimBlock.node.Node;
+
 public abstract class AbstractMessageTask implements Task{
 	private Node from;
 	private Node to;

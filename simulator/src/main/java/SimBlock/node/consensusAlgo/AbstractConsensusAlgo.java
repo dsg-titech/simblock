@@ -13,25 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package SimBlock.task;
+package SimBlock.node.consensusAlgo;
 
-import SimBlock.block.ProofOfWorkBlock;
+import SimBlock.block.Block;
 import SimBlock.node.Node;
-import static SimBlock.simulator.Timer.*;
+import SimBlock.task.AbstractMintingTask;
 
-import java.math.BigInteger;
+public abstract class AbstractConsensusAlgo {
+	private Node selfNode;
 
-public class MiningTask extends AbstractMintingTask {
-	private BigInteger difficulty;
-	
-	public MiningTask(Node minter, long interval, BigInteger difficulty) {
-		super(minter, interval);
-		this.difficulty = difficulty;
+	public AbstractConsensusAlgo(Node selfNode) {
+		this.selfNode = selfNode;
 	}
 
-	@Override
-	public void run() {
-		ProofOfWorkBlock createdBlock = new ProofOfWorkBlock((ProofOfWorkBlock)this.getParent(), this.getMinter(), getCurrentTime(), this.difficulty);
-		this.getMinter().receiveBlock(createdBlock);
-	}
+	public Node getSelfNode() { return this.selfNode; }
+
+	public abstract AbstractMintingTask minting();
+	public abstract boolean isReceivedBlockValid(Block receivedBlock, Block currentBlock);
+	public abstract Block genesisBlock();
 }
