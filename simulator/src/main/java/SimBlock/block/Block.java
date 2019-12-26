@@ -45,11 +45,21 @@ public class Block {
 	}
 
 	// return ancestor block that height is {height}
-	public Block getBlockWithHeight(int height){
-		if(this.height == height){
+	public Block getBlockWithHeight(int height) {
+		if (this.height == height) {
 			return this;
-		}else{
+		} else {
 			return this.parent.getBlockWithHeight(height);
+		}
+	}
+
+	public boolean isOnSameChainAs(Block block) {
+		if (block == null) {
+			return false;
+		} else if (this.height <= block.height) {
+			return this.equals(block.getBlockWithHeight(this.height));
+		} else {
+			return this.getBlockWithHeight(block.height).equals(block);
 		}
 	}
 }

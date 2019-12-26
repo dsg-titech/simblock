@@ -79,7 +79,7 @@ public class Node {
 	public void joinNetwork(){
 		this.routingTable.initTable();
 	}
-	
+
 	public void genesisBlock(){
 		Block genesis = this.consensusAlgo.genesisBlock();
 		this.receiveBlock(genesis);
@@ -107,12 +107,16 @@ public class Node {
 		OUT_JSON_FILE.flush();
 	}
 
-	public void addOrphans(Block newBlock, Block validBlock){
-		if(newBlock != validBlock){
-			this.orphans.add(newBlock);
+	public void addOrphans(Block orphanBlock, Block validBlock){
+		if(orphanBlock != validBlock){
+			this.orphans.add(orphanBlock);
 			this.orphans.remove(validBlock);
-			if(newBlock.getParent() != null && validBlock.getParent() != null){
-				this.addOrphans(newBlock.getParent(),validBlock.getParent());
+			if(validBlock == null || orphanBlock.getHeight() > validBlock.getHeight()){
+				this.addOrphans(orphanBlock.getParent(),validBlock);
+			}else if(orphanBlock.getHeight() == validBlock.getHeight()){
+				this.addOrphans(orphanBlock.getParent(),validBlock.getParent());
+			}else{
+				this.addOrphans(orphanBlock,validBlock.getParent());
 			}
 		}
 	}
@@ -130,27 +134,18 @@ public class Node {
 		}
 	}
 
-	public void receiveBlock(Block receivedBlock){
-		Block sameHeightBlock;
-
-		if(this.consensusAlgo.isReceivedBlockValid(receivedBlock, this.block)){
-			if (this.block != null) {
-				sameHeightBlock = receivedBlock.getBlockWithHeight(this.block.getHeight());
-				if(this.block != sameHeightBlock){
-					this.addOrphans(this.block, sameHeightBlock);
-				}
+	public void receiveBlock(Block block){
+		if(this.consensusAlgo.isReceivedBlockValid(block, this.block)){
+			if (this.block != null && !this.block.isOnSameChainAs(block)) {
+				this.addOrphans(this.block, block);
 			}
-			this.addToChain(receivedBlock);
+			this.addToChain(block);
 			this.minting();
-			this.sendInv(receivedBlock);
-		}else{
-			sameHeightBlock = this.block.getBlockWithHeight(receivedBlock.getHeight());
-			if(!this.orphans.contains(receivedBlock) && receivedBlock != sameHeightBlock){
-				this.addOrphans(receivedBlock, sameHeightBlock);
-				arriveBlock(receivedBlock, this);
-			}
+			this.sendInv(block);
+		}else if(!this.orphans.contains(block) && !block.isOnSameChainAs(this.block)){
+			this.addOrphans(block, this.block);
+			arriveBlock(block, this);
 		}
-
 	}
 
 	public void receiveMessage(AbstractMessageTask message){
@@ -158,12 +153,12 @@ public class Node {
 
 		if(message instanceof InvMessageTask){
 			Block block = ((InvMessageTask) message).getBlock();
-			if(!this.downloadingBlocks.contains(block)){
+			if(!this.orphans.contains(block) && !this.downloadingBlocks.contains(block)){
 				if(this.consensusAlgo.isReceivedBlockValid(block, this.block)){
 					AbstractMessageTask task = new RecMessageTask(this,from,block);
 					putTask(task);
 					downloadingBlocks.add(block);
-				}else if(!this.orphans.contains(block) && block != this.block.getBlockWithHeight(block.getHeight())){
+				}else if(!block.isOnSameChainAs(this.block)){
 					// get new orphan block
 					AbstractMessageTask task = new RecMessageTask(this,from,block);
 					putTask(task);
