@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>SimBlock</title>
@@ -17,7 +17,7 @@
       <pubDate>Tue, 09 Jul 2019 00:00:00 +0000</pubDate>
       
       <guid>https://dsg-titech.github.io/simblock/contact/</guid>
-      <description> Member  Yusuke Aoki Ryohei Banno Takeshi Kaneko Ryunosuke Nagayama Kai Otsuki Kazuyuki Shudo   Laboratory website  Distributed Systems Group (Shudo Lab.)   Contact  E-mail: dsg-titech at googlegroups.com  </description>
+      <description>Member  Yusuke Aoki Ryohei Banno Takeshi Kaneko Ryunosuke Nagayama Kai Otsuki Kazuyuki Shudo  Laboratory website  Distributed Systems Group (Shudo Lab.)  Contact  E-mail: dsg-titech at googlegroups.com  </description>
     </item>
     
     <item>
@@ -26,7 +26,7 @@
       <pubDate>Sat, 01 Jun 2019 00:00:00 +0000</pubDate>
       
       <guid>https://dsg-titech.github.io/simblock/documents/</guid>
-      <description> User Guide (English / 日本語)  </description>
+      <description> User Guide (English/ 日本語)  </description>
     </item>
     
     <item>
@@ -35,7 +35,7 @@
       <pubDate>Sat, 01 Jun 2019 00:00:00 +0000</pubDate>
       
       <guid>https://dsg-titech.github.io/simblock/publications/</guid>
-      <description>Kai Otsuki, Ryohei Banno, Kazuyuki Shudo, &amp;ldquo;Effects of a Simple Relay Network on the Bitcoin Network&amp;rdquo;, in Proc. Asian Internet Engineering Conference (AINTEC), August 2019. Ryohei Banno, Kazuyuki Shudo, &amp;ldquo;Simulating a Blockchain Network with SimBlock&amp;rdquo;, in Proc. IEEE International Conference on Blockchain and Cryptocurrency (ICBC), May 2019. Yusuke Aoki, Kai Otsuki, Takeshi Kaneko, Ryohei Banno, Kazuyuki Shudo, &amp;ldquo;SimBlock: A Blockchain Network Simulator&amp;rdquo;, in Proc. Workshop on Cryptocurrencies and Blockchains for Distributed Systems (CryBlock, In conjunction with IEEE INFOCOM 2019), April 2019.</description>
+      <description>Ryunosuke Nagayama, Kazuyuki Shudo, &amp;ldquo;Simulating Ethereum Network with SimBlock&amp;rdquo;, lightning talks, Devcon 5 (by Ethereum Foundation), October 2019. Kai Otsuki, Ryohei Banno, Kazuyuki Shudo, &amp;ldquo;Effects of a Simple Relay Network on the Bitcoin Network&amp;rdquo;, in Proc. Asian Internet Engineering Conference (AINTEC), August 2019. Ryohei Banno, Kazuyuki Shudo, &amp;ldquo;Simulating a Blockchain Network with SimBlock&amp;rdquo;, in Proc. IEEE International Conference on Blockchain and Cryptocurrency (ICBC), May 2019. Yusuke Aoki, Kai Otsuki, Takeshi Kaneko, Ryohei Banno, Kazuyuki Shudo, &amp;ldquo;SimBlock: A Blockchain Network Simulator&amp;rdquo;, in Proc.</description>
     </item>
     
   </channel>
