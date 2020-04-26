@@ -21,8 +21,8 @@ subprojects {
         outputDir = file(outDir)
         inheritOutputDirs = false
         iml {
-            whenMerged  { module ->
-                module.getDependencies().add(new ModuleLibrary([new Path('file://$MODULE_DIR$/'+confDir)] as Set, [] as Set, [] as Set, [] as Set, null))
+            whenMerged { module ->
+                module.getDependencies().add(new ModuleLibrary([new Path('file://$MODULE_DIR$/' + confDir)] as Set, [] as Set, [] as Set, [] as Set, null))
             }
         }
     }
@@ -74,10 +74,10 @@ allprojects {
 }
 
 project(':simulator') {
-    mainClassName = 'SimBlock.simulator.Main'
+    mainClassName = 'simblock.simulator.Main'
 
     def distSettings = {
-        baseName = 'SimBlock'
+        baseName = 'simblock'
         exclude('output/graph/*.*')
         exclude('output/*.*')
     }
