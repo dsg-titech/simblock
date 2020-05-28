@@ -43,7 +43,7 @@ public class Block {
   private final long time;
 
   /**
-   * Node unique id.
+   * Block unique id.
    */
   private final int id;
 
