@@ -24,6 +24,8 @@ import static simblock.settings.SimulationConfiguration.INTERVAL;
 import static simblock.settings.SimulationConfiguration.NUM_OF_NODES;
 import static simblock.settings.SimulationConfiguration.STDEV_OF_MINING_POWER;
 import static simblock.settings.SimulationConfiguration.TABLE;
+import static simblock.settings.SimulationConfiguration.CBR_USAGE_RATE;
+import static simblock.settings.SimulationConfiguration.CHURN_NODE_RATE;
 import static simblock.simulator.Network.getDegreeDistribution;
 import static simblock.simulator.Network.getRegionDistribution;
 import static simblock.simulator.Network.printRegion;
@@ -254,11 +256,11 @@ public class Main {
    * Populate the list using the distribution.
    *
    * @param distribution the distribution
-   * @param facum        - what is this?
+   * @param facum        whether the distribution is cumulative distribution
    * @return array list
    */
   //TODO explanation on facum etc.
-  public static ArrayList<Integer> makeRandomList(double[] distribution, boolean facum) {
+  public static ArrayList<Integer> makeRandomListFollowDistribution(double[] distribution, boolean facum) {
     ArrayList<Integer> list = new ArrayList<>();
     int index = 0;
 
@@ -289,6 +291,21 @@ public class Main {
   }
 
   /**
+   * Populate the list using the rate.
+   *
+   * @param rate the rate of true
+   * @return array list
+   */
+  public static ArrayList<Boolean> makeRandomList(float rate){
+		ArrayList<Boolean> list = new ArrayList<Boolean>();
+		for(int i=0; i < NUM_OF_NODES; i++){
+			list.add(i < NUM_OF_NODES*rate);
+		}
+		Collections.shuffle(list, random);
+		return list;
+	}
+
+  /**
    * Generates a random mining power expressed as Hash Rate, and is the number of mining (hash
    * calculation) executed per millisecond.
    *
@@ -309,18 +326,24 @@ public class Main {
 
     // Random distribution of nodes per region
     double[] regionDistribution = getRegionDistribution();
-    List<Integer> regionList = makeRandomList(regionDistribution, false);
+    List<Integer> regionList = makeRandomListFollowDistribution(regionDistribution, false);
 
     // Random distribution of node degrees
     double[] degreeDistribution = getDegreeDistribution();
-    List<Integer> degreeList = makeRandomList(degreeDistribution, true);
+    List<Integer> degreeList = makeRandomListFollowDistribution(degreeDistribution, true);
+
+    // List of nodes using compact block relay.
+    List<Boolean> useCBRNodes = makeRandomList(CBR_USAGE_RATE);
+
+    // List of churn nodes.
+		List<Boolean> churnNodes = makeRandomList(CHURN_NODE_RATE);
 
     for (int id = 1; id <= numNodes; id++) {
       // Each node gets assigned a region, its degree, mining power, routing table and
       // consensus algorithm
       Node node = new Node(
           id, degreeList.get(id - 1) + 1, regionList.get(id - 1), genMiningPower(), TABLE,
-          ALGO
+          ALGO, useCBRNodes.get(id - 1), churnNodes.get(id - 1)
       );
       // Add the node to the list of simulated nodes
       addNode(node);

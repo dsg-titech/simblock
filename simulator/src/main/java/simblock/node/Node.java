@@ -17,6 +17,11 @@
 package simblock.node;
 
 import static simblock.settings.SimulationConfiguration.BLOCK_SIZE;
+import static simblock.settings.SimulationConfiguration.CBR_FAILURE_BLOCK_SIZE_DISTRIBUTION_FOR_CHURN_NODE;
+import static simblock.settings.SimulationConfiguration.CBR_FAILURE_BLOCK_SIZE_DISTRIBUTION_FOR_CONTROL_NODE;
+import static simblock.settings.SimulationConfiguration.CBR_FAILURE_RATE_FOR_CHURN_NODE;
+import static simblock.settings.SimulationConfiguration.CBR_FAILURE_RATE_FOR_CONTROL_NODE;
+import static simblock.settings.SimulationConfiguration.COMPACT_BLOCK_SIZE;
 import static simblock.simulator.Main.OUT_JSON_FILE;
 import static simblock.simulator.Network.getBandwidth;
 import static simblock.simulator.Simulator.arriveBlock;
@@ -26,13 +31,17 @@ import static simblock.simulator.Timer.removeTask;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
+
 import simblock.block.Block;
 import simblock.node.consensus.AbstractConsensusAlgo;
 import simblock.node.routing.AbstractRoutingTable;
 import simblock.task.AbstractMessageTask;
 import simblock.task.AbstractMintingTask;
 import simblock.task.BlockMessageTask;
+import simblock.task.CmpctBlockMessageTask;
+import simblock.task.GetBlockTxnMessageTask;
 import simblock.task.InvMessageTask;
 import simblock.task.RecMessageTask;
 
@@ -66,6 +75,16 @@ public class Node {
   private AbstractConsensusAlgo consensusAlgo;
 
   /**
+   * Whether the node uses compact block relay.
+   */
+  private boolean useCBR;
+
+  /**
+   * The node causes churn.
+   */
+  private boolean isChurnNode;
+
+  /**
    * The current block.
    */
   private Block block;
@@ -87,7 +106,7 @@ public class Node {
   private boolean sendingBlock = false;
 
   //TODO
-  private final ArrayList<RecMessageTask> messageQue = new ArrayList<>();
+  private final ArrayList<AbstractMessageTask> messageQue = new ArrayList<>();
   // TODO
   private final Set<Block> downloadingBlocks = new HashSet<>();
 
@@ -105,14 +124,19 @@ public class Node {
    * @param miningPower       the mining power
    * @param routingTableName  the routing table name
    * @param consensusAlgoName the consensus algorithm name
+   * @param useCBR            whether the node uses compact block relay
+   * @param isChurnNode       whether the node causes churn
    */
   public Node(
       int nodeID, int numConnection, int region, long miningPower, String routingTableName,
-      String consensusAlgoName
+      String consensusAlgoName, boolean useCBR, boolean isChurnNode
   ) {
     this.nodeID = nodeID;
     this.region = region;
     this.miningPower = miningPower;
+    this.useCBR = useCBR;
+    this.isChurnNode = isChurnNode;
+
     try {
       this.routingTable = (AbstractRoutingTable) Class.forName(routingTableName).getConstructor(
           Node.class).newInstance(this);
@@ -390,6 +414,27 @@ public class Node {
       }
     }
 
+    if(message instanceof GetBlockTxnMessageTask){
+			this.messageQue.add((GetBlockTxnMessageTask) message);
+			if(!sendingBlock){
+				this.sendNextBlockMessage();
+			}
+		}
+
+    if(message instanceof CmpctBlockMessageTask){
+			Block block = ((CmpctBlockMessageTask) message).getBlock();
+      Random random = new Random();
+      float CBRfailureRate = this.isChurnNode ? CBR_FAILURE_RATE_FOR_CHURN_NODE : CBR_FAILURE_RATE_FOR_CONTROL_NODE;
+			boolean success = random.nextDouble() > CBRfailureRate ? true : false;
+			if(success){
+				downloadingBlocks.remove(block);
+				this.receiveBlock(block);
+			}else{
+				AbstractMessageTask task = new GetBlockTxnMessageTask(this, from, block);
+				putTask(task);
+			}
+		}
+
     if (message instanceof BlockMessageTask) {
       Block block = ((BlockMessageTask) message).getBlock();
       downloadingBlocks.remove(block);
@@ -397,26 +442,58 @@ public class Node {
     }
   }
 
+
+  /**
+   * Gets block size when the node fails compact block relay.
+   */
+  private long getFailedBlockSize(){
+		Random random = new Random();
+			if(this.isChurnNode){
+				int index = random.nextInt(CBR_FAILURE_BLOCK_SIZE_DISTRIBUTION_FOR_CHURN_NODE.length);
+				return (long)(BLOCK_SIZE * CBR_FAILURE_BLOCK_SIZE_DISTRIBUTION_FOR_CHURN_NODE[index]);
+			}else{
+				int index = random.nextInt(CBR_FAILURE_BLOCK_SIZE_DISTRIBUTION_FOR_CONTROL_NODE.length);
+				return (long)(BLOCK_SIZE * CBR_FAILURE_BLOCK_SIZE_DISTRIBUTION_FOR_CONTROL_NODE[index]);
+			}
+	}
+
   /**
    * Send next block message.
    */
   // send a block to the sender of the next queued recMessage
   public void sendNextBlockMessage() {
     if (this.messageQue.size() > 0) {
-      sendingBlock = true;
-
       Node to = this.messageQue.get(0).getFrom();
-      Block block = this.messageQue.get(0).getBlock();
-      this.messageQue.remove(0);
       long bandwidth = getBandwidth(this.getRegion(), to.getRegion());
 
-      // Convert bytes to bits and divide by the bandwidth expressed as bit per millisecond, add
-      // processing time.
-      long delay = BLOCK_SIZE * 8 / (bandwidth / 1000) + processingTime;
+      AbstractMessageTask messageTask;
 
-      //
-      BlockMessageTask messageTask = new BlockMessageTask(this, to, block, delay);
+      if(this.messageQue.get(0) instanceof RecMessageTask){
+        Block block = ((RecMessageTask) this.messageQue.get(0)).getBlock();
+        // If use compact block relay.
+        if(this.messageQue.get(0).getFrom().useCBR && this.useCBR) {
+          // Convert bytes to bits and divide by the bandwidth expressed as bit per millisecond, add
+          // processing time.
+          long delay = COMPACT_BLOCK_SIZE * 8 / (bandwidth / 1000) + processingTime;
 
+          // Send compact block message.
+          messageTask = new CmpctBlockMessageTask(this, to, block, delay);
+        } else {
+          // Else use lagacy protocol.
+          long delay = BLOCK_SIZE * 8 / (bandwidth / 1000) + processingTime;
+          messageTask = new BlockMessageTask(this, to, block, delay);
+        }
+      } else if(this.messageQue.get(0) instanceof GetBlockTxnMessageTask) {
+        // Else from requests missing transactions.
+        Block block = ((GetBlockTxnMessageTask) this.messageQue.get(0)).getBlock();
+        long delay = getFailedBlockSize() * 8 / (bandwidth / 1000) + processingTime;
+        messageTask = new BlockMessageTask(this, to, block, delay);
+      } else {
+        throw new UnsupportedOperationException();
+      }
+      
+      sendingBlock = true;
+      this.messageQue.remove(0);
       putTask(messageTask);
     } else {
       sendingBlock = false;
