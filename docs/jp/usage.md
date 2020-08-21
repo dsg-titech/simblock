@@ -145,8 +145,15 @@ SimBlock
 | ブロック生成間隔 | *BlockChainSimulator.settings.SimulationConfiguration#INTERVAL* | ブロック生成間隔の期待値。この値と、下記マイニングパワーの総量から、マイニングの難しさ（difficulty）が自動調整される。 (単位: millisecond) |
 | 平均マイニングパワー | *BlockChainSimulator.settings.SimulationConfiguration#AVERAGE_MINING_POWER* | 各ノードが持つマイニングパワーの平均値。マイニングパワーはBitcoinにおけるHash Rateに相当し、ミリ秒あたりに実行できるマイニング（ハッシュ計算）回数を表す。 |
 | マイニングパワーの標準偏差 | *BlockChainSimulator.settings.SimulationConfiguration#STDEV_OF_MINING_POWER* | 各ノードのマイニングパワーは、平均がAVERAGE_MINING_POWER、標準偏差がSTDEV_OF_MINING_POWERであるような正規分布に沿ってランダムに決定される。 |
-| ブロック高 | *BlockChainSimulator.settings.SimulationConfiguration#ENDBLOCKHEIGHT* | 何ブロック生成後にシミュレーションを終えるかを表す。 |
-| ブロックサイズ | *BlockChainSimulator.settings.SimulationConfiguration#BLOCKSIZE* | ブロックサイズ。 (単位: byte) |
+| ブロック高 | *BlockChainSimulator.settings.SimulationConfiguration#END_BLOCK_HEIGHT* | 何ブロック生成後にシミュレーションを終えるかを表す。 |
+| ブロックサイズ | *BlockChainSimulator.settings.SimulationConfiguration#BLOCK_SIZE* | ブロックサイズ。 (単位: byte) |
+| CBR使用率 | *BlockChainSimulator.settings.SimulationConfiguration#CBR_USAGE_RATE* | コンパクトブロックリレー (CBR) プロトコルを使っているノードの割合 |
+| チャーンノード率 | *BlockChainSimulator.settings.SimulationConfiguration#CHURN_NODE_RATE* | チャーンノード（チャーンを起こすノード）の割合。 |
+| コンパクトブロックサイズ | *BlockChainSimulator.settings.SimulationConfiguration#COMPACT_BLOCK_SIZE* | コンパクトブロックサイズ。（単位: byte）|
+| コントロールノードのCBR失敗率 | *BlockChainSimulator.settings.SimulationConfiguration#CBR_FAILURE_RATE_FOR_CONTROL_NODE* | コントロールノード（常時ネットワークに接続するノード）がコンパクトブロックリレーに失敗する確率。 |
+| チャーンノードのCBR失敗率 | *BlockChainSimulator.settings.SimulationConfiguration#CBR_FAILURE_RATE_FOR_CHURN_NODE* | チャーンノードがコンパクトブロックリレーに失敗する確率。 |
+| CBR失敗時のブロックサイズの分布 | *BlockChainSimulator.settings.SimulationConfiguration#CBR_FAILURE_BLOCK_SIZE_DISTRIBUTION_FOR_CONTROL_NODE* | コンパクトブロックリレー失敗時にコントロールノードがピアからダウンロードするデータサイズの分布。 |
+| CBR失敗時のブロックサイズの分布 | *BlockChainSimulator.settings.SimulationConfiguration#CBR_FAILURE_BLOCK_SIZE_DISTRIBUTION_FOR_CHURN_NODE* | コンパクトブロックリレー失敗時にチャーンノードがピアからダウンロードするデータサイズの分布。 |
 
 シミュレータのパラメータは *SimBlock.settings* パッケージ内の2つのクラス、 *NetworkConfiguration* と *SimulationConfiguration* に書かれています。
 前者はネットワーク関係のパラメータを、後者はブロックチェーンネットワークに関するパラメタを保持しています。

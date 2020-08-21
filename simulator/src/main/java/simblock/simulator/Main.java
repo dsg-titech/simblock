@@ -24,7 +24,7 @@ import static simblock.settings.SimulationConfiguration.INTERVAL;
 import static simblock.settings.SimulationConfiguration.NUM_OF_NODES;
 import static simblock.settings.SimulationConfiguration.STDEV_OF_MINING_POWER;
 import static simblock.settings.SimulationConfiguration.TABLE;
-import static simblock.settings.SimulationConfiguration.USE_CBR_RATE;
+import static simblock.settings.SimulationConfiguration.CBR_USAGE_RATE;
 import static simblock.settings.SimulationConfiguration.CHURN_NODE_RATE;
 import static simblock.simulator.Network.getDegreeDistribution;
 import static simblock.simulator.Network.getRegionDistribution;
@@ -333,7 +333,7 @@ public class Main {
     List<Integer> degreeList = makeRandomListFollowDistribution(degreeDistribution, true);
 
     // List of nodes using compact block relay.
-    List<Boolean> useCBRNodes = makeRandomList(USE_CBR_RATE);
+    List<Boolean> useCBRNodes = makeRandomList(CBR_USAGE_RATE);
 
     // List of churn nodes.
 		List<Boolean> churnNodes = makeRandomList(CHURN_NODE_RATE);

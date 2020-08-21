@@ -148,8 +148,15 @@ It is explained later in the section of "Import to IDE".
 | Block interval | *BlockChainSimulator.settings.SimulationConfiguration#INTERVAL* | The expected value of block generation interval. The difficulty of mining is automatically adjusted by this value and the sum of mining power. (unit: millisecond) |
 | Average mining power | *BlockChainSimulator.settings.SimulationConfiguration#AVERAGE_MINING_POWER* | The average mining power of each node. Mining power corresponds to Hash Rate in Bitcoin, and is the number of mining (hash calculation) executed per millisecond. |
 | Standard deviation of mining power | *BlockChainSimulator.settings.SimulationConfiguration#STDEV_OF_MINING_POWER* | The mining power of each node is determined randomly according to the normal distribution whose average is AVERAGE_MINING_POWER and standard deviation is STDEV_OF_MINING_POWER. |
-| Max block Height | *BlockChainSimulator.settings.SimulationConfiguration#ENDBLOCKHEIGHT* | The block height when a simulation ends. |
-| Block size | *BlockChainSimulator.settings.SimulationConfiguration#BLOCKSIZE* | Block size. (unit: byte) |
+| Max block Height | *BlockChainSimulator.settings.SimulationConfiguration#END_BLOCK_HEIGHT* | The block height when a simulation ends. |
+| Block size | *BlockChainSimulator.settings.SimulationConfiguration#BLOCK_SIZE* | Block size. (unit: byte) |
+| CBR usage rate | *BlockChainSimulator.settings.SimulationConfiguration#CBR_USAGE_RATE* | The usage rate of compact block relay (CBR) protocol.  |
+| Churn node rate | *BlockChainSimulator.settings.SimulationConfiguration#CHURN_NODE_RATE* | The rate of nodes that cause churn. |
+| Compact block size | *BlockChainSimulator.settings.SimulationConfiguration#COMPACT_BLOCK_SIZE* | Compact block size（unit: byte）|
+| CBR failure rate for control node  | *BlockChainSimulator.settings.SimulationConfiguration#CBR_FAILURE_RATE_FOR_CONTROL_NODE* | CBR failure rate for a node that always connect network. |
+| CBR failure rate for churn node | *BlockChainSimulator.settings.SimulationConfiguration#CBR_FAILURE_RATE_FOR_CHURN_NODE* | CBR failure rate for a node that causes churn. |
+| CBR failure block size distribution for control node | *BlockChainSimulator.settings.SimulationConfiguration#CBR_FAILURE_BLOCK_SIZE_DISTRIBUTION_FOR_CONTROL_NODE* | The distribution of data size that a control node receives when fails CBR. |
+| CBR failure block size distribution for churn node | *BlockChainSimulator.settings.SimulationConfiguration#CBR_FAILURE_BLOCK_SIZE_DISTRIBUTION_FOR_CHURN_NODE* | The distribution of data size that a churn node receives when fails CBR. |
 
 *SimBlock.settings* package has two classes which have these parameters: *NetworkConfiguration.java* and *SimulationConfiguration.java*.
 The former has parameters related to network parameters, and the latter has blockchain parameters.

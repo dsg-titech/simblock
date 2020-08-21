@@ -86,11 +86,11 @@ public class SimulationConfiguration {
   public static final long BLOCK_SIZE = 535000;//6110;//8000;//535000;//0.5MB
 
   /**
-   * The usage rate of compact block relay protocol.
+   * The usage rate of compact block relay (CBR) protocol.
    */
-  public static final float USE_CBR_RATE = 0.964f;
+  public static final float CBR_USAGE_RATE = 0.964f;
   /**
-   * The rate of nodes who cause churn.
+   * The rate of nodes that cause churn.
    */
   public static final float CHURN_NODE_RATE = 0.976f;
   /**
@@ -98,16 +98,16 @@ public class SimulationConfiguration {
    */
 	public static final long COMPACT_BLOCK_SIZE = 18 * 1000; // 18KB
 	/**
-   * The failure rate of compact block relay for a node who always connect network.
+   * CBR failure rate for a node that always connect network.
    */
   public static final float CBR_FAILURE_RATE_FOR_CONTROL_NODE = 0.13f;
   /**
-   * The failure rate of compact block relay for a node who causes churn.
+   * CBR failure rate for a node that causes churn.
    */
   public static final float CBR_FAILURE_RATE_FOR_CHURN_NODE = 0.27f;
   
   /**
-   * Distribution of block size sent when compact block relay failed for a recieved node who always connect network. (unit: byte)
+   * The distribution of data size that a control node receives when fails CBR.
    */
   public static final float[] CBR_FAILURE_BLOCK_SIZE_DISTRIBUTION_FOR_CONTROL_NODE = {
     0.01f,0.01f,0.01f,0.01f,0.01f,0.01f,0.01f,0.01f,0.01f,0.01f,0.01f,0.01f,0.01f,0.01f,0.01f,
@@ -175,7 +175,7 @@ public class SimulationConfiguration {
     0.87f,0.88f,0.89f,0.9f,0.91f,0.92f,0.93f,0.94f,0.95f,0.96f
   };
   /**
-   * Distribution of block size sent when compact block relay failed for a recieved node who causes churn. (unit: byte)
+   * The distribution of data size that a churn node receives when fails CBR.
    */
   public static final float[] CBR_FAILURE_BLOCK_SIZE_DISTRIBUTION_FOR_CHURN_NODE = {
     0.01f,0.01f,0.01f,0.01f,0.01f,0.01f,0.01f,0.01f,0.01f,0.01f,0.01f,0.01f,0.01f,0.01f,0.01f,
