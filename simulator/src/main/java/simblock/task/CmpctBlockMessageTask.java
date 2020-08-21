@@ -24,10 +24,10 @@ import simblock.block.Block;
 import simblock.node.Node;
 
 /**
- * The type Block message task.
+ * The type Compact block message task.
  */
-// Bitcoin protocol Wiki: https://en.bitcoin.it/wiki/Protocol_documentation#block
-public class BlockMessageTask extends AbstractMessageTask {
+// Compact block relay protocol Wiki: https://github.com/bitcoin/bips/blob/master/bip-0152.mediawiki
+public class CmpctBlockMessageTask extends AbstractMessageTask {
   /**
    * The {@link Block} that is sent.
    */
@@ -39,14 +39,14 @@ public class BlockMessageTask extends AbstractMessageTask {
   private final long interval;
 
   /**
-   * Instantiates a new Block message task.
+   * Instantiates a new Compact block message task.
    *
    * @param from  the sender
    * @param to    the receiver
    * @param block the block instance
    * @param delay the delay of the message transmission
    */
-  public BlockMessageTask(Node from, Node to, Block block, long delay) {
+  public CmpctBlockMessageTask(Node from, Node to, Block block, long delay) {
     super(from, to);
     this.block = block;
     this.interval = getLatency(this.getFrom().getRegion(), this.getTo().getRegion()) + delay;
@@ -59,7 +59,7 @@ public class BlockMessageTask extends AbstractMessageTask {
   }
 
   /**
-   * Sends a new block message from the sender to the receiver and logs the event.
+   * Sends a new compact block message from the sender to the receiver and logs the event.
    */
   @Override
   public void run() {
