@@ -17,21 +17,12 @@
 package simblock.simulator;
 
 
-import static simblock.settings.SimulationConfiguration.ALGO;
-import static simblock.settings.SimulationConfiguration.AVERAGE_MINING_POWER;
-import static simblock.settings.SimulationConfiguration.END_BLOCK_HEIGHT;
-import static simblock.settings.SimulationConfiguration.INTERVAL;
-import static simblock.settings.SimulationConfiguration.NUM_OF_NODES;
-import static simblock.settings.SimulationConfiguration.STDEV_OF_MINING_POWER;
-import static simblock.settings.SimulationConfiguration.TABLE;
-import static simblock.settings.SimulationConfiguration.CBR_USAGE_RATE;
-import static simblock.settings.SimulationConfiguration.CHURN_NODE_RATE;
+import static simblock.settings.SimulationConfiguration.*;
 import static simblock.simulator.Network.getDegreeDistribution;
 import static simblock.simulator.Network.getRegionDistribution;
 import static simblock.simulator.Network.printRegion;
 import static simblock.simulator.Simulator.addNode;
 import static simblock.simulator.Simulator.getSimulatedNodes;
-import static simblock.simulator.Simulator.printAllPropagation;
 import static simblock.simulator.Simulator.setTargetInterval;
 import static simblock.simulator.Timer.getCurrentTime;
 import static simblock.simulator.Timer.getTask;
@@ -51,7 +42,9 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import simblock.block.Block;
+import simblock.node.HonestNode;
 import simblock.node.Node;
+import simblock.node.SelfishNode;
 import simblock.task.AbstractMintingTask;
 
 
@@ -109,6 +102,8 @@ public class Main {
     }
   }
 
+  public static SelfishNode selfishNode;
+
   /**
    * The entry point.
    *
@@ -130,15 +125,23 @@ public class Main {
 
     // Initial block height, we stop at END_BLOCK_HEIGHT
     int currentBlockHeight = 1;
+    int iterationNumber = 1;
 
     // Iterate over tasks and handle
     while (getTask() != null) {
       if (getTask() instanceof AbstractMintingTask) {
+        iterationNumber++;
+        System.out.println(iterationNumber);
         AbstractMintingTask task = (AbstractMintingTask) getTask();
         if (task.getParent().getHeight() == currentBlockHeight) {
           currentBlockHeight++;
         }
-        if (currentBlockHeight > END_BLOCK_HEIGHT) {
+//        if (currentBlockHeight > END_BLOCK_HEIGHT) {
+//          break;
+//        }
+        if(iterationNumber >= Iteration_Number){
+          System.out.println("IterationNumber : " + iterationNumber);
+          selfishNode.printSelfishMiningStatus();
           break;
         }
         // Log every 100 blocks and at the second block
@@ -152,7 +155,7 @@ public class Main {
     }
 
     // Print propagation information about all blocks
-    printAllPropagation();
+//    printAllPropagation();
 
     //TODO logger
     System.out.println();
@@ -194,10 +197,10 @@ public class Main {
 
     //Log all orphans
     // TODO move to method and use logger
-    for (Block orphan : orphans) {
-      System.out.println(orphan + ":" + orphan.getHeight());
-    }
-    System.out.println(averageOrphansSize);
+//    for (Block orphan : orphans) {
+//      System.out.println(orphan + ":" + orphan.getHeight());
+//    }
+//    System.out.println(averageOrphansSize);
 
     /*
     Log in format:
@@ -237,7 +240,7 @@ public class Main {
     long end = System.currentTimeMillis();
     simulationTime += end - start;
     // Log simulation time in milliseconds
-    System.out.println(simulationTime);
+//    System.out.println(simulationTime);
 
   }
 
@@ -311,10 +314,20 @@ public class Main {
    *
    * @return the number of hash  calculations executed per millisecond.
    */
-  public static int genMiningPower() {
+/*  public static int genMiningPower() {
     double r = random.nextGaussian();
 
     return Math.max((int) (r * STDEV_OF_MINING_POWER + AVERAGE_MINING_POWER), 1);
+  }*/
+
+  public static int getSelfishMiningPower(){
+    return (int)(SELFISH_MINER_ALPHA * TOTAL_MINING_POWER);
+  }
+
+  public static int getHonestMiningPower(){
+    float honestMiningPower = (1 - SELFISH_MINER_ALPHA) * TOTAL_MINING_POWER;
+
+    return (int)(honestMiningPower / (NUM_OF_NODES - 1));
   }
 
   /**
@@ -336,13 +349,21 @@ public class Main {
     List<Boolean> useCBRNodes = makeRandomList(CBR_USAGE_RATE);
 
     // List of churn nodes.
-		List<Boolean> churnNodes = makeRandomList(CHURN_NODE_RATE);
+    List<Boolean> churnNodes = makeRandomList(CHURN_NODE_RATE);
 
-    for (int id = 1; id <= numNodes; id++) {
+    // Selfish Miner --> Node ID 1
+    //Others Start From 2
+    selfishNode = new SelfishNode(
+            1, degreeList.get(0) + 1, regionList.get(0), getSelfishMiningPower(), TABLE,
+            ALGO, useCBRNodes.get(0), churnNodes.get(0)
+    );
+    addNode(selfishNode);
+
+    for (int id = 2; id <= numNodes; id++) {
       // Each node gets assigned a region, its degree, mining power, routing table and
       // consensus algorithm
-      Node node = new Node(
-          id, degreeList.get(id - 1) + 1, regionList.get(id - 1), genMiningPower(), TABLE,
+      Node node = new HonestNode(
+          id, degreeList.get(id - 1) + 1, regionList.get(id - 1), getHonestMiningPower(), TABLE,
           ALGO, useCBRNodes.get(id - 1), churnNodes.get(id - 1)
       );
       // Add the node to the list of simulated nodes

@@ -52,68 +52,68 @@ public class Node {
   /**
    * Unique node ID.
    */
-  private final int nodeID;
+  protected final int nodeID;
 
   /**
    * Region assigned to the node.
    */
-  private final int region;
+  protected final int region;
 
   /**
    * Mining power assigned to the node.
    */
-  private final long miningPower;
+  protected final long miningPower;
 
   /**
    * A nodes routing table.
    */
-  private AbstractRoutingTable routingTable;
+  protected AbstractRoutingTable routingTable;
 
   /**
    * The consensus algorithm used by the node.
    */
-  private AbstractConsensusAlgo consensusAlgo;
+  protected AbstractConsensusAlgo consensusAlgo;
 
   /**
    * Whether the node uses compact block relay.
    */
-  private boolean useCBR;
+  protected boolean useCBR;
 
   /**
    * The node causes churn.
    */
-  private boolean isChurnNode;
+  protected boolean isChurnNode;
 
   /**
    * The current block.
    */
-  private Block block;
+  protected Block block;
 
   /**
    * Orphaned blocks known to node.
    */
-  private final Set<Block> orphans = new HashSet<>();
+  protected final Set<Block> orphans = new HashSet<>();
 
   /**
    * The current minting task
    */
-  private AbstractMintingTask mintingTask = null;
+  protected AbstractMintingTask mintingTask = null;
 
   /**
    * In the process of sending blocks.
    */
   // TODO verify
-  private boolean sendingBlock = false;
+  protected boolean sendingBlock = false;
 
   //TODO
-  private final ArrayList<AbstractMessageTask> messageQue = new ArrayList<>();
+  protected final ArrayList<AbstractMessageTask> messageQue = new ArrayList<>();
   // TODO
-  private final Set<Block> downloadingBlocks = new HashSet<>();
+  protected final Set<Block> downloadingBlocks = new HashSet<>();
 
   /**
    * Processing time of tasks expressed in milliseconds.
    */
-  private final long processingTime = 2;
+  protected final long processingTime = 2;
 
   /**
    * Instantiates a new Node.
@@ -321,7 +321,7 @@ public class Node {
    */
   //TODO check this out later
   public void addOrphans(Block orphanBlock, Block validBlock) {
-    if (orphanBlock != validBlock) {
+/*    if (orphanBlock != validBlock) {
       this.orphans.add(orphanBlock);
       this.orphans.remove(validBlock);
       if (validBlock == null || orphanBlock.getHeight() > validBlock.getHeight()) {
@@ -331,7 +331,7 @@ public class Node {
       } else {
         this.addOrphans(orphanBlock, validBlock.getParent());
       }
-    }
+    }*/
   }
 
   /**

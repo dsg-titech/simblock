@@ -24,7 +24,7 @@ public class SimulationConfiguration {
    * The number of nodes participating in the blockchain network.
    */
   //TODO revert
-  public static final int NUM_OF_NODES = 300;//600;//800;//6000;
+  public static final int NUM_OF_NODES = 2;//600;//800;//6000;
   // public static final int NUM_OF_NODES = 600;//600;//800;//6000;
 
   /**
@@ -57,6 +57,10 @@ public class SimulationConfiguration {
    */
   public static final int STDEV_OF_MINING_POWER = 100000;
 
+  public static final float SELFISH_MINER_ALPHA = 0.3f;
+  public static final float SELFISH_MINER_GAMMA = 0f;
+  public static final float TOTAL_MINING_POWER = 8000000;
+
   /**
    * The constant AVERAGE_COINS.
    */
@@ -78,7 +82,7 @@ public class SimulationConfiguration {
    */
   //TODO revert
   //public static final int END_BLOCK_HEIGHT = 100;
-  public static final int END_BLOCK_HEIGHT = 3;
+  public static final int Iteration_Number = 10000;
 
   /**
    * Block size. (unit: byte).

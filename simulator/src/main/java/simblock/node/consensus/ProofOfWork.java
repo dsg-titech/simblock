@@ -21,8 +21,11 @@ import static simblock.simulator.Main.random;
 import java.math.BigInteger;
 import simblock.block.Block;
 import simblock.block.ProofOfWorkBlock;
+import simblock.node.HonestNode;
 import simblock.node.Node;
+import simblock.task.AbstractMintingTask;
 import simblock.task.MiningTask;
+import simblock.task.SelfishMiningTask;
 
 /**
  * The type Proof of work.
@@ -42,14 +45,20 @@ public class ProofOfWork extends AbstractConsensusAlgo {
    * Mints a new block by simulating Proof of Work.
    */
   @Override
-  public MiningTask minting() {
+  public AbstractMintingTask minting() {
     Node selfNode = this.getSelfNode();
     ProofOfWorkBlock parent = (ProofOfWorkBlock) selfNode.getBlock();
     BigInteger difficulty = parent.getNextDifficulty();
     double p = 1.0 / difficulty.doubleValue();
     double u = random.nextDouble();
-    return p <= Math.pow(2, -53) ? null : new MiningTask(selfNode, (long) (Math.log(u) / Math.log(
-        1.0 - p) / selfNode.getMiningPower()), difficulty);
+    if(selfNode instanceof HonestNode){
+      return p <= Math.pow(2, -53) ? null : new MiningTask(selfNode, (long) (Math.log(u) / Math.log(
+              1.0 - p) / selfNode.getMiningPower()), difficulty);
+    }
+    else{
+      return p <= Math.pow(2, -53) ? null : new SelfishMiningTask(selfNode, (long) (Math.log(u) / Math.log(
+              1.0 - p) / selfNode.getMiningPower()), difficulty);
+    }
   }
 
   /**

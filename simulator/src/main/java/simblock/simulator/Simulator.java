@@ -140,7 +140,7 @@ public class Simulator {
       //TODO move magic number to constant
       if (observedBlocks.size() > 10) {
         // After the observed blocks limit is reached, log and remove old blocks by FIFO principle
-        printPropagation(observedBlocks.get(0), observedPropagations.get(0));
+        //printPropagation(observedBlocks.get(0), observedPropagations.get(0));
         observedBlocks.remove(0);
         observedPropagations.remove(0);
       }
