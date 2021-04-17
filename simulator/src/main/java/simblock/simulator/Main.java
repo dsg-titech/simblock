@@ -242,6 +242,10 @@ public class Main {
     // Log simulation time in milliseconds
 //    System.out.println(simulationTime);
 
+    System.out.println("Simulator Seen : " + Simulator.getMainChainSize());
+    System.out.println("Selfish Seen : " + selfishNode.getSeenBlockSize());
+    System.out.println("Private Seen : " + selfishNode.getPrivateChainSize());
+    System.out.println("Public Seen : " + selfishNode.getPublicChainSize());
   }
 
 

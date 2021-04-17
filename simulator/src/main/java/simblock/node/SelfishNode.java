@@ -117,6 +117,18 @@ public class SelfishNode extends Node {
         System.out.println("Relative Revenue : " + ((double)selfishMinerWinBlock / this.minedBlock));
     }
 
+    public int getSeenBlockSize(){
+        return this.seenBlock.size();
+    }
+
+    public int getPrivateChainSize(){
+        return this.privateChain.size();
+    }
+
+    public int getPublicChainSize(){
+        return this.publicChain.size();
+    }
+
     private int calculateDelta(){
         return this.privateChain.size() - this.publicChain.size();
     }
