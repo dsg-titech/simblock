@@ -32,31 +32,29 @@ import simblock.task.SelfishMiningTask;
  */
 @SuppressWarnings("unused")
 public class ProofOfWork extends AbstractConsensusAlgo {
-  /**
-   * Instantiates a new Proof of work consensus algorithm.
-   *
-   * @param selfNode the self node
-   */
-  public ProofOfWork(Node selfNode) {
-    super(selfNode);
+  private static final ProofOfWork instance = new ProofOfWork();
+  private ProofOfWork(){
+
+  }
+  public static ProofOfWork getInstance(){
+    return instance;
   }
 
   /**
    * Mints a new block by simulating Proof of Work.
    */
   @Override
-  public AbstractMintingTask minting() {
-    Node selfNode = this.getSelfNode();
+  public AbstractMintingTask minting(Node selfNode) {
     ProofOfWorkBlock parent = (ProofOfWorkBlock) selfNode.getBlock();
     BigInteger difficulty = parent.getNextDifficulty();
     double p = 1.0 / difficulty.doubleValue();
     double u = random.nextDouble();
     if(selfNode instanceof HonestNode){
-      return p <= Math.pow(2, -53) ? null : new MiningTask(selfNode, (long) (Math.log(u) / Math.log(
+      return new MiningTask(selfNode, (long) (Math.log(u) / Math.log(
               1.0 - p) / selfNode.getMiningPower()), difficulty);
     }
     else{
-      return p <= Math.pow(2, -53) ? null : new SelfishMiningTask(selfNode, (long) (Math.log(u) / Math.log(
+      return new SelfishMiningTask(selfNode, (long) (Math.log(u) / Math.log(
               1.0 - p) / selfNode.getMiningPower()), difficulty);
     }
   }
@@ -72,11 +70,11 @@ public class ProofOfWork extends AbstractConsensusAlgo {
    * @return true if block is valid false otherwise
    */
   @Override
-  public boolean isReceivedBlockValid(Block receivedBlock, Block currentBlock) {
+  public boolean isReceivedBlockValid(Node selfNode, Block receivedBlock, Block currentBlock) {
     if (!(receivedBlock instanceof ProofOfWorkBlock)) {
       return false;
     }
-    ProofOfWorkBlock recPoWBlock = (ProofOfWorkBlock) receivedBlock;
+/*    ProofOfWorkBlock recPoWBlock = (ProofOfWorkBlock) receivedBlock;
     ProofOfWorkBlock currPoWBlock = (ProofOfWorkBlock) currentBlock;
     int receivedBlockHeight = receivedBlock.getHeight();
     ProofOfWorkBlock receivedBlockParent = receivedBlockHeight == 0 ? null :
@@ -89,12 +87,14 @@ public class ProofOfWork extends AbstractConsensusAlgo {
     ) && (
         currentBlock == null ||
             recPoWBlock.getTotalDifficulty().compareTo(currPoWBlock.getTotalDifficulty()) > 0
-    );
+    );*/
+
+    return true;
   }
 
   @Override
-  public ProofOfWorkBlock genesisBlock() {
-    return ProofOfWorkBlock.genesisBlock(this.getSelfNode());
+  public ProofOfWorkBlock genesisBlock(Node selfNode) {
+    return ProofOfWorkBlock.genesisBlock(selfNode);
   }
 
 }

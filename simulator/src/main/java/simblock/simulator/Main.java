@@ -46,6 +46,7 @@ import simblock.node.HonestNode;
 import simblock.node.Node;
 import simblock.node.SelfishNode;
 import simblock.task.AbstractMintingTask;
+import simblock.task.Task;
 
 
 /**
@@ -123,39 +124,8 @@ public class Main {
     // Setup network
     constructNetworkWithAllNodes(NUM_OF_NODES);
 
-    // Initial block height, we stop at END_BLOCK_HEIGHT
-    int currentBlockHeight = 1;
-    int iterationNumber = 1;
-
-    // Iterate over tasks and handle
-    while (getTask() != null) {
-      if (getTask() instanceof AbstractMintingTask) {
-        iterationNumber++;
-        System.out.println(iterationNumber);
-        AbstractMintingTask task = (AbstractMintingTask) getTask();
-        if (task.getParent().getHeight() == currentBlockHeight) {
-          currentBlockHeight++;
-        }
-//        if (currentBlockHeight > END_BLOCK_HEIGHT) {
-//          break;
-//        }
-        if(iterationNumber >= Iteration_Number){
-          System.out.println("IterationNumber : " + iterationNumber);
-          selfishNode.printSelfishMiningStatus();
-          break;
-        }
-        // Log every 100 blocks and at the second block
-        // TODO use constants here
-        if (currentBlockHeight % 100 == 0 || currentBlockHeight == 2) {
-          writeGraph(currentBlockHeight);
-        }
-      }
-      // Execute task
-      runTask();
-    }
-
-    // Print propagation information about all blocks
-//    printAllPropagation();
+    startSimulation();
+    selfishNode.printSelfishMiningStatus();
 
     //TODO logger
     System.out.println();
@@ -243,9 +213,9 @@ public class Main {
 //    System.out.println(simulationTime);
 
     System.out.println("Simulator Seen : " + Simulator.getMainChainSize());
-    System.out.println("Selfish Seen : " + selfishNode.getSeenBlockSize());
+/*    System.out.println("Selfish Seen : " + selfishNode.getSeenBlockSize());
     System.out.println("Private Seen : " + selfishNode.getPrivateChainSize());
-    System.out.println("Public Seen : " + selfishNode.getPublicChainSize());
+    System.out.println("Public Seen : " + selfishNode.getPublicChainSize());*/
   }
 
 
@@ -421,6 +391,29 @@ public class Main {
 
     } catch (IOException ex) {
       ex.printStackTrace();
+    }
+  }
+
+  public static void startSimulation(){
+
+    for(int i=0; i < Iteration_Number; i++){
+      // Do message passing task!
+      Task currentTask = getTask();
+      while(currentTask != null){
+        if (currentTask instanceof AbstractMintingTask) {
+          AbstractMintingTask task = (AbstractMintingTask) getTask();
+        }
+        runTask();
+        currentTask = getTask();
+      }
+
+      float generatedRandom = (float)Math.random();
+      if(generatedRandom < SELFISH_MINER_ALPHA){
+        selfishNode.selfishMinting();
+      }
+      else{
+        getSimulatedNodes().get(1).minting();
+      }
     }
   }
 

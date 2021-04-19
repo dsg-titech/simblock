@@ -29,18 +29,11 @@ import simblock.task.SampleStakingTask;
  */
 @SuppressWarnings("unused")
 public class SampleProofOfStake extends AbstractConsensusAlgo {
-  /**
-   * Instantiates a new Sample proof of stake.
-   *
-   * @param selfNode the self node
-   */
-  public SampleProofOfStake(Node selfNode) {
-    super(selfNode);
+  public SampleProofOfStake() {
   }
 
   @Override
-  public SampleStakingTask minting() {
-    Node selfNode = this.getSelfNode();
+  public SampleStakingTask minting(Node selfNode) {
     SamplePoSBlock parent = (SamplePoSBlock) selfNode.getBlock();
     BigInteger difficulty = parent.getNextDifficulty();
     double p = parent.getCoinage(selfNode).getCoinage().doubleValue() / difficulty.doubleValue();
@@ -53,7 +46,7 @@ public class SampleProofOfStake extends AbstractConsensusAlgo {
 
   @SuppressWarnings("CheckStyle")
   @Override
-  public boolean isReceivedBlockValid(Block receivedBlock, Block currentBlock) {
+  public boolean isReceivedBlockValid(Node selfNode, Block receivedBlock, Block currentBlock) {
     if (!(receivedBlock instanceof SamplePoSBlock)) {
       return false;
     }
@@ -74,7 +67,7 @@ public class SampleProofOfStake extends AbstractConsensusAlgo {
   }
 
   @Override
-  public SamplePoSBlock genesisBlock() {
-    return SamplePoSBlock.genesisBlock(this.getSelfNode());
+  public SamplePoSBlock genesisBlock(Node selfNode) {
+    return SamplePoSBlock.genesisBlock(selfNode);
   }
 }

@@ -36,6 +36,7 @@ import java.util.Set;
 
 import simblock.block.Block;
 import simblock.node.consensus.AbstractConsensusAlgo;
+import simblock.node.consensus.ProofOfWork;
 import simblock.node.routing.AbstractRoutingTable;
 import simblock.task.AbstractMessageTask;
 import simblock.task.AbstractMintingTask;
@@ -140,8 +141,7 @@ public class Node {
     try {
       this.routingTable = (AbstractRoutingTable) Class.forName(routingTableName).getConstructor(
           Node.class).newInstance(this);
-      this.consensusAlgo = (AbstractConsensusAlgo) Class.forName(consensusAlgoName).getConstructor(
-          Node.class).newInstance(this);
+      this.consensusAlgo = ProofOfWork.getInstance();
       this.setNumConnection(numConnection);
     } catch (Exception e) {
       e.printStackTrace();
@@ -273,7 +273,7 @@ public class Node {
    * Mint the genesis block.
    */
   public void genesisBlock() {
-    Block genesis = this.consensusAlgo.genesisBlock();
+    Block genesis = this.consensusAlgo.genesisBlock(this);
     this.receiveBlock(genesis);
   }
 
@@ -290,7 +290,12 @@ public class Node {
       this.mintingTask = null;
     }
     // Update the current block
-    this.block = newBlock;
+    if(newBlock.getHeight() == 0){
+      this.block = newBlock;
+    }
+    else if(newBlock.getHeight() > this.block.getHeight()){
+      this.block = newBlock;
+    }
     printAddBlock(newBlock);
     // Observe and handle new block arrival
     arriveBlock(newBlock, this);
@@ -338,7 +343,7 @@ public class Node {
    * Generates a new minting task and registers it
    */
   public void minting() {
-    AbstractMintingTask task = this.consensusAlgo.minting();
+    AbstractMintingTask task = this.consensusAlgo.minting(this);
     this.mintingTask = task;
     if (task != null) {
       putTask(task);
@@ -363,7 +368,7 @@ public class Node {
    * @param block the block
    */
   public void receiveBlock(Block block) {
-    if (this.consensusAlgo.isReceivedBlockValid(block, this.block)) {
+    if (this.consensusAlgo.isReceivedBlockValid(this, block, this.block)) {
       if (this.block != null && !this.block.isOnSameChainAs(block)) {
         // If orphan mark orphan
         this.addOrphans(this.block, block);
@@ -371,7 +376,7 @@ public class Node {
       // Else add to canonical chain
       this.addToChain(block);
       // Generates a new minting task
-      this.minting();
+      //this.minting();
       // Advertise received block
       this.sendInv(block);
     } else if (!this.orphans.contains(block) && !block.isOnSameChainAs(this.block)) {
@@ -394,7 +399,7 @@ public class Node {
     if (message instanceof InvMessageTask) {
       Block block = ((InvMessageTask) message).getBlock();
       if (!this.orphans.contains(block) && !this.downloadingBlocks.contains(block)) {
-        if (this.consensusAlgo.isReceivedBlockValid(block, this.block)) {
+        if (this.consensusAlgo.isReceivedBlockValid(this, block, this.block)) {
           AbstractMessageTask task = new RecMessageTask(this, from, block);
           putTask(task);
           downloadingBlocks.add(block);

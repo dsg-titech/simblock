@@ -30,7 +30,7 @@ public class SelfishNode extends Node {
     }
 
     public void selfishMinting() {
-        SelfishMiningTask task = (SelfishMiningTask) this.consensusAlgo.minting();
+        SelfishMiningTask task = (SelfishMiningTask) this.consensusAlgo.minting(this);
         this.mintingTask = task;
         if (task != null) {
             putTask(task);
@@ -39,7 +39,7 @@ public class SelfishNode extends Node {
 
     public void receiveBlock(Block block) {
         boolean seenBlock = addToSeenBlock(block);
-        if (this.consensusAlgo.isReceivedBlockValid(block, this.block) && !seenBlock) {
+        if (this.consensusAlgo.isReceivedBlockValid(this, block, this.block) && !seenBlock) {
             if (this.block != null && !this.block.isOnSameChainAs(block)) {
                 // If orphan mark orphan
                 this.addOrphans(this.block, block);
@@ -56,7 +56,7 @@ public class SelfishNode extends Node {
             // Else add to canonical chain
             this.addToChain(block);
             // Generates a new minting task
-            this.selfishMinting();
+            //this.selfishMinting();
             // Advertise received block
             this.sendInv(block);
         } else if (!this.orphans.contains(block) && !block.isOnSameChainAs(this.block)) {
@@ -69,7 +69,7 @@ public class SelfishNode extends Node {
     }
 
     public void receiveSelfishBlock(Block block) {
-        if (this.consensusAlgo.isReceivedBlockValid(block, this.block)) {
+        if (this.consensusAlgo.isReceivedBlockValid(this, block, this.block)) {
             if (this.block != null && !this.block.isOnSameChainAs(block)) {
                 // If orphan mark orphan
                 this.addOrphans(this.block, block);
@@ -92,7 +92,7 @@ public class SelfishNode extends Node {
                 this.stopAttack();
             }
 
-            this.selfishMinting();
+            //this.selfishMinting();
         } else if (!this.orphans.contains(block) && !block.isOnSameChainAs(this.block)) {
             // TODO better understand - what if orphan is not valid?
             // If the block was not valid but was an unknown orphan and is not on the same chain as the
@@ -221,6 +221,7 @@ public class SelfishNode extends Node {
             }
         }
         seenBlock.add(block.getHeight());
+        System.out.println(block.getHeight());
         return false;
     }
 
