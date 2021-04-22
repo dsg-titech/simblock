@@ -16,7 +16,6 @@
 
 package simblock.node.routing;
 
-import static simblock.simulator.Main.OUT_JSON_FILE;
 import static simblock.simulator.Simulator.getSimulatedNodes;
 import static simblock.simulator.Timer.getCurrentTime;
 
@@ -101,7 +100,6 @@ public class BitcoinCoreTable extends AbstractRoutingTable {
         node) || this.outbound.size() >= this.getNumConnection()) {
       return false;
     } else if (this.outbound.add(node) && node.getRoutingTable().addInbound(getSelfNode())) {
-      printAddLink(node);
       return true;
     } else {
       return false;
@@ -117,7 +115,6 @@ public class BitcoinCoreTable extends AbstractRoutingTable {
    */
   public boolean removeNeighbor(Node node) {
     if (this.outbound.remove(node) && node.getRoutingTable().removeInbound(getSelfNode())) {
-      printRemoveLink(node);
       return true;
     }
     return false;
@@ -131,7 +128,6 @@ public class BitcoinCoreTable extends AbstractRoutingTable {
    */
   public boolean addInbound(Node from) {
     if (this.inbound.add(from)) {
-      printAddLink(from);
       return true;
     }
     return false;
@@ -145,36 +141,9 @@ public class BitcoinCoreTable extends AbstractRoutingTable {
    */
   public boolean removeInbound(Node from) {
     if (this.inbound.remove(from)) {
-      printRemoveLink(from);
       return true;
     }
     return false;
-  }
-
-  //TODO add example
-  private void printAddLink(Node endNode) {
-    OUT_JSON_FILE.print("{");
-    OUT_JSON_FILE.print("\"kind\":\"add-link\",");
-    OUT_JSON_FILE.print("\"content\":{");
-    OUT_JSON_FILE.print("\"timestamp\":" + getCurrentTime() + ",");
-    OUT_JSON_FILE.print("\"begin-node-id\":" + getSelfNode().getNodeID() + ",");
-    OUT_JSON_FILE.print("\"end-node-id\":" + endNode.getNodeID());
-    OUT_JSON_FILE.print("}");
-    OUT_JSON_FILE.print("},");
-    OUT_JSON_FILE.flush();
-  }
-
-  //TODO add example
-  private void printRemoveLink(Node endNode) {
-    OUT_JSON_FILE.print("{");
-    OUT_JSON_FILE.print("\"kind\":\"remove-link\",");
-    OUT_JSON_FILE.print("\"content\":{");
-    OUT_JSON_FILE.print("\"timestamp\":" + getCurrentTime() + ",");
-    OUT_JSON_FILE.print("\"begin-node-id\":" + getSelfNode().getNodeID() + ",");
-    OUT_JSON_FILE.print("\"end-node-id\":" + endNode.getNodeID());
-    OUT_JSON_FILE.print("}");
-    OUT_JSON_FILE.print("},");
-    OUT_JSON_FILE.flush();
   }
 
 }

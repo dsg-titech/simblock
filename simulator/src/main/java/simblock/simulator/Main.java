@@ -20,7 +20,6 @@ package simblock.simulator;
 import static simblock.settings.SimulationConfiguration.*;
 import static simblock.simulator.Network.getDegreeDistribution;
 import static simblock.simulator.Network.getRegionDistribution;
-import static simblock.simulator.Network.printRegion;
 import static simblock.simulator.Simulator.addNode;
 import static simblock.simulator.Simulator.getSimulatedNodes;
 import static simblock.simulator.Simulator.setTargetInterval;
@@ -62,46 +61,6 @@ public class Main {
    * The initial simulation time.
    */
   public static long simulationTime = 0;
-  /**
-   * Path to config file.
-   */
-  public static URI CONF_FILE_URI;
-  /**
-   * Output path.
-   */
-  public static URI OUT_FILE_URI;
-
-  static {
-    try {
-      CONF_FILE_URI = ClassLoader.getSystemResource("simulator.conf").toURI();
-      OUT_FILE_URI = CONF_FILE_URI.resolve(new URI("../output/"));
-    } catch (URISyntaxException e) {
-      e.printStackTrace();
-    }
-  }
-
-  /**
-   * The output writer.
-   */
-  //TODO use logger
-  public static PrintWriter OUT_JSON_FILE;
-
-  /**
-   * The constant STATIC_JSON_FILE.
-   */
-  //TODO use logger
-  public static PrintWriter STATIC_JSON_FILE;
-
-  static {
-    try {
-      OUT_JSON_FILE = new PrintWriter(
-          new BufferedWriter(new FileWriter(new File(OUT_FILE_URI.resolve("./output.json")))));
-      STATIC_JSON_FILE = new PrintWriter(
-          new BufferedWriter(new FileWriter(new File(OUT_FILE_URI.resolve("./static.json")))));
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-  }
 
   public static SelfishNode selfishNode;
 
@@ -113,13 +72,6 @@ public class Main {
   public static void main(String[] args) {
     final long start = System.currentTimeMillis();
     setTargetInterval(INTERVAL);
-
-    //start json format
-    OUT_JSON_FILE.print("[");
-    OUT_JSON_FILE.flush();
-
-    // Log regions
-    printRegion();
 
     // Setup network
     constructNetworkWithAllNodes(NUM_OF_NODES);
@@ -172,50 +124,8 @@ public class Main {
 //    }
 //    System.out.println(averageOrphansSize);
 
-    /*
-    Log in format:
-     ＜fork_information, block height, block ID＞
-    fork_information: One of "OnChain" and "Orphan". "OnChain" denote block is on Main chain.
-    "Orphan" denote block is an orphan block.
-     */
-    // TODO move to method and use logger
-    try {
-      FileWriter fw = new FileWriter(new File(OUT_FILE_URI.resolve("./blockList.txt")), false);
-      PrintWriter pw = new PrintWriter(new BufferedWriter(fw));
-
-      for (Block b : blockList) {
-        if (!orphans.contains(b)) {
-          pw.println("OnChain : " + b.getHeight() + " : " + b);
-        } else {
-          pw.println("Orphan : " + b.getHeight() + " : " + b);
-        }
-      }
-      pw.close();
-
-    } catch (IOException ex) {
-      ex.printStackTrace();
-    }
-
-    OUT_JSON_FILE.print("{");
-    OUT_JSON_FILE.print("\"kind\":\"simulation-end\",");
-    OUT_JSON_FILE.print("\"content\":{");
-    OUT_JSON_FILE.print("\"timestamp\":" + getCurrentTime());
-    OUT_JSON_FILE.print("}");
-    OUT_JSON_FILE.print("}");
-    //end json format
-    OUT_JSON_FILE.print("]");
-    OUT_JSON_FILE.close();
-
-
     long end = System.currentTimeMillis();
     simulationTime += end - start;
-    // Log simulation time in milliseconds
-//    System.out.println(simulationTime);
-
-    System.out.println("Simulator Seen : " + Simulator.getMainChainSize());
-/*    System.out.println("Selfish Seen : " + selfishNode.getSeenBlockSize());
-    System.out.println("Private Seen : " + selfishNode.getPrivateChainSize());
-    System.out.println("Public Seen : " + selfishNode.getPublicChainSize());*/
   }
 
 
@@ -342,17 +252,6 @@ public class Main {
       );
       // Add the node to the list of simulated nodes
       addNode(node);
-
-      OUT_JSON_FILE.print("{");
-      OUT_JSON_FILE.print("\"kind\":\"add-node\",");
-      OUT_JSON_FILE.print("\"content\":{");
-      OUT_JSON_FILE.print("\"timestamp\":0,");
-      OUT_JSON_FILE.print("\"node-id\":" + id + ",");
-      OUT_JSON_FILE.print("\"region-id\":" + regionList.get(id - 1));
-      OUT_JSON_FILE.print("}");
-      OUT_JSON_FILE.print("},");
-      OUT_JSON_FILE.flush();
-
     }
 
     // Link newly generated nodes
@@ -362,36 +261,6 @@ public class Main {
 
     // Designates a random node (nodes in list are randomized) to mint the genesis block
     getSimulatedNodes().get(0).genesisBlock();
-  }
-
-  /**
-   * Network information when block height is <em>blockHeight</em>, in format:
-   *
-   * <p><em>nodeID_1</em>, <em>nodeID_2</em>
-   *
-   * <p>meaning there is a connection from nodeID_1 to right nodeID_1.
-   *
-   * @param blockHeight the index of the graph and the current block height
-   */
-  //TODO use logger
-  public static void writeGraph(int blockHeight) {
-    try {
-      FileWriter fw = new FileWriter(
-          new File(OUT_FILE_URI.resolve("./graph/" + blockHeight + ".txt")), false);
-      PrintWriter pw = new PrintWriter(new BufferedWriter(fw));
-
-      for (int index = 1; index <= getSimulatedNodes().size(); index++) {
-        Node node = getSimulatedNodes().get(index - 1);
-        for (int i = 0; i < node.getNeighbors().size(); i++) {
-          Node neighbor = node.getNeighbors().get(i);
-          pw.println(node.getNodeID() + " " + neighbor.getNodeID());
-        }
-      }
-      pw.close();
-
-    } catch (IOException ex) {
-      ex.printStackTrace();
-    }
   }
 
   public static void startSimulation(){
