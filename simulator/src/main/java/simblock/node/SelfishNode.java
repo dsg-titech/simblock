@@ -1,6 +1,7 @@
 package simblock.node;
 
 import simblock.block.Block;
+import simblock.block.BlockChain;
 import simblock.task.*;
 
 import java.io.PrintWriter;
@@ -11,7 +12,6 @@ import static simblock.simulator.Simulator.arriveBlock;
 import static simblock.simulator.Timer.putTask;
 
 public class SelfishNode extends Node {
-
     private final ArrayList<Block> privateChain = new ArrayList<Block>();
     private final ArrayList<Block> publicChain = new ArrayList<Block>();
     private final HashSet<Integer> seenBlock = new HashSet<>();
@@ -39,6 +39,12 @@ public class SelfishNode extends Node {
 
     public void receiveBlock(Block block) {
         boolean seenBlock = addToSeenBlock(block);
+        try{
+            BlockChain.getInstance().addBlock(block);
+        }
+        catch (Exception ex){
+            System.out.println("Public Exception!");
+        }
         if (this.consensusAlgo.isReceivedBlockValid(this, block, this.block) && !seenBlock) {
             if (this.block != null && !this.block.isOnSameChainAs(block)) {
                 // If orphan mark orphan
@@ -47,16 +53,17 @@ public class SelfishNode extends Node {
 
             if(block.getHeight() != 0){
                 if(attackStarted){
-                    this.honestMiningDecision();
+                    this.honestMiningDecision(block);
                 }
                 else{
                     this.honestMinerWinBlock++;
                 }
             }
+            else{
+                BlockChain.getInstance().setGenesisBlock(block);
+            }
             // Else add to canonical chain
             this.addToChain(block);
-            // Generates a new minting task
-            //this.selfishMinting();
             // Advertise received block
             this.sendInv(block);
         } else if (!this.orphans.contains(block) && !block.isOnSameChainAs(this.block)) {
@@ -68,7 +75,7 @@ public class SelfishNode extends Node {
         }
     }
 
-    public void receiveSelfishBlock(Block block) {
+    public void receiveSelfishBlock(Block block){
         if (this.consensusAlgo.isReceivedBlockValid(this, block, this.block)) {
             if (this.block != null && !this.block.isOnSameChainAs(block)) {
                 // If orphan mark orphan
@@ -83,12 +90,15 @@ public class SelfishNode extends Node {
 
             if(delta == 0 && this.calculateSelfishChainLength() == 2){
                 this.selfishMinerWinBlock += 2;
-                //!< State 1
-/*                for(Block privateBlock : privateChain){
-                    this.addToSeenBlock(privateBlock);
-                    this.addToChain(privateBlock);
-                    this.sendInv(privateBlock);
-                }*/
+                for(Block privateBlock : privateChain){
+                    try{
+                        BlockChain.getInstance().addBlock(privateBlock);
+                        BlockChain.getInstance().putBlockInMainChain(privateBlock);
+                    }
+                    catch (Exception ex){
+                        System.out.println("Private Exception!");
+                    }
+                }
                 this.stopAttack();
             }
 
@@ -115,6 +125,25 @@ public class SelfishNode extends Node {
         this.minedBlock = this.selfishMinerWinBlock + this.honestMinerWinBlock;
         System.out.println("Mined Block : " + this.minedBlock);
         System.out.println("Relative Revenue : " + ((double)selfishMinerWinBlock / this.minedBlock));
+        System.out.println("**********************************************************************");
+        int a = BlockChain.getInstance().getTotalNumberOfBlocksOnChain();
+        ArrayList<Block> mainChain = BlockChain.getInstance().getMainChain();
+        int newSelfishWin = 0;
+        int newHonestWin = 0;
+        for(Block mainBlock : mainChain){
+            if(mainBlock.getMinter() instanceof SelfishNode){
+                newSelfishWin++;
+            }
+            else{
+                newHonestWin++;
+            }
+        }
+        System.out.println("New Selfish Win Block : " + newSelfishWin);
+        System.out.println("New Honest win Block : " + newHonestWin);
+        int newMinedBlock = newSelfishWin + newHonestWin;
+        System.out.println("New Mined Block : " + newMinedBlock);
+        System.out.println("Relative Revenue : " + ((double)newSelfishWin / newMinedBlock));
+        System.out.println("New Main Chain Size : " + BlockChain.getInstance().getTotalNumberOfBlocksOnChain());
     }
 
     public int getSeenBlockSize(){
@@ -176,13 +205,14 @@ public class SelfishNode extends Node {
         this.attackStarted = false;
     }
 
-    private void honestMiningDecision(){
+    private void honestMiningDecision(Block honestBlock){
         int delta = this.calculateDelta();
         this.addToPublicChain(block);
 
         if(delta == 0 && this.privateChain.size() == 0){
             //!< State 2
             this.honestMinerWinBlock += 1;
+            BlockChain.getInstance().putBlockInMainChain(honestBlock);
             this.stopAttack();
         }
         else if(delta == 0 && this.privateChain.size() == 1){
@@ -192,6 +222,8 @@ public class SelfishNode extends Node {
             if(generatedRandom < SELFISH_MINER_GAMMA){
                 this.honestMinerWinBlock += 1;
                 this.selfishMinerWinBlock += 1;
+                BlockChain.getInstance().putBlockInMainChain(privateChain.get(0));
+                BlockChain.getInstance().putBlockInMainChain(honestBlock);
             }
             else{
              this.honestMinerWinBlock += 2;
@@ -206,6 +238,15 @@ public class SelfishNode extends Node {
         else if(delta == 2){
             //!< State 5
             this.selfishMinerWinBlock += this.privateChain.size();
+            for(Block privateBlock : privateChain){
+                try{
+                    BlockChain.getInstance().addBlock(privateBlock);
+                    BlockChain.getInstance().putBlockInMainChain(privateBlock);
+                }
+                catch (Exception ex){
+                    System.out.println("Private 2 Exception!");
+                }
+            }
             this.stopAttack();
         }
         else if(delta > 2){

@@ -57,7 +57,7 @@ public class SimulationConfiguration {
    */
   public static final int STDEV_OF_MINING_POWER = 100000;
 
-  public static final float SELFISH_MINER_ALPHA = 0.3f;
+  public static final float SELFISH_MINER_ALPHA = 0.49f;
   public static final float SELFISH_MINER_GAMMA = 0.5f;
   public static final float TOTAL_MINING_POWER = 8000000;
 

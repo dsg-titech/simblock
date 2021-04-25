@@ -71,9 +71,9 @@ public class ProofOfWork extends AbstractConsensusAlgo {
    */
   @Override
   public boolean isReceivedBlockValid(Node selfNode, Block receivedBlock, Block currentBlock) {
-    if (!(receivedBlock instanceof ProofOfWorkBlock)) {
+/*    if (!(receivedBlock instanceof ProofOfWorkBlock)) {
       return false;
-    }
+    }*/
 /*    ProofOfWorkBlock recPoWBlock = (ProofOfWorkBlock) receivedBlock;
     ProofOfWorkBlock currPoWBlock = (ProofOfWorkBlock) currentBlock;
     int receivedBlockHeight = receivedBlock.getHeight();
