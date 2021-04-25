@@ -22,7 +22,6 @@ import static simblock.settings.NetworkConfiguration.LATENCY;
 import static simblock.settings.NetworkConfiguration.REGION_DISTRIBUTION;
 import static simblock.settings.NetworkConfiguration.REGION_LIST;
 import static simblock.settings.NetworkConfiguration.UPLOAD_BANDWIDTH;
-import static simblock.simulator.Main.STATIC_JSON_FILE;
 import static simblock.simulator.Main.random;
 
 import java.util.List;
@@ -91,27 +90,4 @@ public class Network {
     return DEGREE_DISTRIBUTION;
   }
 
-  /**
-   * Prints the currently active regions to outfile.
-   */
-  //TODO
-  public static void printRegion() {
-    STATIC_JSON_FILE.print("{\"region\":[");
-
-    int id = 0;
-    for (; id < REGION_LIST.size() - 1; id++) {
-      STATIC_JSON_FILE.print("{");
-      STATIC_JSON_FILE.print("\"id\":" + id + ",");
-      STATIC_JSON_FILE.print("\"name\":\"" + REGION_LIST.get(id) + "\"");
-      STATIC_JSON_FILE.print("},");
-    }
-
-    STATIC_JSON_FILE.print("{");
-    STATIC_JSON_FILE.print("\"id\":" + id + ",");
-    STATIC_JSON_FILE.print("\"name\":\"" + REGION_LIST.get(id) + "\"");
-    STATIC_JSON_FILE.print("}");
-    STATIC_JSON_FILE.print("]}");
-    STATIC_JSON_FILE.flush();
-    STATIC_JSON_FILE.close();
-  }
 }

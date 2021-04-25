@@ -22,7 +22,6 @@ import static simblock.settings.SimulationConfiguration.CBR_FAILURE_BLOCK_SIZE_D
 import static simblock.settings.SimulationConfiguration.CBR_FAILURE_RATE_FOR_CHURN_NODE;
 import static simblock.settings.SimulationConfiguration.CBR_FAILURE_RATE_FOR_CONTROL_NODE;
 import static simblock.settings.SimulationConfiguration.COMPACT_BLOCK_SIZE;
-import static simblock.simulator.Main.OUT_JSON_FILE;
 import static simblock.simulator.Network.getBandwidth;
 import static simblock.simulator.Simulator.arriveBlock;
 import static simblock.simulator.Timer.getCurrentTime;
@@ -36,6 +35,7 @@ import java.util.Set;
 
 import simblock.block.Block;
 import simblock.node.consensus.AbstractConsensusAlgo;
+import simblock.node.consensus.ProofOfWork;
 import simblock.node.routing.AbstractRoutingTable;
 import simblock.task.AbstractMessageTask;
 import simblock.task.AbstractMintingTask;
@@ -52,68 +52,68 @@ public class Node {
   /**
    * Unique node ID.
    */
-  private final int nodeID;
+  protected final int nodeID;
 
   /**
    * Region assigned to the node.
    */
-  private final int region;
+  protected final int region;
 
   /**
    * Mining power assigned to the node.
    */
-  private final long miningPower;
+  protected final long miningPower;
 
   /**
    * A nodes routing table.
    */
-  private AbstractRoutingTable routingTable;
+  protected AbstractRoutingTable routingTable;
 
   /**
    * The consensus algorithm used by the node.
    */
-  private AbstractConsensusAlgo consensusAlgo;
+  protected AbstractConsensusAlgo consensusAlgo;
 
   /**
    * Whether the node uses compact block relay.
    */
-  private boolean useCBR;
+  protected boolean useCBR;
 
   /**
    * The node causes churn.
    */
-  private boolean isChurnNode;
+  protected boolean isChurnNode;
 
   /**
    * The current block.
    */
-  private Block block;
+  protected Block block;
 
   /**
    * Orphaned blocks known to node.
    */
-  private final Set<Block> orphans = new HashSet<>();
+  protected final Set<Block> orphans = new HashSet<>();
 
   /**
    * The current minting task
    */
-  private AbstractMintingTask mintingTask = null;
+  protected AbstractMintingTask mintingTask = null;
 
   /**
    * In the process of sending blocks.
    */
   // TODO verify
-  private boolean sendingBlock = false;
+  protected boolean sendingBlock = false;
 
   //TODO
-  private final ArrayList<AbstractMessageTask> messageQue = new ArrayList<>();
+  protected final ArrayList<AbstractMessageTask> messageQue = new ArrayList<>();
   // TODO
-  private final Set<Block> downloadingBlocks = new HashSet<>();
+  protected final Set<Block> downloadingBlocks = new HashSet<>();
 
   /**
    * Processing time of tasks expressed in milliseconds.
    */
-  private final long processingTime = 2;
+  protected final long processingTime = 2;
 
   /**
    * Instantiates a new Node.
@@ -140,8 +140,7 @@ public class Node {
     try {
       this.routingTable = (AbstractRoutingTable) Class.forName(routingTableName).getConstructor(
           Node.class).newInstance(this);
-      this.consensusAlgo = (AbstractConsensusAlgo) Class.forName(consensusAlgoName).getConstructor(
-          Node.class).newInstance(this);
+      this.consensusAlgo = ProofOfWork.getInstance();
       this.setNumConnection(numConnection);
     } catch (Exception e) {
       e.printStackTrace();
@@ -273,7 +272,7 @@ public class Node {
    * Mint the genesis block.
    */
   public void genesisBlock() {
-    Block genesis = this.consensusAlgo.genesisBlock();
+    Block genesis = this.consensusAlgo.genesisBlock(this);
     this.receiveBlock(genesis);
   }
 
@@ -290,27 +289,14 @@ public class Node {
       this.mintingTask = null;
     }
     // Update the current block
-    this.block = newBlock;
-    printAddBlock(newBlock);
+    if(newBlock.getHeight() == 0){
+      this.block = newBlock;
+    }
+    else if(newBlock.getHeight() > this.block.getHeight()){
+      this.block = newBlock;
+    }
     // Observe and handle new block arrival
     arriveBlock(newBlock, this);
-  }
-
-  /**
-   * Logs the provided block to the logfile.
-   *
-   * @param newBlock the block to be logged
-   */
-  private void printAddBlock(Block newBlock) {
-    OUT_JSON_FILE.print("{");
-    OUT_JSON_FILE.print("\"kind\":\"add-block\",");
-    OUT_JSON_FILE.print("\"content\":{");
-    OUT_JSON_FILE.print("\"timestamp\":" + getCurrentTime() + ",");
-    OUT_JSON_FILE.print("\"node-id\":" + this.getNodeID() + ",");
-    OUT_JSON_FILE.print("\"block-id\":" + newBlock.getId());
-    OUT_JSON_FILE.print("}");
-    OUT_JSON_FILE.print("},");
-    OUT_JSON_FILE.flush();
   }
 
   /**
@@ -321,7 +307,7 @@ public class Node {
    */
   //TODO check this out later
   public void addOrphans(Block orphanBlock, Block validBlock) {
-    if (orphanBlock != validBlock) {
+/*    if (orphanBlock != validBlock) {
       this.orphans.add(orphanBlock);
       this.orphans.remove(validBlock);
       if (validBlock == null || orphanBlock.getHeight() > validBlock.getHeight()) {
@@ -331,14 +317,14 @@ public class Node {
       } else {
         this.addOrphans(orphanBlock, validBlock.getParent());
       }
-    }
+    }*/
   }
 
   /**
    * Generates a new minting task and registers it
    */
   public void minting() {
-    AbstractMintingTask task = this.consensusAlgo.minting();
+    AbstractMintingTask task = this.consensusAlgo.minting(this);
     this.mintingTask = task;
     if (task != null) {
       putTask(task);
@@ -363,7 +349,7 @@ public class Node {
    * @param block the block
    */
   public void receiveBlock(Block block) {
-    if (this.consensusAlgo.isReceivedBlockValid(block, this.block)) {
+    if (this.consensusAlgo.isReceivedBlockValid(this, block, this.block)) {
       if (this.block != null && !this.block.isOnSameChainAs(block)) {
         // If orphan mark orphan
         this.addOrphans(this.block, block);
@@ -371,7 +357,7 @@ public class Node {
       // Else add to canonical chain
       this.addToChain(block);
       // Generates a new minting task
-      this.minting();
+      //this.minting();
       // Advertise received block
       this.sendInv(block);
     } else if (!this.orphans.contains(block) && !block.isOnSameChainAs(this.block)) {
@@ -394,7 +380,7 @@ public class Node {
     if (message instanceof InvMessageTask) {
       Block block = ((InvMessageTask) message).getBlock();
       if (!this.orphans.contains(block) && !this.downloadingBlocks.contains(block)) {
-        if (this.consensusAlgo.isReceivedBlockValid(block, this.block)) {
+        if (this.consensusAlgo.isReceivedBlockValid(this, block, this.block)) {
           AbstractMessageTask task = new RecMessageTask(this, from, block);
           putTask(task);
           downloadingBlocks.add(block);

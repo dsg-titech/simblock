@@ -24,24 +24,8 @@ import simblock.task.AbstractMintingTask;
  * The type Abstract consensus algorithm.
  */
 public abstract class AbstractConsensusAlgo {
-  private final Node selfNode;
 
-  /**
-   * Instantiates a new Abstract consensus algo.
-   *
-   * @param selfNode the self node
-   */
-  public AbstractConsensusAlgo(Node selfNode) {
-    this.selfNode = selfNode;
-  }
-
-  /**
-   * Gets the node using this consensus algorithm.
-   *
-   * @return the self node
-   */
-  public Node getSelfNode() {
-    return this.selfNode;
+  public AbstractConsensusAlgo() {
   }
 
   /**
@@ -49,7 +33,7 @@ public abstract class AbstractConsensusAlgo {
    *
    * @return the abstract minting task
    */
-  public abstract AbstractMintingTask minting();
+  public abstract AbstractMintingTask minting(Node selfNode);
 
   /**
    * Tests if the receivedBlock is valid with regards to the current block.
@@ -58,12 +42,12 @@ public abstract class AbstractConsensusAlgo {
    * @param currentBlock  the current block
    * @return true if block is valid false otherwise
    */
-  public abstract boolean isReceivedBlockValid(Block receivedBlock, Block currentBlock);
+  public abstract boolean isReceivedBlockValid(Node selfNode, Block receivedBlock, Block currentBlock);
 
   /**
    * Gets the genesis block.
    *
    * @return the genesis block
    */
-  public abstract Block genesisBlock();
+  public abstract Block genesisBlock(Node selfNode);
 }

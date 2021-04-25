@@ -18,9 +18,8 @@ package simblock.simulator;
 
 import static simblock.simulator.Timer.getCurrentTime;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
+
 import simblock.block.Block;
 import simblock.node.Node;
 
@@ -107,6 +106,7 @@ public class Simulator {
    * A list of observed {@link Block} instances.
    */
   private static final ArrayList<Block> observedBlocks = new ArrayList<>();
+  private static final Set<Integer> mainChain = new LinkedHashSet<>();
 
   /**
    * A list of observed block propagation times. The map key represents the id of the node that
@@ -140,7 +140,7 @@ public class Simulator {
       //TODO move magic number to constant
       if (observedBlocks.size() > 10) {
         // After the observed blocks limit is reached, log and remove old blocks by FIFO principle
-        printPropagation(observedBlocks.get(0), observedPropagations.get(0));
+        //printPropagation(observedBlocks.get(0), observedPropagations.get(0));
         observedBlocks.remove(0);
         observedPropagations.remove(0);
       }
@@ -149,6 +149,7 @@ public class Simulator {
       propagation.put(node.getNodeID(), getCurrentTime() - block.getTime());
       // Record the block as seen
       observedBlocks.add(block);
+      mainChain.add(block.getHeight());
       // Record the propagation time
       observedPropagations.add(propagation);
     }
@@ -185,5 +186,9 @@ public class Simulator {
     for (int i = 0; i < observedBlocks.size(); i++) {
       printPropagation(observedBlocks.get(i), observedPropagations.get(i));
     }
+  }
+
+  public static int getMainChainSize(){
+    return mainChain.size();
   }
 }
