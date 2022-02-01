@@ -18,10 +18,12 @@ package simblock.simulator;
 
 import static simblock.settings.NetworkConfiguration.DEGREE_DISTRIBUTION;
 import static simblock.settings.NetworkConfiguration.DOWNLOAD_BANDWIDTH;
+import static simblock.settings.NetworkConfiguration.DOWNLOAD_BANDWIDTH_PARTITIONED;
 import static simblock.settings.NetworkConfiguration.LATENCY;
 import static simblock.settings.NetworkConfiguration.REGION_DISTRIBUTION;
 import static simblock.settings.NetworkConfiguration.REGION_LIST;
 import static simblock.settings.NetworkConfiguration.UPLOAD_BANDWIDTH;
+import static simblock.settings.NetworkConfiguration.UPLOAD_BANDWIDTH_PARTITIONED;
 import static simblock.simulator.Main.STATIC_JSON_FILE;
 import static simblock.simulator.Main.random;
 
@@ -35,6 +37,8 @@ import simblock.settings.NetworkConfiguration;
  */
 // TODO how is this degree distribution calculated and what does the double array mean
 public class Network {
+
+  public static boolean partitioned = false;
 
   /**
    * Gets latency according with 20% variance pallet distribution.
@@ -60,7 +64,13 @@ public class Network {
    */
 
   public static final long getBandwidth(int from, int to) {
-    return Math.min(UPLOAD_BANDWIDTH[from], DOWNLOAD_BANDWIDTH[to]);
+    if (partitioned){
+      return Math.min(UPLOAD_BANDWIDTH_PARTITIONED[from][to], DOWNLOAD_BANDWIDTH_PARTITIONED[from][to]);
+	} else {
+      return Math.min(UPLOAD_BANDWIDTH[from][to], DOWNLOAD_BANDWIDTH[from][to]);
+	}
+    
+    //return Math.min(UPLOAD_BANDWIDTH[from], DOWNLOAD_BANDWIDTH[to]);
   }
 
   /**

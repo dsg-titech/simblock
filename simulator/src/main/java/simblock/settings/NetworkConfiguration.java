@@ -48,6 +48,7 @@ public class NetworkConfiguration {
    * LATENCY[i][j] is average latency from REGION_LIST[i] to REGION_LIST[j]
    * Unit: millisecond, for year 2019
    */
+
   private static final long[][] LATENCY_2019 = {
       {32, 124, 184, 198, 151, 189},
       {124, 11, 227, 237, 252, 294},
@@ -60,7 +61,7 @@ public class NetworkConfiguration {
   /**
    * List of latency assigned to each region. (unit: millisecond)
    */
-  public static final long[][] LATENCY = LATENCY_2019;
+  public static long[][] LATENCY = LATENCY_2019;
 
   /**
    * List of download bandwidth assigned to each region, and last element is Inter-regional
@@ -74,16 +75,37 @@ public class NetworkConfiguration {
    * List of download bandwidth assigned to each region, and last element is Inter-regional
    * bandwidth. (unit: bit per second) for year 2019
    */
+   /*
   private static final long[] DOWNLOAD_BANDWIDTH_2019 = {
       52000000, 40000000, 18000000, 22800000,
       22800000, 29900000, 6 * 1000000
+  };
+  */
+  private static final long[][] DOWNLOAD_BANDWIDTH_2019 = {
+      {52000000, 40000000, 18000000, 22800000, 22800000, 29900000},
+      {40000000, 40000000, 18000000, 22800000, 22800000, 29900000},
+      {18000000, 18000000, 18000000, 18000000, 18000000, 18000000},
+      {22800000, 22800000, 18000000, 22800000, 22800000, 22800000},
+      {22800000, 22800000, 18000000, 22800000, 22800000, 22800000},
+      {29900000, 29900000, 18000000, 22800000, 22800000, 29900000}
+  };
+
+  private static final long[][] DOWNLOAD_BANDWIDTH_2019_PARTITIONED = {
+      {25000000, 0, 0, 0, 0, 0, 0},
+      {0, 40000000, 18000000, 22800000, 22800000, 29900000},
+      {0, 18000000, 18000000, 18000000, 18000000, 18000000},
+      {0, 22800000, 18000000, 22800000, 22800000, 22800000},
+      {0, 22800000, 18000000, 22800000, 22800000, 22800000},
+      {0, 29900000, 18000000, 22800000, 22800000, 29900000}
   };
 
   /**
    * List of download bandwidth assigned to each region, and last element is Inter-regional
    * bandwidth. (unit: bit per second)
    */
-  public static final long[] DOWNLOAD_BANDWIDTH = DOWNLOAD_BANDWIDTH_2019;
+  public static final long[][] DOWNLOAD_BANDWIDTH = DOWNLOAD_BANDWIDTH_2019;
+
+  public static final long[][] DOWNLOAD_BANDWIDTH_PARTITIONED = DOWNLOAD_BANDWIDTH_2019_PARTITIONED;
 
   /**
    * List of upload bandwidth assigned to each region. (unit: bit per second), and last element
@@ -97,16 +119,35 @@ public class NetworkConfiguration {
    * List of upload bandwidth assigned to each region. (unit: bit per second), and last element
    * is Inter-regional bandwidth for year 2019
    */
-  private static final long[] UPLOAD_BANDWIDTH_2019 = {
-      19200000, 20700000, 5800000, 15700000,
-      10200000, 11300000, 6 * 1000000
+  //private static final long[] UPLOAD_BANDWIDTH_2019 = {
+  //    19200000, 20700000, 5800000, 15700000,
+  //    10200000, 11300000, 6 * 1000000
+  //};
+  private static final long[][] UPLOAD_BANDWIDTH_2019_PARTITIONED = {
+      {19200000, 0, 0, 0, 0, 0, 0},
+      {0, 20700000, 5800000, 15700000, 10200000, 11300000},
+      {0, 5800000, 5800000, 5800000, 5800000, 5800000},
+      {0, 15700000, 5800000, 15700000, 10200000, 11300000},
+      {0, 10200000, 5800000, 10200000, 10200000, 10200000},
+      {0, 11300000, 5800000, 11300000, 10200000, 11300000}
+  };
+
+    private static final long[][] UPLOAD_BANDWIDTH_2019 = {
+      {19200000, 20700000, 5800000, 15700000, 10200000, 11300000},
+      {20700000, 20700000, 5800000, 15700000, 10200000, 11300000},
+      {5800000, 5800000, 5800000, 5800000, 5800000, 5800000},
+      {15700000, 15700000, 5800000, 15700000, 10200000, 11300000},
+      {10200000, 10200000, 5800000, 10200000, 10200000, 10200000},
+      {11300000, 11300000, 5800000, 11300000, 10200000, 11300000}
   };
 
   /**
    * List of upload bandwidth assigned to each region. (unit: bit per second), and last element
    * is Inter-regional bandwidth.
    */
-  public static final long[] UPLOAD_BANDWIDTH = UPLOAD_BANDWIDTH_2019;
+  public static final long[][] UPLOAD_BANDWIDTH = UPLOAD_BANDWIDTH_2019;
+
+  public static final long[][] UPLOAD_BANDWIDTH_PARTITIONED = UPLOAD_BANDWIDTH_2019_PARTITIONED;
 
   /**
    * Region distribution Bitcoin 2015.
