@@ -469,6 +469,7 @@ public class Node {
       // In the event of a partition, don't send the message
       if (bandwidth == 0){
        sendingBlock = false;
+       this.messageQue.remove(0);
        return;
 	  }
 
