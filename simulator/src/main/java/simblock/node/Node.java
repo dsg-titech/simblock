@@ -466,6 +466,13 @@ public class Node {
       Node to = this.messageQue.get(0).getFrom();
       long bandwidth = getBandwidth(this.getRegion(), to.getRegion());
 
+      // In the event of a partition, don't send the message
+      if (bandwidth == 0){
+       sendingBlock = false;
+       this.messageQue.remove(0);
+       return;
+	  }
+
       AbstractMessageTask messageTask;
 
       if(this.messageQue.get(0) instanceof RecMessageTask){

@@ -35,6 +35,7 @@ import static simblock.simulator.Simulator.printAllPropagation;
 import static simblock.simulator.Simulator.setTargetInterval;
 import static simblock.simulator.Timer.getCurrentTime;
 import static simblock.simulator.Timer.getTask;
+import static simblock.simulator.Timer.putTaskAbsoluteTime;
 import static simblock.simulator.Timer.runTask;
 
 import java.io.BufferedWriter;
@@ -53,6 +54,8 @@ import java.util.Set;
 import simblock.block.Block;
 import simblock.node.Node;
 import simblock.task.AbstractMintingTask;
+import simblock.task.PartitionTask;
+
 
 
 /**
@@ -128,6 +131,9 @@ public class Main {
     // Setup network
     constructNetworkWithAllNodes(NUM_OF_NODES);
 
+    // Add partition event to execute after 100 seconds? (it says these are milliseconds, but they can't be. Maybe simulated seconds?)
+    putTaskAbsoluteTime(new PartitionTask(), 100000);
+
     // Initial block height, we stop at END_BLOCK_HEIGHT
     int currentBlockHeight = 1;
 
@@ -152,7 +158,7 @@ public class Main {
     }
 
     // Print propagation information about all blocks
-    printAllPropagation();
+    //printAllPropagation();
 
     //TODO logger
     System.out.println();
