@@ -168,6 +168,27 @@ public class Main {
       block = block.getParent();
     }
 
+    // Count the all the forks
+    int num_forks = 0;
+
+    for (Node node : getSimulatedNodes()) {
+        Block b = node.getBlock();
+        while (b.getParent() != null) {
+          if (blocks.contains(b)){
+            b = b.getParent();
+		  } else {
+            num_forks += 1;
+            // add all blocks in fork to set of known blocks so we don't count this fork again
+            while (b.getParent() != null) {
+              blocks.add(b);
+              b = b.getParent();
+            }
+          }
+        }
+    }
+
+    System.out.println("Number of detected forks: " + num_forks);
+
     Set<Block> orphans = new HashSet<>();
     int averageOrphansSize = 0;
     // Gather all known orphans
