@@ -468,9 +468,10 @@ public class Node {
 
       // In the event of a partition, don't send the message
       if (bandwidth == 0){
-       sendingBlock = false;
-       this.messageQue.remove(0);
-       return;
+         sendingBlock = false;
+         this.messageQue.remove(0);
+         sendNextBlockMessage();
+         return;
 	  }
 
       AbstractMessageTask messageTask;
@@ -482,7 +483,6 @@ public class Node {
           // Convert bytes to bits and divide by the bandwidth expressed as bit per millisecond, add
           // processing time.
           long delay = COMPACT_BLOCK_SIZE * 8 / (bandwidth / 1000) + processingTime;
-
           // Send compact block message.
           messageTask = new CmpctBlockMessageTask(this, to, block, delay);
         } else {

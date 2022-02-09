@@ -31,6 +31,7 @@ import static simblock.simulator.Network.getRegionDistribution;
 import static simblock.simulator.Network.printRegion;
 import static simblock.simulator.Simulator.addNode;
 import static simblock.simulator.Simulator.getSimulatedNodes;
+import static simblock.simulator.Simulator.getSortedSimulatedNodes;
 import static simblock.simulator.Simulator.printAllPropagation;
 import static simblock.simulator.Simulator.setTargetInterval;
 import static simblock.simulator.Timer.getCurrentTime;
@@ -166,7 +167,7 @@ public class Main {
     Set<Block> blocks = new HashSet<>();
 
     // Get the latest block from the first simulated node
-    Block block = getSimulatedNodes().get(0).getBlock();
+    Block block = getSortedSimulatedNodes().get(0).getBlock();
 
     //Update the list of known blocks by adding the parents of the aforementioned block
     while (block.getParent() != null) {
@@ -177,7 +178,7 @@ public class Main {
     // Count the all the forks
     int num_forks = 0;
 
-    for (Node node : getSimulatedNodes()) {
+    for (Node node : getSortedSimulatedNodes()) {
         Block b = node.getBlock();
         while (b.getParent() != null) {
           if (blocks.contains(b)){

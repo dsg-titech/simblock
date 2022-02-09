@@ -21,6 +21,6 @@ public class PartitionTask implements Task {
 
   public void run() {
     // Instruct the Network class to start using new bandwidth matrices
-    Network.partitioned = true;
+     Network.partitioned = true;
   }
 }

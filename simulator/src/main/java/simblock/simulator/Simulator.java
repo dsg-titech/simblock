@@ -21,6 +21,8 @@ import static simblock.simulator.Timer.getCurrentTime;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Collections;
+import java.util.Comparator;
 import simblock.block.Block;
 import simblock.node.Node;
 
@@ -41,12 +43,41 @@ public class Simulator {
    */
   private static long targetInterval;
 
-  /**
+    /**
    * Get simulated nodes list.
    *
    * @return the array list
    */
   public static ArrayList<Node> getSimulatedNodes() {
+    return simulatedNodes;
+  }
+
+  /**
+   * Get sorted simulated nodes list.
+   *
+   * @return the sorted array list
+   */
+  public static ArrayList<Node> getSortedSimulatedNodes() {
+    // Sort the nodes so nodes with the longest chains are returned first
+    Collections.sort(simulatedNodes, new Comparator<Node>() {
+        @Override
+        public int compare(Node lhs, Node rhs) {
+            int c_lhs = 0; 
+            int c_rhs = 0;
+            Block b_lhs = lhs.getBlock();
+            Block b_rhs = rhs.getBlock();
+            while (b_lhs!= null && b_lhs.getParent() != null) {
+              b_lhs = b_lhs.getParent();
+              c_lhs += 1;
+            }
+            while (b_rhs != null && b_rhs.getParent() != null) {
+              b_rhs = b_rhs.getParent();
+              c_rhs += 1;
+            }
+            // -1 - less than, 1 - greater than, 0 - equal, all inversed for descending
+            return c_lhs > c_rhs ? -1 : (c_lhs < c_rhs) ? 1 : 0;
+        }
+    });
     return simulatedNodes;
   }
 
