@@ -56,6 +56,7 @@ import simblock.block.Block;
 import simblock.node.Node;
 import simblock.task.AbstractMintingTask;
 import simblock.task.PartitionTask;
+import simblock.task.EndPartitionTask;
 
 
 
@@ -134,6 +135,7 @@ public class Main {
 
     // Add partition event to execute after 100 seconds? (it says these are milliseconds, but they can't be. Maybe simulated seconds?)
     putTaskAbsoluteTime(new PartitionTask(), 100000);
+    putTaskAbsoluteTime(new EndPartitionTask(), 6000000);
 
     // Initial block height, we stop at END_BLOCK_HEIGHT
     int currentBlockHeight = 1;
