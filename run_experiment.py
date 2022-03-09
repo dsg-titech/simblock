@@ -19,7 +19,7 @@ def upload_with_value():
 with open('D:\\simblock\\simulator\\src\\main\\java\\simblock\\settings\\NetworkConfiguration.java', 'r') as f:
     settings = f.read()
 
-throttles = [0, 10000000, 1000000, 100000, 10000, 1000, 0]
+throttles = [0, 1000] #10000000, 1000000, 100000, 10000, 1000, 0]
 data = defaultdict(list)
 
 for i in range(1, len(throttles)):
@@ -32,7 +32,7 @@ for i in range(1, len(throttles)):
 	with open('D:\\simblock\\simulator\\src\\main\\java\\simblock\\settings\\NetworkConfiguration.java', 'w') as f:
 		f.write(settings)
 
-	for _ in range(20):
+	for _ in range(1):
 		out = check_output("gradlew.bat :simulator:run", shell=True).decode()
 		for line in out.split('\n'):
 			if line.startswith("Number of detected forks:"):
