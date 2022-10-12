@@ -65,9 +65,9 @@ public class Network {
 
   public static final long getBandwidth(int from, int to) {
     if (partitioned){
-      return Math.min(UPLOAD_BANDWIDTH_PARTITIONED[from][to], DOWNLOAD_BANDWIDTH_PARTITIONED[from][to]);
+      return Math.max(UPLOAD_BANDWIDTH_PARTITIONED[from][to], DOWNLOAD_BANDWIDTH_PARTITIONED[from][to]);
 	} else {
-      return Math.min(UPLOAD_BANDWIDTH[from][to], DOWNLOAD_BANDWIDTH[from][to]);
+      return Math.max(UPLOAD_BANDWIDTH[from][to], DOWNLOAD_BANDWIDTH[from][to]);
 	}
     
     //return Math.min(UPLOAD_BANDWIDTH[from], DOWNLOAD_BANDWIDTH[to]);

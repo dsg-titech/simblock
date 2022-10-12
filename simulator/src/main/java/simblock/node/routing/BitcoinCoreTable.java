@@ -18,6 +18,7 @@ package simblock.node.routing;
 
 import static simblock.simulator.Main.OUT_JSON_FILE;
 import static simblock.simulator.Simulator.getSimulatedNodes;
+import static simblock.simulator.Simulator.getBaseStations;
 import static simblock.simulator.Timer.getCurrentTime;
 
 import java.util.ArrayList;
@@ -79,6 +80,28 @@ public class BitcoinCoreTable extends AbstractRoutingTable {
     for (int candidate : candidates) {
       if (this.outbound.size() < this.getNumConnection()) {
         this.addNeighbor(getSimulatedNodes().get(candidate));
+      } else {
+        break;
+      }
+    }
+  }
+
+  /**
+   * Initializes a new BitcoinCore routing table for IOT simulations. From a pool of
+   * all available nodes, choose candidates from the list of base stations and
+   * fill the table using the allowed outbound connections
+   * amount.
+   */
+  //TODO this should be done using the bootstrap node
+  public void initIOTTable() {
+    ArrayList<Integer> candidates = new ArrayList<>();
+    for (int i = 0; i < getBaseStations().size(); i++) {
+      candidates.add(i);
+    }
+    Collections.shuffle(candidates);
+    for (int candidate : candidates) {
+      if (this.outbound.size() < this.getNumConnection()) {
+        this.addNeighbor(getBaseStations().get(candidate));
       } else {
         break;
       }

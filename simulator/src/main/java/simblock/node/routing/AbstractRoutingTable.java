@@ -24,7 +24,7 @@ import simblock.node.Node;
  */
 public abstract class AbstractRoutingTable {
   private final Node selfNode;
-  private int numConnection = 8;
+  private int numConnection = 80;
 
   /**
    * Instantiates a new Abstract routing table.
@@ -66,6 +66,11 @@ public abstract class AbstractRoutingTable {
    * Table initialization.
    */
   public abstract void initTable();
+
+    /**
+   * IOT Table initialization.
+   */
+  public abstract void initIOTTable();
 
   /**
    * Gets neighbors.

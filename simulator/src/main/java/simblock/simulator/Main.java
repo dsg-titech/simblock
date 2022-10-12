@@ -177,12 +177,18 @@ public class Main {
       block = block.getParent();
     }
 
+    for (Node node : getSortedSimulatedNodes()) {
+        for (Block b : node.getOrphans()){
+            System.out.println("Orphans:" + b.getHeight());     
+		}
+    }
+
     // Count the all the forks
     int num_forks = 0;
 
     for (Node node : getSortedSimulatedNodes()) {
         Block b = node.getBlock();
-        while (b.getParent() != null) {
+        while (b != null && b.getParent() != null) {
           if (blocks.contains(b)){
             b = b.getParent();
 		  } else {
@@ -317,6 +323,8 @@ public class Main {
     }
 
     Collections.shuffle(list, random);
+    System.out.println("here");
+    System.out.println(list);
     return list;
   }
 

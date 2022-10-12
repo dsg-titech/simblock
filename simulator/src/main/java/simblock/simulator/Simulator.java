@@ -38,6 +38,8 @@ public class Simulator {
    */
   private static final ArrayList<Node> simulatedNodes = new ArrayList<>();
 
+  private static final ArrayList<Node> baseStations = new ArrayList<>();
+
   /**
    * The target block interval in milliseconds.
    */
@@ -50,6 +52,15 @@ public class Simulator {
    */
   public static ArrayList<Node> getSimulatedNodes() {
     return simulatedNodes;
+  }
+
+   /**
+   * Get base station list.
+   *
+   * @return the array list
+   */
+  public static ArrayList<Node> getBaseStations() {
+    return baseStations;
   }
 
   /**

@@ -13,7 +13,7 @@ def get_average_propogation_time(apt, id, time, output):
 				times.append(int(event['content']['timestamp']) - time)
 				
 	if len(times) != 0:
-		apt[time] = [np.mean(times), np.std(times)]
+		apt[time] = [np.mean(times), np.std(times), np.max(times)]
 		
 		
 def get_block_at_time(time, adds):
@@ -41,6 +41,8 @@ def analyze_agreement(pa):
 		if val < running_means[-1] - 0.1 and time-last_time > 100000:
 			last_time = time
 			window = [v for v, _ in pa[i-30:i+30]]
+			if len(window) == 0:
+				continue
 			drops.append((time, val, max(window), min(window)))
 			magnitudes.append(max(window) - min(window))
 			if coords is not None:
@@ -81,20 +83,23 @@ for time in range(30000, max_timestamp, 100):
 		sums[b] += 1
 	if max(sums, key=sums.get) is not None:
 		percentage_agreement.append([sums[max(sums, key=sums.get)]/len(node_vals), time])
-	
-events, means, drop_diffs, increase_rates, increase_vis = analyze_agreement(percentage_agreement)
-print(drop_diffs, increase_rates, auc([x[1] for x in percentage_agreement], [x[0] for x in percentage_agreement]))
-plt.plot([x[1] for x in percentage_agreement], [x[0] for x in percentage_agreement])
-plt.fill_between([x[1] for x in percentage_agreement], 0, [x[0] for x in percentage_agreement], alpha=0.2)
-plt.plot([x[0] for x in events], [x[1] for x in events], 'ro')
-for line in increase_vis:
-	plt.plot([line[2], line[3]], [line[0], line[1]], 'g')
-plt.ylabel("Precentage of Nodes with Majority Block")
-plt.xlabel("Timestamp")
-plt.title("Percentage Agreement")
-plt.show()
-plt.clf()
-	
+
+
+#events, means, drop_diffs, increase_rates, increase_vis = analyze_agreement(percentage_agreement)
+#print(drop_diffs, [x*100000 for x in increase_rates], auc([x[1] for x in percentage_agreement], [x[0] for x in percentage_agreement])/max_timestamp)
+#plt.plot([x[1] for x in percentage_agreement], [x[0] for x in percentage_agreement])
+#plt.fill_between([x[1] for x in percentage_agreement], 0, [x[0] for x in percentage_agreement], alpha=0.2)
+#plt.plot([x[0] for x in events], [x[1] for x in events], 'ro')
+#for line in increase_vis:
+#	plt.plot([line[2], line[3]], [line[0], line[1]], 'g')
+#plt.ylabel("Precentage with Plurality Block")
+#plt.xlabel("Timestamp")
+#plt.title("Percentage Agreement in a Solar Superstorm Scenario")
+#plt.show()
+#plt.clf()
+
+print(average_propagation_time)
+print(max(average_propagation_time.items(), key = lambda k : k[1][0]))
 plt.errorbar([x for x in sorted(average_propagation_time.keys())], 
 			 [x[0] for _, x in sorted(average_propagation_time.items())],
 			 [x[1] for _, x in sorted(average_propagation_time.items())])
