@@ -77,21 +77,17 @@ project(':simulator') {
     mainClassName = 'simblock.simulator.Main'
 
     def distSettings = {
-        baseName = 'simblock'
+        archivesBaseName = 'simblock'
         exclude('output/graph/*.*')
         exclude('output/*.*')
     }
 
     distZip {
-        baseName = 'simblock'
-        exclude('output/graph/*.*')
-        exclude('output/*.*')
+        configure distSettings
     }
 
     distTar {
-        baseName = 'simblock'
-        exclude('output/graph/*.*')
-        exclude('output/*.*')
+        configure distSettings
     }
 
     startScripts {
