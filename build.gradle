@@ -83,11 +83,15 @@ project(':simulator') {
     }
 
     distZip {
-        configure distSettings
+        baseName = 'simblock'
+        exclude('output/graph/*.*')
+        exclude('output/*.*')
     }
 
     distTar {
-        configure distSettings
+        baseName = 'simblock'
+        exclude('output/graph/*.*')
+        exclude('output/*.*')
     }
 
     startScripts {
