@@ -77,7 +77,7 @@ project(':simulator') {
     mainClassName = 'simblock.simulator.Main'
 
     def distSettings = {
-        baseName = 'simblock'
+        archiveBaseName = 'simblock'
         exclude('output/graph/*.*')
         exclude('output/*.*')
     }
