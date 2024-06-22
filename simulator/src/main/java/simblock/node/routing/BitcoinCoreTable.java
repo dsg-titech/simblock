@@ -17,6 +17,7 @@
 package simblock.node.routing;
 
 import static simblock.simulator.Main.OUT_JSON_FILE;
+import static simblock.simulator.Main.random;
 import static simblock.simulator.Simulator.getSimulatedNodes;
 import static simblock.simulator.Timer.getCurrentTime;
 
@@ -25,7 +26,8 @@ import java.util.Collections;
 import simblock.node.Node;
 
 /**
- * The implementation of the {@link AbstractRoutingTable} representing the Bitcoin core routing
+ * The implementation of the {@link AbstractRoutingTable} representing the
+ * Bitcoin core routing
  * table.
  */
 @SuppressWarnings("unused")
@@ -50,7 +52,6 @@ public class BitcoinCoreTable extends AbstractRoutingTable {
     super(selfNode);
   }
 
-
   /**
    * Gets all known outbound and inbound nodes.
    *
@@ -69,13 +70,13 @@ public class BitcoinCoreTable extends AbstractRoutingTable {
    * fill the table using the allowed outbound connections
    * amount.
    */
-  //TODO this should be done using the bootstrap node
+  // TODO this should be done using the bootstrap node
   public void initTable() {
     ArrayList<Integer> candidates = new ArrayList<>();
     for (int i = 0; i < getSimulatedNodes().size(); i++) {
       candidates.add(i);
     }
-    Collections.shuffle(candidates);
+    Collections.shuffle(candidates, random);
     for (int candidate : candidates) {
       if (this.outbound.size() < this.getNumConnection()) {
         this.addNeighbor(getSimulatedNodes().get(candidate));
@@ -86,11 +87,16 @@ public class BitcoinCoreTable extends AbstractRoutingTable {
   }
 
   /**
-   * Adds the provided node to the list of outbound connections of self node.The provided node
-   * will not be added if it is the self node, it exists as an outbound connection of the self node,
-   * it exists as an inbound connection of the self node or the self node does not allow for
-   * additional outbound connections. Otherwise, the self node will add the provided node to the
-   * list of outbound connections and the provided node will add the self node to the list of
+   * Adds the provided node to the list of outbound connections of self node.The
+   * provided node
+   * will not be added if it is the self node, it exists as an outbound connection
+   * of the self node,
+   * it exists as an inbound connection of the self node or the self node does not
+   * allow for
+   * additional outbound connections. Otherwise, the self node will add the
+   * provided node to the
+   * list of outbound connections and the provided node will add the self node to
+   * the list of
    * inbound connections.
    *
    * @param node the node to be connected to the self node.
@@ -109,7 +115,8 @@ public class BitcoinCoreTable extends AbstractRoutingTable {
   }
 
   /**
-   * Remove the provided node from the list of outbound connections of the self node and the
+   * Remove the provided node from the list of outbound connections of the self
+   * node and the
    * self node from the list inbound connections from the provided node.
    *
    * @param node the node to be disconnected from the self node.
@@ -151,7 +158,7 @@ public class BitcoinCoreTable extends AbstractRoutingTable {
     return false;
   }
 
-  //TODO add example
+  // TODO add example
   private void printAddLink(Node endNode) {
     OUT_JSON_FILE.print("{");
     OUT_JSON_FILE.print("\"kind\":\"add-link\",");
@@ -164,7 +171,7 @@ public class BitcoinCoreTable extends AbstractRoutingTable {
     OUT_JSON_FILE.flush();
   }
 
-  //TODO add example
+  // TODO add example
   private void printRemoveLink(Node endNode) {
     OUT_JSON_FILE.print("{");
     OUT_JSON_FILE.print("\"kind\":\"remove-link\",");
