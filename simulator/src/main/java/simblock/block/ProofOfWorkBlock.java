@@ -22,7 +22,6 @@ import static simblock.simulator.Simulator.getTargetInterval;
 import java.math.BigInteger;
 import simblock.node.Node;
 
-
 /**
  * The type Proof of work block.
  */
@@ -83,18 +82,19 @@ public class ProofOfWorkBlock extends Block {
   }
 
   /**
-   * Generates the genesis block, gets the total mining power and adjusts the difficulty of the
+   * Generates the genesis block, gets the total mining power and adjusts the
+   * difficulty of the
    * next block accordingly.
    *
-   * @param minter the minter
    * @return the genesis block
    */
-  public static ProofOfWorkBlock genesisBlock(Node minter) {
+  public static ProofOfWorkBlock genesisBlock() {
     long totalMiningPower = 0;
     for (Node node : getSimulatedNodes()) {
       totalMiningPower += node.getMiningPower();
     }
     genesisNextDifficulty = BigInteger.valueOf(totalMiningPower * getTargetInterval());
-    return new ProofOfWorkBlock(null, minter, 0, BigInteger.ZERO);
+    return new ProofOfWorkBlock(null, null, 0, BigInteger.ZERO);
+
   }
 }

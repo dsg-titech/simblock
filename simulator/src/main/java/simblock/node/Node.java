@@ -271,9 +271,9 @@ public class Node {
   /**
    * Mint the genesis block.
    */
-  public void genesisBlock() {
-    Block genesis = this.consensusAlgo.genesisBlock();
-    this.receiveBlock(genesis);
+  public void genesisBlock(Block genesis) {
+    addToChain(genesis);
+    minting();
   }
 
   /**
