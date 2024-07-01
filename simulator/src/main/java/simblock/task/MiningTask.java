@@ -35,7 +35,7 @@ public class MiningTask extends AbstractMintingTask {
    * @param interval   the interval
    * @param difficulty the difficulty
    */
-  //TODO how is the difficulty expressed and used here?
+  // TODO how is the difficulty expressed and used here?
   public MiningTask(Node minter, long interval, BigInteger difficulty) {
     super(minter, interval);
     this.difficulty = difficulty;
@@ -45,8 +45,7 @@ public class MiningTask extends AbstractMintingTask {
   public void run() {
     ProofOfWorkBlock createdBlock = new ProofOfWorkBlock(
         (ProofOfWorkBlock) this.getParent(), this.getMinter(), getCurrentTime(),
-        this.difficulty
-    );
+        this.difficulty);
     this.getMinter().receiveBlock(createdBlock);
   }
 }

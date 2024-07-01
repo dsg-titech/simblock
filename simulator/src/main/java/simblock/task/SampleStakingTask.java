@@ -34,8 +34,7 @@ public class SampleStakingTask extends AbstractMintingTask {
   public void run() {
     SamplePoSBlock createdBlock = new SamplePoSBlock(
         (SamplePoSBlock) this.getParent(), this.getMinter(), getCurrentTime(),
-        this.difficulty
-    );
+        this.difficulty);
     this.getMinter().receiveBlock(createdBlock);
   }
 }

@@ -76,8 +76,7 @@ public class Coinage implements Cloneable {
    */
   public void reward(double reward) {
     this.coins = this.coins.add(
-        new BigDecimal(this.getCoinage()).multiply(new BigDecimal(reward)).toBigInteger()
-    );
+        new BigDecimal(this.getCoinage()).multiply(new BigDecimal(reward)).toBigInteger());
   }
 
   /**
@@ -85,7 +84,7 @@ public class Coinage implements Cloneable {
    *
    * @return the coinage
    */
-  //TODO what is coin age
+  // TODO what is coin age
   public BigInteger getCoinage() {
     return this.getCoins().multiply(BigInteger.valueOf(this.getAge()));
   }

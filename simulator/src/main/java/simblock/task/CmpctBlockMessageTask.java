@@ -26,7 +26,8 @@ import simblock.node.Node;
 /**
  * The type Compact block message task.
  */
-// Compact block relay protocol Wiki: https://github.com/bitcoin/bips/blob/master/bip-0152.mediawiki
+// Compact block relay protocol Wiki:
+// https://github.com/bitcoin/bips/blob/master/bip-0152.mediawiki
 public class CmpctBlockMessageTask extends AbstractMessageTask {
   /**
    * The {@link Block} that is sent.
@@ -52,14 +53,14 @@ public class CmpctBlockMessageTask extends AbstractMessageTask {
     this.interval = getLatency(this.getFrom().getRegion(), this.getTo().getRegion()) + delay;
   }
 
-
   @Override
   public long getInterval() {
     return this.interval;
   }
 
   /**
-   * Sends a new compact block message from the sender to the receiver and logs the event.
+   * Sends a new compact block message from the sender to the receiver and logs
+   * the event.
    */
   @Override
   public void run() {

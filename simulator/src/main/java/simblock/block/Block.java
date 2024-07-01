@@ -101,7 +101,7 @@ public class Block {
    *
    * @return the time
    */
-  //TODO what format
+  // TODO what format
   public long getTime() {
     return this.time;
   }
@@ -111,13 +111,14 @@ public class Block {
    *
    * @return the id
    */
-  //TODO what format
+  // TODO what format
   public int getId() {
     return this.id;
   }
 
   /**
-   * Generates the genesis block. The parent is set to null and the time is set to 0
+   * Generates the genesis block. The parent is set to null and the time is set to
+   * 0
    *
    * @param minter the minter
    * @return the block

@@ -21,11 +21,12 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import simblock.task.Task;
 
-
 /**
- * The type Timer schedules the execution of simulation tasks stored in a Future Event List (FEL)
+ * The type Timer schedules the execution of simulation tasks stored in a Future
+ * Event List (FEL)
  * . Each {@link Task}
- * can be scheduled for execution. Tasks that have been run get removed from the FEL.
+ * can be scheduled for execution. Tasks that have been run get removed from the
+ * FEL.
  */
 public class Timer {
 
@@ -35,16 +36,18 @@ public class Timer {
   private static final PriorityQueue<ScheduledTask> taskQueue = new PriorityQueue<>();
 
   /**
-   * A map containing a mapping of all tasks to their ScheduledTask counterparts. When
+   * A map containing a mapping of all tasks to their ScheduledTask counterparts.
+   * When
    * executed, the key - value
    * pair is to be removed from the mapping.
    */
-  //TODO a bit redundant since Task is again stored in ScheduledTask. Is there a better approach?
+  // TODO a bit redundant since Task is again stored in ScheduledTask. Is there a
+  // better approach?
   private static final Map<Task, ScheduledTask> taskMap = new HashMap<>();
   /**
    * Initial simulation time in milliseconds.
    */
-  //TODO is it milliseconds?
+  // TODO is it milliseconds?
   private static long currentTime = 0L;
 
   /**
@@ -58,7 +61,8 @@ public class Timer {
      * Instantiates a new ScheduledTask.
      *
      * @param task          - the task to be executed
-     * @param scheduledTime - the simulation time at which the task is to be executed
+     * @param scheduledTime - the simulation time at which the task is to be
+     *                      executed
      */
     private ScheduledTask(Task task, long scheduledTime) {
       this.task = task;
@@ -87,7 +91,8 @@ public class Timer {
      * Compares the two scheduled tasks.
      *
      * @param o other task
-     * @return 1 if self is executed later, 0 if concurrent and -1 if self is to be executed before.
+     * @return 1 if self is executed later, 0 if concurrent and -1 if self is to be
+     *         executed before.
      */
     public int compareTo(ScheduledTask o) {
       if (this.equals(o)) {
@@ -147,7 +152,8 @@ public class Timer {
   }
 
   /**
-   * Schedule task to be executed at the current time incremented by the task duration.
+   * Schedule task to be executed at the current time incremented by the task
+   * duration.
    *
    * @param task the task
    */

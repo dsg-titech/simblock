@@ -29,11 +29,14 @@ import java.util.List;
 import simblock.settings.NetworkConfiguration;
 
 /**
- * The type Network represents a network split in regions, each node belonging to a region with
+ * The type Network represents a network split in regions, each node belonging
+ * to a region with
  * an upload bandwidth
- * and a download bandwidth. Node degrees follow a predefined degree distribution.
+ * and a download bandwidth. Node degrees follow a predefined degree
+ * distribution.
  */
-// TODO how is this degree distribution calculated and what does the double array mean
+// TODO how is this degree distribution calculated and what does the double
+// array mean
 public class Network {
 
   /**
@@ -51,11 +54,14 @@ public class Network {
   }
 
   /**
-   * Gets the minimum between the <em>from</em> upload bandwidth and <em>to</em> download
+   * Gets the minimum between the <em>from</em> upload bandwidth and <em>to</em>
+   * download
    * bandwidth.
    *
-   * @param from the from index in the {@link NetworkConfiguration#UPLOAD_BANDWIDTH} array.
-   * @param to   the to index in the {@link NetworkConfiguration#UPLOAD_BANDWIDTH} array.
+   * @param from the from index in the
+   *             {@link NetworkConfiguration#UPLOAD_BANDWIDTH} array.
+   * @param to   the to index in the {@link NetworkConfiguration#UPLOAD_BANDWIDTH}
+   *             array.
    * @return the bandwidth
    */
 
@@ -73,7 +79,8 @@ public class Network {
   }
 
   /**
-   * Return the number of nodes in the corresponding region as a portion the number of all nodes.
+   * Return the number of nodes in the corresponding region as a portion the
+   * number of all nodes.
    *
    * @return an array the distribution
    */
@@ -86,7 +93,7 @@ public class Network {
    *
    * @return the double [ ]
    */
-  //TODO
+  // TODO
   public static double[] getDegreeDistribution() {
     return DEGREE_DISTRIBUTION;
   }
@@ -94,7 +101,7 @@ public class Network {
   /**
    * Prints the currently active regions to outfile.
    */
-  //TODO
+  // TODO
   public static void printRegion() {
     STATIC_JSON_FILE.print("{\"region\":[");
 

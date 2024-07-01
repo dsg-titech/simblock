@@ -47,8 +47,7 @@ public class SamplePoSBlock extends Block {
    * @param difficulty the difficulty
    */
   public SamplePoSBlock(
-      SamplePoSBlock parent, Node minter, long time, BigInteger difficulty
-  ) {
+      SamplePoSBlock parent, Node minter, long time, BigInteger difficulty) {
     super(parent, minter, time);
 
     this.coinages = new HashMap<>();
@@ -77,8 +76,7 @@ public class SamplePoSBlock extends Block {
       this.totalDifficulty = parent.getTotalDifficulty().add(difficulty);
     }
     this.nextDifficulty = totalCoinage.multiply(
-            BigInteger.valueOf(getTargetInterval())).divide(BigInteger.valueOf(1000)
-    );
+        BigInteger.valueOf(getTargetInterval())).divide(BigInteger.valueOf(1000));
   }
 
   /**
@@ -87,7 +85,7 @@ public class SamplePoSBlock extends Block {
    * @param node the node
    * @return the coinage
    */
-  //TODO Coinage is related to proof of stake obviously
+  // TODO Coinage is related to proof of stake obviously
   public Coinage getCoinage(Node node) {
     return this.coinages.get(node);
   }

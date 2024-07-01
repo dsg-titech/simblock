@@ -26,7 +26,7 @@ import simblock.node.Node;
 public class RecMessageTask extends AbstractMessageTask {
 
   /**
-   * The block to  be received.
+   * The block to be received.
    */
   private final Block block;
 

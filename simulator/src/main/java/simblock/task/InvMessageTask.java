@@ -20,7 +20,8 @@ import simblock.block.Block;
 import simblock.node.Node;
 
 /**
- * The type Inv message task, allows a node to advertise its knowledge of a block.
+ * The type Inv message task, allows a node to advertise its knowledge of a
+ * block.
  */
 // Bitcoin protocol Wiki: https://en.bitcoin.it/wiki/Protocol_documentation#inv
 public class InvMessageTask extends AbstractMessageTask {

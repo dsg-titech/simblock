@@ -22,7 +22,6 @@ import static simblock.simulator.Simulator.getTargetInterval;
 import java.math.BigInteger;
 import simblock.node.Node;
 
-
 /**
  * The type Proof of work block.
  */
@@ -83,7 +82,8 @@ public class ProofOfWorkBlock extends Block {
   }
 
   /**
-   * Generates the genesis block, gets the total mining power and adjusts the difficulty of the
+   * Generates the genesis block, gets the total mining power and adjusts the
+   * difficulty of the
    * next block accordingly.
    *
    * @param minter the minter

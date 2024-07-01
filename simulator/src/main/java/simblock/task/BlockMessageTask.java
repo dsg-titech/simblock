@@ -26,7 +26,8 @@ import simblock.node.Node;
 /**
  * The type Block message task.
  */
-// Bitcoin protocol Wiki: https://en.bitcoin.it/wiki/Protocol_documentation#block
+// Bitcoin protocol Wiki:
+// https://en.bitcoin.it/wiki/Protocol_documentation#block
 public class BlockMessageTask extends AbstractMessageTask {
   /**
    * The {@link Block} that is sent.
@@ -51,7 +52,6 @@ public class BlockMessageTask extends AbstractMessageTask {
     this.block = block;
     this.interval = getLatency(this.getFrom().getRegion(), this.getTo().getRegion()) + delay;
   }
-
 
   @Override
   public long getInterval() {

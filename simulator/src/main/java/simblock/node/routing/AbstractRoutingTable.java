@@ -96,7 +96,7 @@ public abstract class AbstractRoutingTable {
    * @param from the from
    * @return the boolean
    */
-  //TODO possibly incoming requests - just the hook I need
+  // TODO possibly incoming requests - just the hook I need
   public boolean addInbound(Node from) {
     return false;
   }
@@ -107,7 +107,7 @@ public abstract class AbstractRoutingTable {
    * @param from the from
    * @return the boolean
    */
-  //TODO possibly incoming requests - just the hook I need
+  // TODO possibly incoming requests - just the hook I need
   public boolean removeInbound(Node from) {
     return false;
   }
@@ -115,7 +115,7 @@ public abstract class AbstractRoutingTable {
   /**
    * Accept block.
    */
-  //TODO unclear what this does
+  // TODO unclear what this does
   public void acceptBlock() {
   }
 }

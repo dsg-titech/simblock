@@ -22,24 +22,25 @@ import simblock.node.Node;
 /**
  * The type GetBlockTxn message task.
  */
-// Compact block relay protocol Wiki: https://github.com/bitcoin/bips/blob/master/bip-0152.mediawiki
+// Compact block relay protocol Wiki:
+// https://github.com/bitcoin/bips/blob/master/bip-0152.mediawiki
 public class GetBlockTxnMessageTask extends AbstractMessageTask {
 	/**
-     * The {@link Block} that is sent by from as compact block.
-     */
+	 * The {@link Block} that is sent by from as compact block.
+	 */
 	private Block block;
 
 	public GetBlockTxnMessageTask(Node from, Node to, Block block) {
 		super(from, to);
 		this.block = block;
 	}
-    
-    /**
-     * Get block.
-     *
-     * @return the block
-     */
-	public Block getBlock(){
+
+	/**
+	 * Get block.
+	 *
+	 * @return the block
+	 */
+	public Block getBlock() {
 		return this.block;
-	}	
+	}
 }
