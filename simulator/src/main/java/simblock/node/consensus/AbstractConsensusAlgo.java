@@ -20,9 +20,7 @@ import simblock.block.Block;
 import simblock.node.Node;
 import simblock.task.AbstractMintingTask;
 
-/**
- * The type Abstract consensus algorithm.
- */
+/** The type Abstract consensus algorithm. */
 public abstract class AbstractConsensusAlgo {
   private final Node selfNode;
 
@@ -55,7 +53,7 @@ public abstract class AbstractConsensusAlgo {
    * Tests if the receivedBlock is valid with regards to the current block.
    *
    * @param receivedBlock the received block
-   * @param currentBlock  the current block
+   * @param currentBlock the current block
    * @return true if block is valid false otherwise
    */
   public abstract boolean isReceivedBlockValid(Block receivedBlock, Block currentBlock);

@@ -23,17 +23,16 @@ import static simblock.settings.SimulationConfiguration.CBR_FAILURE_RATE_FOR_CHU
 import static simblock.settings.SimulationConfiguration.CBR_FAILURE_RATE_FOR_CONTROL_NODE;
 import static simblock.settings.SimulationConfiguration.COMPACT_BLOCK_SIZE;
 import static simblock.simulator.Main.OUT_JSON_FILE;
+import static simblock.simulator.Main.random;
 import static simblock.simulator.Network.getBandwidth;
 import static simblock.simulator.Simulator.arriveBlock;
 import static simblock.simulator.Timer.getCurrentTime;
 import static simblock.simulator.Timer.putTask;
 import static simblock.simulator.Timer.removeTask;
-import static simblock.simulator.Main.random;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
-
 import simblock.block.Block;
 import simblock.node.consensus.AbstractConsensusAlgo;
 import simblock.node.routing.AbstractRoutingTable;
@@ -45,63 +44,39 @@ import simblock.task.GetBlockTxnMessageTask;
 import simblock.task.InvMessageTask;
 import simblock.task.RecMessageTask;
 
-/**
- * A class representing a node in the network.
- */
+/** A class representing a node in the network. */
 public class Node {
-  /**
-   * Unique node ID.
-   */
+  /** Unique node ID. */
   private final int nodeID;
 
-  /**
-   * Region assigned to the node.
-   */
+  /** Region assigned to the node. */
   private final int region;
 
-  /**
-   * Mining power assigned to the node.
-   */
+  /** Mining power assigned to the node. */
   private final long miningPower;
 
-  /**
-   * A nodes routing table.
-   */
+  /** A nodes routing table. */
   private AbstractRoutingTable routingTable;
 
-  /**
-   * The consensus algorithm used by the node.
-   */
+  /** The consensus algorithm used by the node. */
   private AbstractConsensusAlgo consensusAlgo;
 
-  /**
-   * Whether the node uses compact block relay.
-   */
+  /** Whether the node uses compact block relay. */
   private boolean useCBR;
 
-  /**
-   * The node causes churn.
-   */
+  /** The node causes churn. */
   private boolean isChurnNode;
 
-  /**
-   * The current block.
-   */
+  /** The current block. */
   private Block block;
 
-  /**
-   * Orphaned blocks known to node.
-   */
+  /** Orphaned blocks known to node. */
   private final Set<Block> orphans = new HashSet<>();
 
-  /**
-   * The current minting task
-   */
+  /** The current minting task */
   private AbstractMintingTask mintingTask = null;
 
-  /**
-   * In the process of sending blocks.
-   */
+  /** In the process of sending blocks. */
   // TODO verify
   private boolean sendingBlock = false;
 
@@ -110,26 +85,30 @@ public class Node {
   // TODO
   private final Set<Block> downloadingBlocks = new HashSet<>();
 
-  /**
-   * Processing time of tasks expressed in milliseconds.
-   */
+  /** Processing time of tasks expressed in milliseconds. */
   private final long processingTime = 2;
 
   /**
    * Instantiates a new Node.
    *
-   * @param nodeID            the node id
-   * @param numConnection     the number of connections a node can have
-   * @param region            the region
-   * @param miningPower       the mining power
-   * @param routingTableName  the routing table name
+   * @param nodeID the node id
+   * @param numConnection the number of connections a node can have
+   * @param region the region
+   * @param miningPower the mining power
+   * @param routingTableName the routing table name
    * @param consensusAlgoName the consensus algorithm name
-   * @param useCBR            whether the node uses compact block relay
-   * @param isChurnNode       whether the node causes churn
+   * @param useCBR whether the node uses compact block relay
+   * @param isChurnNode whether the node causes churn
    */
   public Node(
-      int nodeID, int numConnection, int region, long miningPower, String routingTableName,
-      String consensusAlgoName, boolean useCBR, boolean isChurnNode) {
+      int nodeID,
+      int numConnection,
+      int region,
+      long miningPower,
+      String routingTableName,
+      String consensusAlgoName,
+      boolean useCBR,
+      boolean isChurnNode) {
     this.nodeID = nodeID;
     this.region = region;
     this.miningPower = miningPower;
@@ -137,10 +116,12 @@ public class Node {
     this.isChurnNode = isChurnNode;
 
     try {
-      this.routingTable = (AbstractRoutingTable) Class.forName(routingTableName).getConstructor(
-          Node.class).newInstance(this);
-      this.consensusAlgo = (AbstractConsensusAlgo) Class.forName(consensusAlgoName).getConstructor(
-          Node.class).newInstance(this);
+      this.routingTable =
+          (AbstractRoutingTable)
+              Class.forName(routingTableName).getConstructor(Node.class).newInstance(this);
+      this.consensusAlgo =
+          (AbstractConsensusAlgo)
+              Class.forName(consensusAlgoName).getConstructor(Node.class).newInstance(this);
       this.setNumConnection(numConnection);
     } catch (Exception e) {
       e.printStackTrace();
@@ -261,25 +242,20 @@ public class Node {
     return this.routingTable.removeNeighbor(node);
   }
 
-  /**
-   * Initializes the routing table.
-   */
+  /** Initializes the routing table. */
   public void joinNetwork() {
     this.routingTable.initTable();
   }
 
-  /**
-   * Mint the genesis block.
-   */
+  /** Mint the genesis block. */
   public void genesisBlock() {
     Block genesis = this.consensusAlgo.genesisBlock();
     this.receiveBlock(genesis);
   }
 
   /**
-   * Adds a new block to the to chain. If node was minting that task instance is
-   * abandoned, and
-   * the new block arrival is handled.
+   * Adds a new block to the to chain. If node was minting that task instance is abandoned, and the
+   * new block arrival is handled.
    *
    * @param newBlock the new block
    */
@@ -317,7 +293,7 @@ public class Node {
    * Add orphans.
    *
    * @param orphanBlock the orphan block
-   * @param validBlock  the valid block
+   * @param validBlock the valid block
    */
   // TODO check this out later
   public void addOrphans(Block orphanBlock, Block validBlock) {
@@ -334,9 +310,7 @@ public class Node {
     }
   }
 
-  /**
-   * Generates a new minting task and registers it
-   */
+  /** Generates a new minting task and registers it */
   public void minting() {
     AbstractMintingTask task = this.consensusAlgo.minting();
     this.mintingTask = task;
@@ -424,7 +398,8 @@ public class Node {
 
     if (message instanceof CmpctBlockMessageTask) {
       Block block = ((CmpctBlockMessageTask) message).getBlock();
-      float CBRfailureRate = this.isChurnNode ? CBR_FAILURE_RATE_FOR_CHURN_NODE : CBR_FAILURE_RATE_FOR_CONTROL_NODE;
+      float CBRfailureRate =
+          this.isChurnNode ? CBR_FAILURE_RATE_FOR_CHURN_NODE : CBR_FAILURE_RATE_FOR_CONTROL_NODE;
       boolean success = random.nextDouble() > CBRfailureRate ? true : false;
       if (success) {
         downloadingBlocks.remove(block);
@@ -442,9 +417,7 @@ public class Node {
     }
   }
 
-  /**
-   * Gets block size when the node fails compact block relay.
-   */
+  /** Gets block size when the node fails compact block relay. */
   private long getFailedBlockSize() {
     if (this.isChurnNode) {
       int index = random.nextInt(CBR_FAILURE_BLOCK_SIZE_DISTRIBUTION_FOR_CHURN_NODE.length);
@@ -455,9 +428,7 @@ public class Node {
     }
   }
 
-  /**
-   * Send next block message.
-   */
+  /** Send next block message. */
   // send a block to the sender of the next queued recMessage
   public void sendNextBlockMessage() {
     if (this.messageQue.size() > 0) {

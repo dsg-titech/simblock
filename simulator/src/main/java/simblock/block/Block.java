@@ -18,38 +18,24 @@ package simblock.block;
 
 import simblock.node.Node;
 
-/**
- * The representation of a block.
- */
+/** The representation of a block. */
 public class Block {
-  /**
-   * The current height of the block.
-   */
+  /** The current height of the block. */
   private final int height;
 
-  /**
-   * The parent {@link Block}.
-   */
+  /** The parent {@link Block}. */
   private final Block parent;
 
-  /**
-   * The {@link Node} that minted the block.
-   */
+  /** The {@link Node} that minted the block. */
   private final Node minter;
 
-  /**
-   * Minting timestamp, absolute time since the beginning of the simulation.
-   */
+  /** Minting timestamp, absolute time since the beginning of the simulation. */
   private final long time;
 
-  /**
-   * Block unique id.
-   */
+  /** Block unique id. */
   private final int id;
 
-  /**
-   * Latest known block id.
-   */
+  /** Latest known block id. */
   private static int latestId = 0;
 
   /**
@@ -57,7 +43,7 @@ public class Block {
    *
    * @param parent the parent
    * @param minter the minter
-   * @param time   the time
+   * @param time the time
    */
   public Block(Block parent, Node minter, long time) {
     this.height = parent == null ? 0 : parent.getHeight() + 1;
@@ -101,7 +87,7 @@ public class Block {
    *
    * @return the time
    */
-  //TODO what format
+  // TODO what format
   public long getTime() {
     return this.time;
   }
@@ -111,7 +97,7 @@ public class Block {
    *
    * @return the id
    */
-  //TODO what format
+  // TODO what format
   public int getId() {
     return this.id;
   }

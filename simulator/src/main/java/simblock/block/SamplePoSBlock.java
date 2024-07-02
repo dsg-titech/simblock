@@ -28,9 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 import simblock.node.Node;
 
-/**
- * The type Sample proof of stake block.
- */
+/** The type Sample proof of stake block. */
 public class SamplePoSBlock extends Block {
   private final Map<Node, Coinage> coinages;
   private static Map<Node, Coinage> genesisCoinages;
@@ -41,14 +39,12 @@ public class SamplePoSBlock extends Block {
   /**
    * Instantiates a new Sample proof of stake block.
    *
-   * @param parent     the parent
-   * @param minter     the minter
-   * @param time       the time
+   * @param parent the parent
+   * @param minter the minter
+   * @param time the time
    * @param difficulty the difficulty
    */
-  public SamplePoSBlock(
-      SamplePoSBlock parent, Node minter, long time, BigInteger difficulty
-  ) {
+  public SamplePoSBlock(SamplePoSBlock parent, Node minter, long time, BigInteger difficulty) {
     super(parent, minter, time);
 
     this.coinages = new HashMap<>();
@@ -76,9 +72,10 @@ public class SamplePoSBlock extends Block {
     } else {
       this.totalDifficulty = parent.getTotalDifficulty().add(difficulty);
     }
-    this.nextDifficulty = totalCoinage.multiply(
-            BigInteger.valueOf(getTargetInterval())).divide(BigInteger.valueOf(1000)
-    );
+    this.nextDifficulty =
+        totalCoinage
+            .multiply(BigInteger.valueOf(getTargetInterval()))
+            .divide(BigInteger.valueOf(1000));
   }
 
   /**
@@ -87,7 +84,7 @@ public class SamplePoSBlock extends Block {
    * @param node the node
    * @return the coinage
    */
-  //TODO Coinage is related to proof of stake obviously
+  // TODO Coinage is related to proof of stake obviously
   public Coinage getCoinage(Node node) {
     return this.coinages.get(node);
   }
