@@ -19,28 +19,20 @@ package simblock.task;
 import simblock.block.Block;
 import simblock.node.Node;
 
-/**
- * The type Abstract minting task represents .
- */
+/** The type Abstract minting task represents . */
 public abstract class AbstractMintingTask implements Task {
-  /**
-   * The node to mint the block.
-   */
+  /** The node to mint the block. */
   private final Node minter;
-  /**
-   * The parent block.
-   */
+  /** The parent block. */
   private final Block parent;
 
-  /**
-   * Block interval in milliseconds.
-   */
+  /** Block interval in milliseconds. */
   private final long interval;
 
   /**
    * Instantiates a new Abstract minting task.
    *
-   * @param minter   the minter
+   * @param minter the minter
    * @param interval the interval in milliseconds
    */
   public AbstractMintingTask(Node minter, long interval) {

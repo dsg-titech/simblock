@@ -19,9 +19,7 @@ package simblock.node.routing;
 import java.util.ArrayList;
 import simblock.node.Node;
 
-/**
- * An abstraction of the a routing table used by a {@link Node}.
- */
+/** An abstraction of the a routing table used by a {@link Node}. */
 public abstract class AbstractRoutingTable {
   private final Node selfNode;
   private int numConnection = 8;
@@ -62,9 +60,7 @@ public abstract class AbstractRoutingTable {
     return this.numConnection;
   }
 
-  /**
-   * Table initialization.
-   */
+  /** Table initialization. */
   public abstract void initTable();
 
   /**
@@ -112,10 +108,7 @@ public abstract class AbstractRoutingTable {
     return false;
   }
 
-  /**
-   * Accept block.
-   */
+  /** Accept block. */
   // TODO unclear what this does
-  public void acceptBlock() {
-  }
+  public void acceptBlock() {}
 }

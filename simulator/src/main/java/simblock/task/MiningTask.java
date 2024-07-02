@@ -22,17 +22,15 @@ import java.math.BigInteger;
 import simblock.block.ProofOfWorkBlock;
 import simblock.node.Node;
 
-/**
- * The type Mining task.
- */
+/** The type Mining task. */
 public class MiningTask extends AbstractMintingTask {
   private final BigInteger difficulty;
 
   /**
    * Instantiates a new Mining task.
    *
-   * @param minter     the minter
-   * @param interval   the interval
+   * @param minter the minter
+   * @param interval the interval
    * @param difficulty the difficulty
    */
   // TODO how is the difficulty expressed and used here?
@@ -43,9 +41,12 @@ public class MiningTask extends AbstractMintingTask {
 
   @Override
   public void run() {
-    ProofOfWorkBlock createdBlock = new ProofOfWorkBlock(
-        (ProofOfWorkBlock) this.getParent(), this.getMinter(), getCurrentTime(),
-        this.difficulty);
+    ProofOfWorkBlock createdBlock =
+        new ProofOfWorkBlock(
+            (ProofOfWorkBlock) this.getParent(),
+            this.getMinter(),
+            getCurrentTime(),
+            this.difficulty);
     this.getMinter().receiveBlock(createdBlock);
   }
 }
