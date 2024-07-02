@@ -1,12 +1,19 @@
 import org.gradle.plugins.ide.idea.model.*
 import org.gradle.plugins.ide.eclipse.model.*
 
-apply plugin: 'idea'
-apply plugin: 'eclipse'
+plugins {
+    id 'idea'
+    id 'eclipse'
+    id 'com.diffplug.spotless' version '6.0.0'
+}
 
 def srcDir = 'src/main/java'
 def confDir = 'src/dist/conf'
 def outDir = 'build/classes/java/main'
+
+repositories {
+    mavenCentral()
+}
 
 subprojects {
     apply plugin: 'java'
@@ -92,5 +99,12 @@ project(':simulator') {
 
     startScripts {
         applicationName = 'runSimBlock'
+    }
+
+    spotless {
+        java {
+            target '**/*.java'
+            googleJavaFormat() 
+        }
     }
 }
