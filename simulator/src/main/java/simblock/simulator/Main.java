@@ -305,6 +305,11 @@ public class Main {
     return Math.max((int) (r * STDEV_OF_MINING_POWER + AVERAGE_MINING_POWER), 1);
   }
 
+  /**
+   * Get a random minter of genesis block based on mining power.
+   *
+   * @return the node that will mint the genesis block
+   */
   public static Node getGenesisMinter() {
     int totalMiningPower = 0;
     for (Node node : getSimulatedNodes()) {
