@@ -20,24 +20,18 @@ import static simblock.simulator.Network.getLatency;
 
 import simblock.node.Node;
 
-/**
- * The type Abstract message task.
- */
+/** The type Abstract message task. */
 public abstract class AbstractMessageTask implements Task {
-  /**
-   * The sending entity.
-   */
+  /** The sending entity. */
   private final Node from;
-  /**
-   * The receiving entity.
-   */
+  /** The receiving entity. */
   private final Node to;
 
   /**
    * Instantiates a new Abstract message task.
    *
    * @param from the sending entity
-   * @param to   the receiving entity
+   * @param to the receiving entity
    */
   public AbstractMessageTask(Node from, Node to) {
     this.from = from;
@@ -70,15 +64,12 @@ public abstract class AbstractMessageTask implements Task {
   public long getInterval() {
     long latency = getLatency(this.from.getRegion(), this.to.getRegion());
     // Add 10 milliseconds here, why?
-    //TODO
+    // TODO
     return latency + 10;
   }
 
-  /**
-   * Receive message at the <em>to</em> side.
-   */
+  /** Receive message at the <em>to</em> side. */
   public void run() {
     this.to.receiveMessage(this);
   }
-
 }

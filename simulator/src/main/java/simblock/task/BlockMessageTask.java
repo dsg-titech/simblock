@@ -23,26 +23,21 @@ import static simblock.simulator.Timer.getCurrentTime;
 import simblock.block.Block;
 import simblock.node.Node;
 
-/**
- * The type Block message task.
- */
-// Bitcoin protocol Wiki: https://en.bitcoin.it/wiki/Protocol_documentation#block
+/** The type Block message task. */
+// Bitcoin protocol Wiki:
+// https://en.bitcoin.it/wiki/Protocol_documentation#block
 public class BlockMessageTask extends AbstractMessageTask {
-  /**
-   * The {@link Block} that is sent.
-   */
+  /** The {@link Block} that is sent. */
   private final Block block;
 
-  /**
-   * The block message sending delay in milliseconds.
-   */
+  /** The block message sending delay in milliseconds. */
   private final long interval;
 
   /**
    * Instantiates a new Block message task.
    *
-   * @param from  the sender
-   * @param to    the receiver
+   * @param from the sender
+   * @param to the receiver
    * @param block the block instance
    * @param delay the delay of the message transmission
    */
@@ -52,15 +47,12 @@ public class BlockMessageTask extends AbstractMessageTask {
     this.interval = getLatency(this.getFrom().getRegion(), this.getTo().getRegion()) + delay;
   }
 
-
   @Override
   public long getInterval() {
     return this.interval;
   }
 
-  /**
-   * Sends a new block message from the sender to the receiver and logs the event.
-   */
+  /** Sends a new block message from the sender to the receiver and logs the event. */
   @Override
   public void run() {
 

@@ -19,22 +19,17 @@ package simblock.task;
 import simblock.block.Block;
 import simblock.node.Node;
 
-/**
- * The type Rec message task receives a block.
- */
-
+/** The type Rec message task receives a block. */
 public class RecMessageTask extends AbstractMessageTask {
 
-  /**
-   * The block to  be received.
-   */
+  /** The block to be received. */
   private final Block block;
 
   /**
    * Instantiates a new Rec message task.
    *
-   * @param from  the sending node
-   * @param to    the receiving node
+   * @param from the sending node
+   * @param to the receiving node
    * @param block the block to be received
    */
   public RecMessageTask(Node from, Node to, Block block) {
@@ -50,5 +45,4 @@ public class RecMessageTask extends AbstractMessageTask {
   public Block getBlock() {
     return this.block;
   }
-
 }

@@ -24,9 +24,7 @@ import simblock.block.SamplePoSBlock;
 import simblock.node.Node;
 import simblock.task.SampleStakingTask;
 
-/**
- * The type Sample proof of stake.
- */
+/** The type Sample proof of stake. */
 @SuppressWarnings("unused")
 public class SampleProofOfStake extends AbstractConsensusAlgo {
   /**
@@ -45,10 +43,10 @@ public class SampleProofOfStake extends AbstractConsensusAlgo {
     BigInteger difficulty = parent.getNextDifficulty();
     double p = parent.getCoinage(selfNode).getCoinage().doubleValue() / difficulty.doubleValue();
     double u = random.nextDouble();
-    return p <= Math.pow(2, -53) ? null : new SampleStakingTask(selfNode,
-                                                                (long) (Math.log(u) / Math.log(
-                                                                    1.0 - p) * 1000), difficulty
-    );
+    return p <= Math.pow(2, -53)
+        ? null
+        : new SampleStakingTask(
+            selfNode, (long) (Math.log(u) / Math.log(1.0 - p) * 1000), difficulty);
   }
 
   @SuppressWarnings("CheckStyle")
@@ -60,17 +58,17 @@ public class SampleProofOfStake extends AbstractConsensusAlgo {
     SamplePoSBlock recPoSBlock = (SamplePoSBlock) receivedBlock;
     SamplePoSBlock currPoSBlock = (SamplePoSBlock) currentBlock;
     int receivedBlockHeight = receivedBlock.getHeight();
-    SamplePoSBlock receivedBlockParent = receivedBlockHeight == 0 ? null :
-        (SamplePoSBlock) receivedBlock.getBlockWithHeight(receivedBlockHeight - 1);
+    SamplePoSBlock receivedBlockParent =
+        receivedBlockHeight == 0
+            ? null
+            : (SamplePoSBlock) receivedBlock.getBlockWithHeight(receivedBlockHeight - 1);
 
-    //TODO - dangerous to split due to short circuit operators being used, refactor?
-    return (
-        receivedBlockHeight == 0 ||
-            recPoSBlock.getDifficulty().compareTo(receivedBlockParent.getNextDifficulty()) >= 0
-    ) && (
-        currentBlock == null ||
-            recPoSBlock.getTotalDifficulty().compareTo(currPoSBlock.getTotalDifficulty()) > 0
-    );
+    // TODO - dangerous to split due to short circuit operators being used,
+    // refactor?
+    return (receivedBlockHeight == 0
+            || recPoSBlock.getDifficulty().compareTo(receivedBlockParent.getNextDifficulty()) >= 0)
+        && (currentBlock == null
+            || recPoSBlock.getTotalDifficulty().compareTo(currPoSBlock.getTotalDifficulty()) > 0);
   }
 
   @Override

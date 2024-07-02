@@ -19,9 +19,7 @@ package simblock.block;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-/**
- * The type Coinage tracks the age of coins.
- */
+/** The type Coinage tracks the age of coins. */
 public class Coinage implements Cloneable {
   private BigInteger coins;
   private long age;
@@ -30,7 +28,7 @@ public class Coinage implements Cloneable {
    * Instantiates a new Coinage.
    *
    * @param coins the coins
-   * @param age   the age
+   * @param age the age
    */
   public Coinage(BigInteger coins, long age) {
     this.coins = coins;
@@ -55,16 +53,12 @@ public class Coinage implements Cloneable {
     return this.age;
   }
 
-  /**
-   * Increase age.
-   */
+  /** Increase age. */
   public void increaseAge() {
     this.age++;
   }
 
-  /**
-   * Reset age.
-   */
+  /** Reset age. */
   public void resetAge() {
     this.age = 0;
   }
@@ -75,9 +69,9 @@ public class Coinage implements Cloneable {
    * @param reward the reward
    */
   public void reward(double reward) {
-    this.coins = this.coins.add(
-        new BigDecimal(this.getCoinage()).multiply(new BigDecimal(reward)).toBigInteger()
-    );
+    this.coins =
+        this.coins.add(
+            new BigDecimal(this.getCoinage()).multiply(new BigDecimal(reward)).toBigInteger());
   }
 
   /**
@@ -85,7 +79,7 @@ public class Coinage implements Cloneable {
    *
    * @return the coinage
    */
-  //TODO what is coin age
+  // TODO what is coin age
   public BigInteger getCoinage() {
     return this.getCoins().multiply(BigInteger.valueOf(this.getAge()));
   }

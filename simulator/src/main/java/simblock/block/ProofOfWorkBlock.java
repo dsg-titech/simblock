@@ -22,10 +22,7 @@ import static simblock.simulator.Simulator.getTargetInterval;
 import java.math.BigInteger;
 import simblock.node.Node;
 
-
-/**
- * The type Proof of work block.
- */
+/** The type Proof of work block. */
 public class ProofOfWorkBlock extends Block {
   private final BigInteger difficulty;
   private final BigInteger totalDifficulty;
@@ -35,9 +32,9 @@ public class ProofOfWorkBlock extends Block {
   /**
    * Instantiates a new Proof of work block.
    *
-   * @param parent     the parent
-   * @param minter     the minter
-   * @param time       the time
+   * @param parent the parent
+   * @param minter the minter
+   * @param time the time
    * @param difficulty the difficulty
    */
   public ProofOfWorkBlock(ProofOfWorkBlock parent, Node minter, long time, BigInteger difficulty) {
@@ -52,7 +49,6 @@ public class ProofOfWorkBlock extends Block {
       // TODO: difficulty adjustment
       this.nextDifficulty = parent.getNextDifficulty();
     }
-
   }
 
   /**
@@ -83,8 +79,8 @@ public class ProofOfWorkBlock extends Block {
   }
 
   /**
-   * Generates the genesis block, gets the total mining power and adjusts the difficulty of the
-   * next block accordingly.
+   * Generates the genesis block, gets the total mining power and adjusts the difficulty of the next
+   * block accordingly.
    *
    * @param minter the minter
    * @return the genesis block

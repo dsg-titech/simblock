@@ -21,35 +21,28 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import simblock.task.Task;
 
-
 /**
- * The type Timer schedules the execution of simulation tasks stored in a Future Event List (FEL)
- * . Each {@link Task}
- * can be scheduled for execution. Tasks that have been run get removed from the FEL.
+ * The type Timer schedules the execution of simulation tasks stored in a Future Event List (FEL) .
+ * Each {@link Task} can be scheduled for execution. Tasks that have been run get removed from the
+ * FEL.
  */
 public class Timer {
 
-  /**
-   * A sorted queue of scheduled tasks.
-   */
+  /** A sorted queue of scheduled tasks. */
   private static final PriorityQueue<ScheduledTask> taskQueue = new PriorityQueue<>();
 
   /**
-   * A map containing a mapping of all tasks to their ScheduledTask counterparts. When
-   * executed, the key - value
-   * pair is to be removed from the mapping.
+   * A map containing a mapping of all tasks to their ScheduledTask counterparts. When executed, the
+   * key - value pair is to be removed from the mapping.
    */
-  //TODO a bit redundant since Task is again stored in ScheduledTask. Is there a better approach?
+  // TODO a bit redundant since Task is again stored in ScheduledTask. Is there a
+  // better approach?
   private static final Map<Task, ScheduledTask> taskMap = new HashMap<>();
-  /**
-   * Initial simulation time in milliseconds.
-   */
-  //TODO is it milliseconds?
+  /** Initial simulation time in milliseconds. */
+  // TODO is it milliseconds?
   private static long currentTime = 0L;
 
-  /**
-   * Represents a {@link Task} that is scheduled to be executed.
-   */
+  /** Represents a {@link Task} that is scheduled to be executed. */
   private static class ScheduledTask implements Comparable<ScheduledTask> {
     private final Task task;
     private final long scheduledTime;
@@ -57,7 +50,7 @@ public class Timer {
     /**
      * Instantiates a new ScheduledTask.
      *
-     * @param task          - the task to be executed
+     * @param task - the task to be executed
      * @param scheduledTime - the simulation time at which the task is to be executed
      */
     private ScheduledTask(Task task, long scheduledTime) {
@@ -102,9 +95,7 @@ public class Timer {
     }
   }
 
-  /**
-   * Runs a {@link ScheduledTask}.
-   */
+  /** Runs a {@link ScheduledTask}. */
   public static void runTask() {
     // If there are any tasks
     if (taskQueue.size() > 0) {
