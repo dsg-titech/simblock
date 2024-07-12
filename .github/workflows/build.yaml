@@ -1,0 +1,29 @@
+name: Test build
+on:
+  pull_request:
+    branches:
+      - master
+      - feature-cicd
+  push:
+    branches:
+      - master
+      - feature-cicd
+jobs:
+  build:
+    name: Gradle build and run
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout project sources
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: "11"
+          distribution: "temurin"
+
+      - name: Run build
+        run: ./gradlew build --stacktrace
+
+      - name: Run simulator
+        run: gradle :simulator:run
