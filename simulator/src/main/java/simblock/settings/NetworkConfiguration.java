@@ -52,51 +52,54 @@ public class NetworkConfiguration {
     {151, 252, 301, 58, 12, 126},
     {189, 294, 322, 198, 126, 16}
   };
+  /**
+   * LATENCY[i][j] is average latency from REGION_LIST[i] to REGION_LIST[j] Unit: millisecond, for
+   * year 2024
+   */
+  private static final long[][] LATENCY_2024 = {
+    {34, 120, 152, 219, 146, 184},
+    {121, 20, 208, 212, 282, 279},
+    {152, 208, 13, 351, 289, 317},
+    {219, 206, 352, 109, 93, 188},
+    {146, 283, 289, 93, 0, 123},
+    {184, 278, 317, 188, 123, 10}
+  };
 
   /** List of latency assigned to each region. (unit: millisecond) */
   public static final long[][] LATENCY = LATENCY_2019;
 
-  /**
-   * List of download bandwidth assigned to each region, and last element is Inter-regional
-   * bandwidth. (unit: bit per second) for year 2015
-   */
+  /** List of download bandwidth assigned to each region. (unit: bit per second) for year 2015 */
   private static final long[] DOWNLOAD_BANDWIDTH_2015 = {
-    25000000, 24000000, 6500000, 10000000, 17500000, 14000000, 6 * 1000000
+    25000000, 24000000, 6500000, 10000000, 17500000, 14000000
   };
-  /**
-   * List of download bandwidth assigned to each region, and last element is Inter-regional
-   * bandwidth. (unit: bit per second) for year 2019
-   */
+  /** List of download bandwidth assigned to each region. (unit: bit per second) for year 2019 */
   private static final long[] DOWNLOAD_BANDWIDTH_2019 = {
-    52000000, 40000000, 18000000, 22800000, 22800000, 29900000, 6 * 1000000
+    52000000, 40000000, 18000000, 22800000, 22800000, 29900000
+  };
+  /** List of download bandwidth assigned to each region. (unit: bit per second) for year 2024 */
+  private static final long[] DOWNLOAD_BANDWIDTH_2024 = {
+    185000000, 123000000, 147000000, 135000000, 84000000, 154000000
   };
 
-  /**
-   * List of download bandwidth assigned to each region, and last element is Inter-regional
-   * bandwidth. (unit: bit per second)
-   */
+  /** List of download bandwidth assigned to each region. (unit: bit per second) */
   public static final long[] DOWNLOAD_BANDWIDTH = DOWNLOAD_BANDWIDTH_2019;
 
-  /**
-   * List of upload bandwidth assigned to each region. (unit: bit per second), and last element is
-   * Inter-regional bandwidth for year 2015
-   */
+  /** List of upload bandwidth assigned to each region. (unit: bit per second) for year 2015 */
   private static final long[] UPLOAD_BANDWIDTH_2015 = {
     4700000, 8100000, 1800000, 5300000, 3400000, 5200000, 6 * 1000000
   };
 
-  /**
-   * List of upload bandwidth assigned to each region. (unit: bit per second), and last element is
-   * Inter-regional bandwidth for year 2019
-   */
+  /** List of upload bandwidth assigned to each region. (unit: bit per second) for year 2019 */
   private static final long[] UPLOAD_BANDWIDTH_2019 = {
     19200000, 20700000, 5800000, 15700000, 10200000, 11300000, 6 * 1000000
   };
 
-  /**
-   * List of upload bandwidth assigned to each region. (unit: bit per second), and last element is
-   * Inter-regional bandwidth.
-   */
+  /** List of upload bandwidth assigned to each region. (unit: bit per second) for year 2024 */
+  private static final long[] UPLOAD_BANDWIDTH_2024 = {
+    36000000, 36000000, 54000000, 49000000, 23000000, 20000000, 6 * 1000000
+  };
+
+  /** List of upload bandwidth assigned to each region. (unit: bit per second) */
   public static final long[] UPLOAD_BANDWIDTH = UPLOAD_BANDWIDTH_2019;
 
   /** Region distribution Bitcoin 2015. */
@@ -109,6 +112,12 @@ public class NetworkConfiguration {
   private static final double[] REGION_DISTRIBUTION_BITCOIN_2019 = {
     0.3316, 0.4998, 0.0090,
     0.1177, 0.0224, 0.0195
+  };
+
+  /** Region distribution Bitcoin 2024. */
+  private static final double[] REGION_DISTRIBUTION_BITCOIN_2024 = {
+    0.2944, 0.5718, 0.0162,
+    0.0822, 0.0166, 0.0188
   };
 
   /** Region distribution Litecoin. */

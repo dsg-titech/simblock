@@ -61,14 +61,17 @@ public class SimulationConfiguration {
 
   /** The block height when a simulation ends. */
   // TODO revert
-  // public static final int END_BLOCK_HEIGHT = 100;
   public static final int END_BLOCK_HEIGHT = 3;
 
   /** Block size. (unit: byte). */
   public static final long BLOCK_SIZE = 535000; // 6110;//8000;//535000;//0.5MB
 
+  /** The usage rate of compact block relay (CBR) protocol for year 2019. */
+  public static final float CBR_USAGE_RATE_2019 = 0.964f;
+  /** The usage rate of compact block relay (CBR) protocol for year 2024. */
+  public static final float CBR_USAGE_RATE_2024 = 0.996f;
   /** The usage rate of compact block relay (CBR) protocol. */
-  public static final float CBR_USAGE_RATE = 0.964f;
+  public static final float CBR_USAGE_RATE = CBR_USAGE_RATE_2019;
   /** The rate of nodes that cause churn. */
   public static final float CHURN_NODE_RATE = 0.976f;
   /** Compact block size. (unit: byte) */
@@ -81,33 +84,22 @@ public class SimulationConfiguration {
   /** The distribution of data size that a control node receives when fails CBR. */
   public static final float[] CBR_FAILURE_BLOCK_SIZE_DISTRIBUTION_FOR_CONTROL_NODE = {
     0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f,
-        0.01f, 0.01f,
     0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f,
-        0.01f, 0.01f,
     0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f,
-        0.01f, 0.01f,
     0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f,
-        0.01f, 0.01f,
     0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f,
-        0.01f, 0.01f,
     0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f,
-        0.01f, 0.01f,
     0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f,
-        0.01f, 0.01f,
     0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f,
-        0.01f, 0.01f,
     0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f,
-        0.01f, 0.01f,
     0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f,
-        0.01f, 0.01f,
     0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f,
-        0.01f, 0.01f,
     0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f,
-        0.01f, 0.01f,
     0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f,
-        0.01f, 0.01f,
     0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f,
-        0.01f, 0.01f
+    0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f,
+    0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f, 0.01f,
+    0.01f, 0.01f
   };
   /** The distribution of data size that a churn node receives when fails CBR. */
   public static final float[] CBR_FAILURE_BLOCK_SIZE_DISTRIBUTION_FOR_CHURN_NODE = {
